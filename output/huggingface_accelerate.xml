@@ -1,0 +1,283 @@
+<?xml version="1.0" ?>
+<rss version="2.0">
+  <channel>
+    <title>huggingface/accelerate Releases</title>
+    <link>https://github.com/huggingface/accelerate/releases</link>
+    <description>Latest releases from huggingface/accelerate on GitHub</description>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Dec 2025 07:08:19 GMT</lastBuildDate>
+    <item>
+      <title>v1.12.0: Deepspeed Ulysses/ALST</title>
+      <link>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</link>
+      <description>## Deepspeed Ulysses/ALST integration
+
+Deepspeed Ulysses/ALST is an efficient way of training on long sequences by employing sequence parallelism and attention head parallelism. You can learn more about this technology in this paper https://arxiv.org/abs/2506.13996 or this deepspeed tutorial https://www.deepspeed.ai/tutorials/ulysses-alst-sequence-parallelism/.
+
+&lt;img width=&quot;2368&quot; height=&quot;1250&quot; alt=&quot;0d8bd9e0&quot; src=&quot;https://github.com/user-attachments/assets/b94e90c9-4368-4711-ad57-58de3c714ebc&quot; /&gt;
+
+
+To enable Deepspeed Ulysses, you first need to create `ParallelismConfig` and setting `sp` related args: 
+
+```python
+parallelism_config = ParallelismConfig(
+    sp_backend=&quot;deepspeed&quot;,
+    sp_size=2,
+    sp_handler=DeepSpeedSequenceParallelConfig(...),
+)
+```
+Then, you need to make sure to compute the correct loss as described on our [docs](https://huggingface.co/docs/accelerate/main/en/concept_guides/sequence_parallelism)
+
+```python 
+        ...
+        losses_per_rank = torch.distributed.nn.functional.all_gather(loss, group=sp_group)
+        good_tokens = (shift_labels != -100).view(-1).sum()
+        good_tokens_per_rank = torch.distributed.nn.functional.all_gather(good_tokens, group=sp_group)
+        total_loss = sum(
+            losses_per_rank[rank] * good_tokens_per_rank[rank]
+            for rank in range(sp_world_size)
+            if good_tokens_per_rank[rank] &gt; 0
+        )
+        total_good_tokens = sum(good_tokens_per_rank)
+        loss = total_loss / max(total_good_tokens, 1)
+```
+
+Thanks @S1ro1  for starting this work and for @stas00 for finishing this work. Also thanks @kashif for adding docs and reviewing/testing this PR !
+
+This feature will also be available in HF Trainer thanks for this PR from @stas00: https://github.com/huggingface/transformers/pull/41832
+
+
+## Minor changes
+
+* Remove warning for `cpu_ram_efficient_loading` by @SunMarc in https://github.com/huggingface/accelerate/pull/3816
+* update typo in bnb quantisation 4bit flag docstring by @hbraith in https://github.com/huggingface/accelerate/pull/3828
+* ArXiv -&gt; HF Papers by @qgallouedec in https://github.com/huggingface/accelerate/pull/3834
+* Fix typo in broadcast_object_list docstring by @wsntxxn in https://github.com/huggingface/accelerate/pull/3823
+* [Bug] Update torch.optim.Optimizer parameter states after tensor parallelism by @naomili0924 in https://github.com/huggingface/accelerate/pull/3835
+* use self hosted runner by @SunMarc in https://github.com/huggingface/accelerate/pull/3841
+* device type helper by @kashif in https://github.com/huggingface/accelerate/pull/3843
+
+## New Contributors
+* @hbraith made their first contribution in https://github.com/huggingface/accelerate/pull/3828
+* @wsntxxn made their first contribution in https://github.com/huggingface/accelerate/pull/3823
+* @naomili0924 made their first contribution in https://github.com/huggingface/accelerate/pull/3835
+
+**Full Changelog**: https://github.com/huggingface/accelerate/compare/v1.11.0...v1.12.0</description>
+      <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.12.0</guid>
+      <pubDate>Fri, 21 Nov 2025 12:47:55 GMT</pubDate>
+      <author>SunMarc</author>
+    </item>
+    <item>
+      <title>v1.11.0: TE MXFP8, FP16/BF16 with MPS, Python 3.10 </title>
+      <link>https://github.com/huggingface/accelerate/releases/tag/v1.11.0</link>
+      <description>## TE MXFP8 support
+
+We've added support for MXFP8 in our TransformerEngine integration. To use that, you need to set  `use_mxfp8_block_scaling` in `fp8_config`. See nvidia docs [here]. (https://docs.nvidia.com/deeplearning/transformer-engine/user-guide/examples/fp8_primer.html#MXFP8-and-block-scaling) 
+
+* Add support for TE MXFP8 recipe in accelerate by @pstjohn in https://github.com/huggingface/accelerate/pull/3688
+
+## FP16/BF16 Training for MPS devices
+
+BF16 and FP16 support for MPS devices is finally here. You can now pass `mixed_precision = &quot;fp16&quot; or &quot;bf16&quot;` when training on a mac (`fp16` requires torch 2.8 and `bf16` requires torch 2.6)
+* Add bf16/fp16 support for amp with mps device by @SunMarc in https://github.com/huggingface/accelerate/pull/3373
+
+## FSDP updates
+
+The following PRs  add respectively support to `ignored_params` and `no_sync()` for FSDPv2:
+* feat: add ignored_params support for fsdp2 by @kmehant in https://github.com/huggingface/accelerate/pull/3731
+* fix: model.set_requires_gradient_sync(False) should be called to turn off gradient synchronization in FSDP2 by @EquationWalker in https://github.com/huggingface/accelerate/pull/3762
+
+Mixed precision can now be passed as a dtype string from accelerate cli flag or `fsdp_config` in accelerate config file:
+* feat: allow mixed precision policy as dtype by @kmehant in https://github.com/huggingface/accelerate/pull/3751
+
+## Nd-parallel updates
+
+Some minor updates concerning nd-parallelism. 
+
+* Context Parallelism docs typos fixed by @sergiopaniego in https://github.com/huggingface/accelerate/pull/3761
+* Feat: add to_json by @S1ro1 in https://github.com/huggingface/accelerate/pull/3743
+* make torch_native_parallelism examples device agnostic by @yao-matrix in https://github.com/huggingface/accelerate/pull/3759
+* [ND Parallel] Update examples, cleanup by @S1ro1 in https://github.com/huggingface/accelerate/pull/3737
+
+## Bump to Python 3.10 
+
+We've dropped support for python 3.9 as it reached EOL in October. 
+* Bump to python3.10 + update linter by @SunMarc in https://github.com/huggingface/accelerate/pull/3809
+
+### Lots of minor fixes: 
+* fix: CPU RAM efficient loading for nd or HSDP parallelisms by @kmehant in https://github.com/huggingface/accelerate/pull/3740
+* xpu INT64 all_gather issue fixed in 2.9 by @yao-matrix in https://github.com/huggingface/accelerate/pull/3756
+* Specify device_ids in torch.distributed.barrier for PartialState by @qgallouedec in https://github.com/huggingface/accelerate/pull/3744
+* fix: specify device for process_tensor in example usage by @qgallouedec in https://github.com/huggingface/accelerate/pull/3755
+* Lower complexity of get_balanced_memory by adding a set by @SamuelBarryCS in https://github.com/huggingface/accelerate/pull/3776
+* Fix (skip) cuda cache flush when origin device is `cpu` and offloaded to `meta` by @Qubitium in https://github.com/huggingface/accelerate/pull/3796
+* Fix convert LayerNorm without bias to fp8 by @mjun0812 in https://github.com/huggingface/accelerate/pull/3725
+* Add optional typing by @cyyever in https://github.com/huggingface/accelerate/pull/3769
+* refactor: Use  `with`  in Accelerator.autocast()instead of ` __enter__()` and` __exit__()` for more elegant style. by @EquationWalker in https://github.com/huggingface/accelerate/pull/3767
+* switch XPU ccl backend to torch-builtin xccl in test_zero3_integration by @yao-matrix in https://github.com/huggingface/accelerate/pull/3773
+* fix FSDP2 test case failure on XPU by @yao-matrix in https://github.com/huggingface/accelerate/pull/3771
+* Fix tests by @SunMarc in https://github.com/huggingface/accelerate/pull/3722
+* Protect import for device_mesh  by @SunMarc in https://github.com/huggingface/accelerate/pull/3742
+* Fix `SWANLAB_MODE` by @SunMarc in https://github.com/huggingface/accelerate/pull/3808
+* Fix tracking swanlab by @SunMarc in https://github.com/huggingface/accelerate/pull/3810
+* refactor: nit change for get_parameters_from_modules (code debt) by @kmehant in https://github.com/huggingface/accelerate/pull/3815
+* Remove deprecated FindTiedParametersResult by @cyyever in https://github.com/huggingface/accelerate/pull/3786
+* Add optional typing by @cyyever in https://github.com/huggingface/accelerate/pull/3769
+* remove mlflow from testing  by @SunMarc in https://github.com/huggingface/accelerate/pull/3783
+* enable 2 model hook ut cases on XPU by @yao-matrix in https://github.com/huggingface/accelerate/pull/3774
+* Added Tip for better rendering by @sergiopaniego in https://github.com/huggingface/accelerate/pull/3781
+* Fix typos by @cyyever in https://github.com/huggingface/accelerate/pull/3753
+* fix: torch_npu import error in some envs by @yanyongyu in https://github.com/huggingface/accelerate/pull/3764
+* Fix: typo makes tests fail by @S1ro1 in https://github.com/huggingface/accelerate/pull/3765
+* fix Muti node CUDA error: invalid device ordinal #3775 by @RicardoDominguez in https://github.com/huggingface/accelerate/pull/3779
+* use reset_peak_memory_stats on xpu by @yao-matrix in https://github.com/huggingface/accelerate/pull/3772
+
+
+## New Contributors
+* @mjun0812 made their first contribution in https://github.com/huggingface/accelerate/pull/3725
+* @sergiopaniego made their first contribution in https://github.com/huggingface/accelerate/pull/3761
+* @EquationWalker made their first contribution in https://github.com/huggingface/accelerate/pull/3762
+* @yanyongyu made their first contribution in https://github.com/huggingface/accelerate/pull/3764
+* @RicardoDominguez made their first contribution in https://github.com/huggingface/accelerate/pull/3779
+* @SamuelBarryCS made their first contribution in https://github.com/huggingface/accelerate/pull/3776
+* @Qubitium made their first contribution in https://github.com/huggingface/accelerate/pull/3796
+
+**Full Changelog**: https://github.com/huggingface/accelerate/compare/v1.10.1...v1.11.0</description>
+      <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.11.0</guid>
+      <pubDate>Mon, 20 Oct 2025 16:08:58 GMT</pubDate>
+      <author>SunMarc</author>
+    </item>
+    <item>
+      <title>v1.10.1: Patchfix</title>
+      <link>https://github.com/huggingface/accelerate/releases/tag/v1.10.1</link>
+      <description>- Feat: add to_json by @S1ro1 in https://github.com/huggingface/accelerate/pull/3743
+- Protect import for device_mesh by @SunMarc in https://github.com/huggingface/accelerate/pull/3742. 
+
+**Full Changelog**: https://github.com/huggingface/accelerate/compare/v1.10.0...v1.10.1</description>
+      <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.10.1</guid>
+      <pubDate>Mon, 25 Aug 2025 13:57:15 GMT</pubDate>
+      <author>SunMarc</author>
+    </item>
+    <item>
+      <title>v1.10.0: N-D Parallelism</title>
+      <link>https://github.com/huggingface/accelerate/releases/tag/v1.10.0</link>
+      <description># N-D Parallelism
+
+Training large models across multiple GPUs can be complex, especially when combining [different parallelism strategies](https://huggingface.co/spaces/nanotron/ultrascale-playbook) (e.g TP, CP, DP). To simplify this process, we've collaborated with [Axolotl](https://github.com/axolotl-ai-cloud/axolotl/) to introduce an easy-to-use integration that allows you to apply any combination of parallelism strategies directly in your training script. Just pass a `ParallelismConfig` specifying the size of each parallelism type—it's that simple.
+Learn more about how it works in our latest [blogpost](https://github.com/huggingface/blog/pull/3006).
+
+```python
+parallelism_config = ParallelismConfig(
+    dp_shard_size=2,
+    dp_replicate_size=2,
+    cp_size=2,
+    tp_size=2,
+)
+accelerator = Accelerator(
+    parallelism_config=parallelism_config,
+   ...
+)
+model = AutoModelForCausalLM.from_pretrained(&quot;your-model-name&quot;, device_mesh=accelerator.torch_device_mesh)
+model = accelerator.prepare(model)
+```
+
+* Parallelism config + TP + HSDP +  BYODM (Bring Your Own Device Mesh) by @SalmanMohammadi in https://github.com/huggingface/accelerate/pull/3682
+* Feat: context parallel v2.0 by @S1ro1 in https://github.com/huggingface/accelerate/pull/3700
+* set default submesh_tp_size to prevent unset local variable error by @winglian in https://github.com/huggingface/accelerate/pull/3687
+* Add Parallelism getter property to Accelerator class by @WoosungMyung in https://github.com/huggingface/accelerate/pull/3703
+* Fix: prepare works even if nothing except tp specified (rare) by @S1ro1 in https://github.com/huggingface/accelerate/pull/3707
+* Set parallelism_config in constructor due to Trainer reset of State by @winglian in https://github.com/huggingface/accelerate/pull/3713
+* Fix: tp size wouldn't read from env by @S1ro1 in https://github.com/huggingface/accelerate/pull/3716
+* Remove `ParallelismConfig` from `PartialState` by @SunMarc in https://github.com/huggingface/accelerate/pull/3720
+
+
+# FSDP improvements
+
+We've fixed ignored modules attribute. With this, it is now possible to train PEFT model that moe layers that contrains `q_proj` and `v_proj` parameters. This is especially important for fine-tuning `gpt-oss` model. 
+
+* ENH: Allow FSDP ignored modules to be regex by @BenjaminBossan in https://github.com/huggingface/accelerate/pull/3698
+* TST Add test for FSDP ignored_modules as str by @BenjaminBossan in https://github.com/huggingface/accelerate/pull/3719
+
+# Minor improvements
+* feature: CpuOffload pre_forward don't attempt to move if already on device by @JoeGaffney in https://github.com/huggingface/accelerate/pull/3695
+* Fix: Ensure environment variable values are case-insensitive in Accelerate by @jp1924 in https://github.com/huggingface/accelerate/pull/3712
+* remove use_ipex by @SunMarc in https://github.com/huggingface/accelerate/pull/3721
+
+# New Contributors
+* @SalmanMohammadi made their first contribution in https://github.com/huggingface/accelerate/pull/3682
+* @WoosungMyung made their first contribution in https://github.com/huggingface/accelerate/pull/3703
+* @jp1924 made their first contribution in https://github.com/huggingface/accelerate/pull/3712
+* @JoeGaffney made their first contribution in https://github.com/huggingface/accelerate/pull/3695
+
+**Full Changelog**: https://github.com/huggingface/accelerate/compare/v1.9.0...v1.10.0</description>
+      <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.10.0</guid>
+      <pubDate>Thu, 07 Aug 2025 13:39:44 GMT</pubDate>
+      <author>SunMarc</author>
+    </item>
+    <item>
+      <title>v1.9.0: Trackio support, Model loading speedup, Minor distributed improvements</title>
+      <link>https://github.com/huggingface/accelerate/releases/tag/v1.9.0</link>
+      <description># Trackio tracker support
+We've added support for a trackio, lightweight, 💯 free experiment tracking Python library built on top of 🤗 Datasets and Spaces.
+
+![Screen Recording 2025-06-11 at 5 39 32 PM](https://github.com/user-attachments/assets/5cf12286-54e7-4119-8a20-88c2cbd37ab6)
+
+Main features are: 
+- *Local-first* design: dashboard runs locally by default. You can also host it on Spaces by specifying a `space_id`.
+- Persists logs locally (or in a private Hugging Face Dataset)
+- Visualize experiments with a Gradio dashboard locally (or on Hugging Face Spaces)
+- Everything here, including hosting on Hugging Faces, is **free**!
+
+To use it with accelerate, you need to set `log_with` and initialize the trackers 
+```python 
+accelerator = Accelerator(log_with=&quot;trackio&quot;)
+config={&quot;learning_rate&quot;: 0.001, &quot;batch_size&quot;: 32}
+# init_kwargs in order to host the dashboard on spaces
+init_kwargs = {&quot;trackio&quot;: {&quot;space_id&quot;: &quot;hf_username/space_name&quot;}
+accelerator.init_trackers(&quot;example_project&quot;, config=config, init_kwargs=init_kwargs})
+```
+Thanks @pcuenca for the integration ! 
+* trackio by @pcuenca in https://github.com/huggingface/accelerate/pull/3669
+
+## Model loading speedup when relying `set_module_tensor_to_device `
+Setting tensor while clearing cache is very slow, so we added `clear_device` option to disable it. 
+Another small optimization is using `non_blocking` everywhere and syncing just before returning control to the user. This makes the loading slightly faster.
+* Speedup model loading by 4-5x in Diffusers ⚡ by @a-r-r-o-w in https://github.com/huggingface/accelerate/pull/3674
+
+## FDSP, Deepspeed, FP8 minor improvements
+
+* Add support for e5e2 and default to hybrid when launcher is used by @IlyasMoutawwakil in https://github.com/huggingface/accelerate/pull/3640
+* Fix FP8 tests, enable FP8 to be used without direct `Accelerator()` configuring by @pstjohn in https://github.com/huggingface/accelerate/pull/3677
+* Bunch of FSDP improvements by @S1ro1 in https://github.com/huggingface/accelerate/pull/3671
+* Fix: properly error when DDP + Dtensor model by @S1ro1 in https://github.com/huggingface/accelerate/pull/3629
+* Fix fsdp2 example typo by @shimizust in https://github.com/huggingface/accelerate/pull/3657
+* Added a check in no_sync() to avoid errors when using deepspeed zero2/3 by @xliu0105 in https://github.com/huggingface/accelerate/pull/3656
+
+## 🚨🚨🚨 Breaking changes 🚨🚨🚨
+`find_executable_batch_size()` will no longer halves the batch after every OOM. Instead, we will multiply the batch size by 0.9. This should help user not waste gpu capacity. 
+
+* “Stop Halving My Batch!” · Default back-off 0.5 → 0.9 by @SunMarc in https://github.com/huggingface/accelerate/pull/3684
+
+## What's Changed
+
+* [typo] shards instead of shard  by @SunMarc in https://github.com/huggingface/accelerate/pull/3645
+* Docs: Fix typos in gradient accumulation guide by @kilavvy in https://github.com/huggingface/accelerate/pull/3649
+* xpu enablement on left cases  by @yao-matrix in https://github.com/huggingface/accelerate/pull/3654
+* unpin datasets in examples requirements by @SunMarc in https://github.com/huggingface/accelerate/pull/3681
+* fix: wandb config not saved in offline mode by @ved1beta in https://github.com/huggingface/accelerate/pull/3648
+* accelerate/data_loader.py: do not yield if the base_dataloader is empty by @0xnightwind in https://github.com/huggingface/accelerate/pull/3659
+* warn for invalid keys by @ved1beta in https://github.com/huggingface/accelerate/pull/3613
+* Update Gaudi runner image to latest SynapseAI and enable previously disabled tests by @IlyasMoutawwakil in https://github.com/huggingface/accelerate/pull/3653
+
+## New Contributors
+* @kilavvy made their first contribution in https://github.com/huggingface/accelerate/pull/3649
+* @shimizust made their first contribution in https://github.com/huggingface/accelerate/pull/3657
+* @xliu0105 made their first contribution in https://github.com/huggingface/accelerate/pull/3656
+* @0xnightwind made their first contribution in https://github.com/huggingface/accelerate/pull/3659
+
+**Full Changelog**: https://github.com/huggingface/accelerate/compare/v1.8.1...v1.9.0</description>
+      <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.9.0</guid>
+      <pubDate>Wed, 16 Jul 2025 16:35:54 GMT</pubDate>
+      <author>SunMarc</author>
+    </item>
+  </channel>
+</rss>

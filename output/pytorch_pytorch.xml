@@ -1,0 +1,3188 @@
+<?xml version="1.0" ?>
+<rss version="2.0">
+  <channel>
+    <title>pytorch/pytorch Releases</title>
+    <link>https://github.com/pytorch/pytorch/releases</link>
+    <description>Latest releases from pytorch/pytorch on GitHub</description>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Dec 2025 07:08:18 GMT</lastBuildDate>
+    <item>
+      <title>PyTorch 2.9.1 Release, bug fix release</title>
+      <link>https://github.com/pytorch/pytorch/releases/tag/v2.9.1</link>
+      <description>This release is meant to fix the following issues (regressions / silent correctness):
+
+### Tracked Regressions
+Significant Memory Regression in F.conv3d with bfloat16 Inputs in PyTorch 2.9.0 ([#166643](https://github.com/pytorch/pytorch/issues/166643)) 
+This release provides work around this issue. If you are impacted please install nvidia-cudnn package version 9.15+ from pypi. ([#166480](https://github.com/pytorch/pytorch/pull/166480)) ([#167111](https://github.com/pytorch/pytorch/pull/167111))
+
+
+### Torch.compile
+Fix Inductor bug when compiling Gemma ([#165601](https://github.com/pytorch/pytorch/pull/165601))
+Fix InternalTorchDynamoError in bytecode_transformation ([#166036](https://github.com/pytorch/pytorch/pull/166036))
+Fix silent correctness error_on_graph_break bug where non-empty checkpoint results in unwanted graph break resumption ([#166586](https://github.com/pytorch/pytorch/pull/166586))
+Improve performance by avoiding recompilation with mark_static_address with cudagraphs ([#162208](https://github.com/pytorch/pytorch/pull/162208))
+Improve performance by caching get_free_symbol_uses in torch inductor ([#166338](https://github.com/pytorch/pytorch/pull/166338))
+Fix fix registration design for inductor graph partition for vLLM ([#166458](https://github.com/pytorch/pytorch/pull/166458)) ([#165815](https://github.com/pytorch/pytorch/pull/165815)) ([#165514](https://github.com/pytorch/pytorch/pull/165514))
+Fix warning spamming in torch.compile ([#166993](https://github.com/pytorch/pytorch/pull/166993)) 
+Fix exception related to uninitialized tracer_output variable ([#163169](https://github.com/pytorch/pytorch/pull/163169))
+Fix crash in torch.bmm and torch.compile with PyTorch release 2.9.0 ([#166457](https://github.com/pytorch/pytorch/pull/166457))
+
+### Other
+Fix warning spamming on new APIs to control TF32 behavior ([#166956](https://github.com/pytorch/pytorch/pull/166956))
+Fix distributed crash with non-contiguous gather inputs ([#166181](https://github.com/pytorch/pytorch/pull/166181))
+Fix indexing on large tensor causes invalid configuration argument ([#166974](https://github.com/pytorch/pytorch/pull/166974))
+Fix numeric issue in CUDNN_ATTENTION ([#166912](https://github.com/pytorch/pytorch/pull/166912)) ([#166570](https://github.com/pytorch/pytorch/pull/166570))
+Fix symmetric memory issue with fused_scaled_matmul_reduce_scatter ([#165086](https://github.com/pytorch/pytorch/pull/165086))
+Improve libtorch stable ABI documentation ([#163899](https://github.com/pytorch/pytorch/pull/163899))
+Fix image display on pypi project description section ([#166404](https://github.com/pytorch/pytorch/pull/166404))</description>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/releases/tag/v2.9.1</guid>
+      <pubDate>Wed, 12 Nov 2025 19:27:19 GMT</pubDate>
+      <author>atalman</author>
+    </item>
+    <item>
+      <title>2.9 Release Notes</title>
+      <link>https://github.com/pytorch/pytorch/releases/tag/v2.9.0</link>
+      <description># PyTorch 2.9.0 Release Notes
+- [Highlights](#highlights)
+- [Backwards Incompatible Changes](#backwards-incompatible-changes)
+- [Deprecations](#deprecations)
+- [New Features](#new-features)
+- [Improvements](#improvements)
+- [Bug fixes](#bug-fixes)
+- [Performance](#performance)
+- [Documentation](#documentation)
+- [Developers](#developers)
+- [Security](#security)
+
+
+# Highlights
+
+&lt;table&gt;
+  &lt;tr&gt;
+   &lt;td&gt;&lt;strong&gt;Unstable (API-Unstable)&lt;/strong&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Updates to the stable libtorch ABI for third-party C++/CUDA extensions&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Symmetric memory that enables easy programming of multi-GPU kernels&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;The ability to arbitrarily toggle error or resume on graph breaks in torch.compile&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Expanded wheel variant support  to include ROCm,  XPU and CUDA 13&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;FlexAttention enablement on Intel GPUs&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Flash decoding optimization based on FlexAttention on X86 CPU&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;ARM Platform improvements and optimizations&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Enablement of Linux aarch64 binary wheel builds across all supported CUDA versions&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+For more details about these highlighted features, you can look at the [release blogpost](https://pytorch.org/blog/pytorch-2-9/). Below are the full release notes for this release.
+
+
+# Backwards Incompatible Changes
+
+## Min supported Python version is now 3.10 (#162310)
+
+The minimum version of Python required for PyTorch 2.9.0 is 3.10. We also have 3.14 and 3.14t available as preview with this release.
+
+## Undefined behavior when an output of a custom operator shares storage with an input
+
+This is a reminder that outputs of PyTorch custom operators (that are registered using the `torch.library` or `TORCH_LIBRARY` APIs) are not allowed to return Tensors that share storage with input tensors. The violation of this condition leads to undefined behavior: sometimes the result will be correct, sometimes it will be garbage.
+
+After [#163227](https://github.com/pytorch/pytorch/pull/163227), custom operators that violated this condition that previously returned correct results under `torch.compile` may now return silently incorrect results under `torch.compile`. Because this is changing the behavior of undefined behavior, we do not consider this to be a bug, but we are still documenting it in this section as a &quot;potentially unexpected behavior change&quot;.
+
+This is one of the conditions checked for by [`torch.library.opcheck`](https://docs.pytorch.org/docs/stable/library.html#testing-custom-ops) and is mentioned in [The Custom Operators Manual](https://docs.google.com/document/d/1_W62p8WJOQQUzPsJYa7s701JXt0qf2OfLub2sbkHOaU/edit?tab=t.0#bookmark=id.4c0um7xkba6e)
+
+### More details
+
+Outputs of PyTorch custom operators are not allowed to return Tensors that share storage with input tensors
+
+For example, the following two custom operators are not valid custom operators:
+
+```py
+@torch.library.custom_op(&quot;mylib::foo&quot;, mutates_args=())
+def foo(x: torch.Tensor) -&gt; torch.Tensor:
+    # the result of `foo` must not directly be an input to foo.
+    return x
+
+@torch.library.custom_op(&quot;mylib::bar&quot;, mutates_args=())
+def bar(x: torch.Tensor) -&gt; torch.Tensor:
+    # the result of bar must not be a view of an input of bar
+    return x.view(-1)
+```
+The easiest workaround is to add an extra `.clone()` to the outputs:
+```py
+@torch.library.custom_op(&quot;mylib::foo&quot;, mutates_args=())
+def foo(x: torch.Tensor) -&gt; torch.Tensor:
+    return x.clone()
+
+@torch.library.custom_op(&quot;mylib::bar&quot;, mutates_args=())
+def bar(x: torch.Tensor) -&gt; torch.Tensor:
+    return x.view(-1).clone()
+```
+
+A common way to get into this situation is for a user to want to create a custom operator that sometimes mutates the input in-place and sometimes returns a new Tensor, like in the following example.
+
+```py
+@torch.library.custom_op(&quot;mylib::baz&quot;, mutates_args=[&quot;x&quot;])
+def baz(x: torch.Tensor) -&gt; torch.Tensor:
+    if inplace:
+        x.sin_()
+        return x
+    else:
+        return x.sin()
+```
+This dynamism is not supported and leads to undefined behavior. The workaround is to split the custom operator into two custom operators, one that always mutates the input in-place, and another that always returns a new Tensor.
+```py
+@torch.library.custom_op(&quot;mylib::baz_outplace&quot;, mutates_args=())
+def baz_outplace(x: torch.Tensor) -&gt; torch.Tensor:
+    return x.sin()
+
+@torch.library.custom_op(&quot;mylib::baz_inplace&quot;, mutates_args=[&quot;x&quot;])
+def baz_inplace(x: torch.Tensor) -&gt; torch.Tensor:
+    x.sin_()
+
+def baz(x):
+    if inplace:
+        baz_inplace(x)
+        return x
+    else:
+        return baz_outplace(x)
+```
+
+## Build metal kernels of MacOS-14+ and remove all pre-MacOS-14 specific logic, requires MacOS-14+ going forward (#159733, #159912)
+
+PyTorch MPS is only supported on MacOS-14 or later. If you need to use MPS on MacOS Ventura, please avoid updating to Python-3.9 or above
+
+## Upgrade to DLPack 1.0 (#145000)
+
+This upgrade is doing the same BC-breaking changes as the DLPack release. Objects in `torch.utils.dlpack` have been updated to reflect these changes, such as `DLDeviceType`.
+
+See the PR for details on the exact changes and how to update your code.
+
+## Raise appropriate errors in `torch.cat` (#158249)
+
+`torch.cat` now raises `ValueError`, `IndexError` or `TypeError` where appropriate instead of the generic `RuntimeError`. If you code was catching these errors, you can update to catch the new error type.
+
+
+## Default to `dynamo=True` for ONNX exporter (#159646, #162726)
+
+Previously `torch.onnx.export(...)` used the legacy TorchScript exporter if no arguments were provied. The ONNX exporter now uses the newer `torch.export.export` pipeline by default (`dynamo=True`). This change improves graph fidelity and future-proofs exports, but may surface graph capture errors that were previously masked or handled differently.
+
+Previously in torch 2.8.0:
+
+```python
+# API calls the legacy exporter with dynamo=False
+torch.onnx.export(...)
+```
+
+Now in torch 2.9.0:
+
+```python
+# To preserve the original behavior
+torch.onnx.export(..., dynamo=False)
+
+# Export onnx model through torch.export.export
+torch.onnx.export(...)
+```
+
+Recommendation: first try the new default; only fall back if you hit blocking issues and report them upstream.
+Long term solution: fix the root cause instead of relying on fallback or TorchScript exporter.
+
+## Switch off runtime asserts by default in Export in favor of a shape guards function (#160111, #161178, #161794)
+
+
+To enable runtime asserts, use `export(..., prefer_deferred_runtime_asserts_over_guards=True)`. Also kills the `allow_complex_guards_as_runtime_asserts` flag, merging it into the former option.
+
+
+Additionally, `exported_program.module()` will generate a call to a `_guards_fn` submodule that will run additional checks on inputs. Users who do not want this behavior can either remove this call in the graph, or do `exported_program.module(check_guards=False)` to avoid the generation.
+
+## Set default opset to 20 in ONNX (#158802)
+
+Opset 20 enables newer operator definitions. If your tooling or downstream runtime only supports opset 18, pin it explicitly. For the latest ONNX operators, you can experiment with opset 23.
+
+Previously in torch 2.8.0:
+
+```python
+# opset_version=18
+torch.onnx.export(...)
+```
+
+Now in torch 2.9.0:
+
+```python
+# To preserve the original behavior
+torch.onnx.export(..., opset_version=18)
+
+# New: opset_version=20
+torch.onnx.export(...)
+
+# Use the latest supported opset: opset_version=23
+torch.onnx.export(..., opset_version=23)
+```
+
+## Drop `draft_export` in exporter API (#161454, #162225)
+
+Remove implicit draft tracing from the default exporter path, achieving clearer behaviour and faster failures.
+The expensive `torch.export.draft_export` diagnostic path is no longer auto-invoked (which could take hours on large models). You can still opt in for deep diagnostics:
+
+Previously in torch 2.8.0:
+
+```bash
+# If both torch.export.export(..., strict=False) and
+# torch.export.export(..., strict=True) fail to capture
+# the model graph, torch.export.draft_export(...) will be triggered,
+# and uses real tensor to trace/export the model.
+#
+# Inside export_to_onnx.py:
+#  ... torch.onnx.export(..., dynamo=True)
+python export_to_onnx.py
+```
+
+Now in torch 2.9.0:
+
+```bash
+# To trigger torch.export.draft_export once
+# torch.export.export strict=False/True both
+# fail:
+
+TORCH_ONNX_ENABLE_DRAFT_EXPORT=True python export_to_onnx.py
+```
+
+## Remove `torch.onnx.dynamo_export` and the `onnxrt` torch compile backend (#158130, #158258)
+
+`torch.onnx.dynamo_export` is removed. Please use `torch.onnx.export` instead.
+The experimental ONNX Runtime compile backend (`torch.compile(backend=&quot;onnxrt&quot;)`) is no longer supported.
+
+## Remove `torch.onnx.enable_fake_mode` (#161222)
+
+The `dynamo=True` mode uses `FakeTensor`s by default which is memory efficient.
+
+## Some public facing ONNX utility APIs for the TorchScript based exporter are now private (#161323)
+
+Deprecated members in `torch.onnx.verification` are removed. Previously private `torch.onnx.symbolic_opsets*` functions will no longer be accessible. Consider making a copy of the source code if you need to access any private functions for compatibility with the TorchScript based exporter.
+
+## Remove `torch.onnx.symbolic_caffe2` (#157102)
+
+Support for `caffe2` in the ONNX exporter has ended and is removed.
+
+## Remove `/d2implyavx512upperregs` flag that slows build (#159431)
+
+Re-introduced AVX512 optimizations for Windows VS2022 builds, may cause issues with specific versions of VS2022, see #145702
+
+## Add `ScalarType` to shim conversion and `stable::Tensor.scalar_type` (#160557)
+
+Before, user extensions could only in abstract pass around obfuscated dtypes appearing as `int32_ts`. Now, users can confidently use `torch::headeronly::ScalarType` in their extensions for major scalar types. This PR enables ABI stability by adding a translation layer through the shim, so that even if the `ScalarType` enum values change in the future, user extensions need not fear.
+
+This change adds ScalarType support for user extensions and is only narrowly BC breaking for unpopular dtypes: `quint*`s, `qint*`s, `Bits*`, `dummy_uint*`s, `dummy_int*`s, `Float8_e8m0fnu`, and `Float4_e2m1fn_x2` in the use case where an extension retrieves a Tensor dtype of the above and passes it into `aoti_torch_call_dispatcher`.
+
+# Deprecations
+## Deprecate `pin_memory_device` param in `torch.utils.data.DataLoader` (#158323)
+
+We move enabling `pin_memory` back inside `BaseDataLoaderIter`. This is required for `StatefulDataloader` which leveraged `BaseDataLoaderIter` direclty rather than the `Dataloader` class init
+
+## Deprecate `torch.export.export_for_training` API in favor of equivalent `torch.export.export` API (#158203)
+
+`torch.export.export_for_training` exists because we couldn't migrate internal usages of export to the final IR. Now that we have completed the migration, we deprecated and deleted this API.
+
+# New Features
+## Python Frontend
+- Add utility to get the kernel currently registered on the dispatcher (#158393)
+- Extend `__torch_function__` handler to be triggered by elements within a list (#160256)
+- Add `torch.hash_tensor` reduction function (#154149)
+
+## FX
+- Extend torch function support to ALL arguments instead of just scalar type (but not inside of list, #145089)
+- Add `is_fx_symbolic_tracing` flag (#161385)
+
+## Dynamo
+- Experimental API for ahead-of-time compiling models in fullgraph mode (#161383)
+- Add a hook for recompilations (#157961)
+- DynamicInts prototype (#162194)
+
+Introduces an API for annotating dynamic integer inputs &amp; attributes for `torch.compile`, by wrapping plain ints with `DynamicInt()`.
+DynamicInt objects also work in eager mode, acting as their underlying values when passed as scalar inputs.
+
+```python
+a = DynamicInt(4)
+y = a + 2  # DynamicInt(6)
+z = torch.ones(a)  # torch.ones(4)
+
+fn = torch.compile(torch.ones)
+fn(a)  # compiled fn takes a dynamic integer input
+fn(2)  # returns torch.ones(2) without recompiling
+```
+
+
+## Optimizer
+- Introduce Muon optimizer to PyTorch (#160213)
+
+## Profiler
+- Add GC Events to Python Stack Tracer (#161209)
+- Add a custom profiler configuration option (#151656)
+
+## Inductor
+- Allow user to pass in custom partitioner function (#157580)
+
+## Export
+- Add support for param mutation under inference mode (#159661)
+
+## AOTDispatcher
+- Add AOTDispatcher config to set backward autocast behavior (#156356)
+
+## Quantization
+- Enable cpu fp8 qlinear and cpu fp8 qconv (#155678, #157076)
+
+## ONNX
+- RMS Norm support in opset 23 (#159377)
+
+## C++ Extensions
+- Build out a stable set of ATen ops in `torch/csrc/stable/ops.h`:  `amax`, `narrow`, `new_empty` + `new_zeros` dtype variant, `pad`, (#159328, #158974, #159508, #161597, #160214)
+- Add `torch::stable::Tensor()` default constructor,  `is_cpu`, and `get_device_index`(#159507, #160212, #160143)
+- Add beginnings of `torch::stable::accelerator` with support for DeviceGuard and Stream (#159679, #160453)
+- Start building out `torch/headeronly`: c10 Macros, STD_TORCH_CHECK, ScalarTypes (like BFloat16 and Half, #158035, #158365, #157912, #158377, #159302, #159414, #159412, #159415, #159411, #159911)
+- Remove cmake cache and reconfigure again if it is invalid (#156958)
+- Cut a version of `TORCH_ERROR_CODE_CHECK` in `headeronly` from AOTI (#159604)
+- Remove `wheel` from build requirements (#158027)
+- Error when `TORCH_STABLE_ONLY` is defined in `TensorBase.h` (#161658)
+
+## Build Frontend
+- Add transpose to `torch/csrc/stable` (#158160)
+- Add `zero_()` and `empty_like(t)` to `torch/csrc/stable/ops.h` (#158866)
+
+## Release Engineering
+- Add support for CUDA 13.0 in CI/CD builds. Enable CUDA compression mode for binary size reduction for CUDA 13.0 builds (#160956, #161073, #161257, #161663, #161316, #160201, #160770, #161013, #161916, #162268, #162322, #162383, #161833)
+
+- Enable CUDA 12.6, 12.8 and 13.0 support for Linux ARM64 CD builds (#162364, #160720, #159481)
+
+- Add support for Python 3.14 in CI/CD builds (#156889, #157559, #159261, #159869, #160593, #160788, #161255, #159725)
+
+- Enable NVSHMEM integration (#151261, #153010, #154538, #155506, #156685, #158938, #161321, #160778, #159907, #160465)
+
+## CUDA
+- Add getter for CUDA graph exec to allow mutation of captured kernel params (#161294)
+- Implement support for `cudnn_batch_norm_out` kernel to replace the autogen approach (#123020)
+
+## CPU
+- Support GQA for flash attention (#157893)
+
+## MPS
+- Partial sparse support for MPS backend (#159729, #160254, #160223, #161846, #162007, #157238)
+- Add `avg_pool3d`, `max_unpool1d/2d/3d`, `max_pool3d`, `max_pool3d` bwd pass, and `avg_pool3d` bwd pass for MPS (#158877,#159789, #156467, #157498, #159089)
+
+## ROCm
+- OCP Micro-scaling Format (mx-fp8/mx-fp4) Support (#151360)
+
+## XPU
+- Enable `FlexAttention` on Intel GPU (#143553)
+
+# Improvements
+## Python Frontend
+- Speed up `torch.load` under `FakeTensorMode` by reducing random reads (#157931)
+- Make `torch.utils.benchmark.utils.timer` accelerator agnostic (#157131)
+- Improve error message for weight-only load errors (#159935)
+
+## torch.nn
+- Allow `register_buffer` with `Tensor`-like objects (#159455)
+- Improve error message for unsupported padding configurations (#160866)
+- Validate target is 0D when input is 1D in `NLLLoss` (#161412)
+
+## Optimizer
+- Resolve warning in LBFGS when converting a tensor with `requires_grad=True` to a scalar (#160389)
+- Resolve `SequentialLR` deprecation warning about invoking `step(epoch)` (#149392)
+
+## Autograd
+- Support deterministic `torch.nn.Upsample` `mode=&quot;trilinear&quot;` backward (#154239)
+
+## Distributed
+### c10d
+  - Add improvements to eager init of `ProcessGroupNCCL` (#156748)
+  - Simplify unique hash management of `ProcessGroupNCCL` (#156790)
+  - Support per operation timeouts in `ProcessGroupGloo` (#158128)
+  - Allow ping to be retried in `TCPStore` (#159165)
+  - Support scalar tensor for functional `all_gather` (#149913)
+  - Expos `unsafe_get_ptr` for dist.ProcessGroupNCCL.NCCLConfig (#161136)
+  - Add batch option for `send/recv_object_list` (#160342)
+  - Make FakeStore optional to be passed into fake backend (#162164)
+  - Enable complex datatype support in `ProcessGroupGloo` (#156633)
+  - Move thread-local capture mode guard to include `work.isStarted` (#160398)
+### DistributedDataParallel (DDP)
+  - Support ddp zero hook XCCL path (#159240)
+### DTensor
+  - Relax `device_mesh` argument constraint in `local_map` (#157049)
+  - Support complex numbers in DTensor redistribute (#157329)
+  - Rework partial propagation in point-wise op and support mul (#157340)
+  - Allow dynamic shapes for `DTensor` slice (#157953)
+  - Implement `histc` op (#158298)
+  - Made dispatch to sharding prop over decomps (#159324)
+  - Support user-supplied Generator for random ops (#159933)
+  - Add `propagate_tensor_meta` function that skips cache if `_are_we_tracing` (#161334)
+  - Support `local_map` as a decorator (#161353)
+### Device Mesh
+  - Enable the use of user set backend and pg option even for the global mesh (#157501)
+  - Enable slicing a submesh with warnings (#158899)
+  - Allow controlling PG backend and options via `init_device_mesh` (#159371)
+### FullyShardedDataParallel2 (FSDP2)
+  - Support custom `all_gather` and `reduce_scatter` comms (#155189)
+  - Made it fail `set_allocate_memory_from_process_group` if used together with custom comm hooks (#157487)
+  - Use `reduceOpSum` when world size is 1 (#157529)
+  - Skipp `allgather` when world size is 1 (#160135)
+  - Use `post_reduce_stream.record_event()` on hsdp+cpuoffload (#160481)
+### Tensor Parallel (TP)
+  - Improve `parallelize_module` API to support more cases (#157182)
+### TensorPipe
+  - Update TensorPipe pinned dependency version (#159834)
+### TorchElastic
+  - Enable NUMA binding integration with elastic agent and `torchrun` (#149334)
+  - Support NUMA Binding for Callable Entrypoints (#160163, #161183)
+### Pipeline Parallelism (PP)
+  - Add `eval()` API to schedule (#157795)
+  - Allow intermediate nodes in zero bubble to have multiple grads (#159084)
+  - Support `OVERLAP_F_B` computation type (#158978)
+  - Initializ P2P communicators on first step (#160210)
+  - Add `DualPipeV` schedule (#159591)
+
+## Linear Algebra Frontend
+- Use rocSOLVER for Cholesky inversion on AMD. (#157154)
+- Add option for using TF32 as fp32 internal precision for matmul/linear/conv on MKLDNN (#157520)
+- Make einsum produce contiguous outputs in more cases (#161755)
+
+## Profiler
+- Add more CUDA API for kernel launcher (#156016)
+- Allow Custom Time Unit When Printing Profiler Table (#157913)
+- Update CUDA runtime kernel identification logic (#157890)
+
+## FX
+- Fix DCE eliminating random operations by improving `is_impure()` (#151524, #157981)
+- Support converting a float32 tensor to a scalar in FX trace. (#158216)
+- Correctly copy `self.module_stack` in ModuleStackTracer (#159956)
+- Add tool to track events in graph split (#159795)
+- Add `node_name_match` to subgraph rewriter (#157574)
+
+## Dynamo
+- Improve tracing support for various Python builtin data structures/modules:
+  - `list`s (e.g. #153969)
+  - `set`s (e.g. #153150)
+  - `dict`s (e.g. #154794)
+  - `iter` (e.g. #156371)
+  - `itertools` (e.g. #159693)
+  - `collections` (e.g. #159365)
+  - `collections.NamedTuple` (#159367)
+  - frozen `dataclasses.dataclass` (#159529)
+- Graph break error messages link to a website with more information (#159011)
+- Add option for `TorchDispatchMode` to ignore `torch.compile` internals (#161648)
+
+## Inductor
+- Add Inductor support for MTIA backend (#159211)
+- Share default device context when all graph partitions and cudagraph-unsafe ops are on the same device(#162873)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Enable AOTI for CPU on Windows (#158915)
+- Re-enable TMA templates w/ AOTI (#157819)
+- Don't allow int32 indices if `{non-inf, &gt; int32_max}` upper bound is provided (#159433)
+- Add RecordFunction to C shim so that profiling works with AOTI (#159842)
+- Add AOTI C shim functions for collective ops (#154492)
+- Add missing ops to set of C-shim ops which can have nullptr returns (#158073)
+
+## Export
+- Handle `None` &amp; ellipsis slicing/select in non-strict (#157821)
+- Extend FP8 types in serialization (#158430)
+- Improve error messages for deserialization (#159881)
+- Support serialization for `triton_kernel_wrapper_functional` HOP (#161314)
+- Support serialization for complex constants (#161517)
+- Add runtime asserts to `while_loop` HOP subgraphs (#158467)
+- Warn on side-effectful code in strict mode (#160060)
+- Support for vmap in pre-dispatch export (#154650)
+- Support vmap and custom autograd function/improve DTensor constructor inefficiency (#162240)
+
+## AOTDispatcher
+- Skip logging in fp8 activation quantization if there are no nodes to be quantized (#158129)
+- Add `aot_export_joint_with_descriptors` and `aot_compile_joint_with_descriptors` (#158715)
+- Extract out `prepare_aot_module_simplified` for use in next PR (#158319)
+- Rename modules in AOTAutograd (#158449)
+- Track descriptors for all inputs/outputs of AOTAutograd traced graph (#158624)
+- Improve graph output alias with subclass error message (#159619)
+- Pass fw/bw compilers to `aot_export_joint_with_descriptors` (#159814)
+
+## Composability
+- Meta implementation for `aten.add.Scalar` (#161332)
+- `aten.expand_copy` decomp (#161688)
+- Fix result dtype cast in decomp for `aten.linalg_vector_norm` (#155111)
+- Add dtype checks in meta implementation for several ordering ops (#159556)
+- Fix meta function for `aten.complex` (#160894)
+- Improve unbacked symint (dynamic shape) support for several decompositions (#148815, #156902, #157008, #158894, #159184, #160683, #160253, #162084, #162099, #162109, #160462)
+
+## Quantization
+- Avoid getting model device once per node for pt2e quantization flow (#159901)
+- Fixes bug in implementation of `HistogramObserver` (#156457)
+- Support `bias=None` for `fbgemm_linear_fp16_weight` CPU op (#158535)
+- Add Static Dispatch Kernel for `wrapped_fbgemm_linear_fp16_weight` for Sigmoid (#160451)
+
+## Nested Tensor (NJT)
+- Added initial `log_softmax()` support (#159662)
+
+## Foreach
+- Invoke `vector.reserve()` consistently for non-inplace foreach operations (#161128)
+- Faster and safer lambda expression capture in `has_integral_tensor()` (#161042)
+
+## ONNX
+- Support symbolic arguments in ONNX exporter (#157734)
+- Fix `torch.tensor` warning in ONNX `symbolic_opset10` export  (#158835)
+
+## C++ Frontend
+- Generalized `AllocatorConfig` to be device-agnostic via new `AcceleratorAllocatorConfig` (#149601, #150312)
+- Added `Scalar::isUnsigned()` method (#159877)
+- Exposed `ModelRunner` from nativert as public (#159989)
+- Improve error message for `torch.binomial` enforcing float inputs (#157658)
+
+## Build Frontend
+- Fix dev warning in `Dependencies.cmake` (#159702)
+- Fix building system gloo with CUDA/HIP (#146637)
+- Build `libtorch` without NVSHMEM (#160910)
+- Improve BLAS feature detection (#143846)
+
+## Release Engineering
+- Enable vLLM testing workflow (#160583, #161565, #162292, #162000, #161797)
+- Enable Windows ARM64 CI testing (#148753, #161504)
+- Enable PyTorch ROCm CI for MI355X testing. (#158889)
+
+## CUDA
+- Make cublaslt/hipblaslt workspaces persistent (#156495)
+- Remove unnecessary warnings during the ATen compilation process (#157703)
+- Slightly improve error message from `repeat_interleave` kernel (#157996)
+- Add framework for explanations for common CUDA errors (#158395)
+- Upgrade KernelLauncher `kernelLaunchCheck` to print help string (#158896)
+- Prep for cutlass upgrade by ignoring `Wunused-but-set-variable` (#159276)
+- Workaround ATen SFINAE under `libc++` (#161101)
+- Implement changes to CCCL (CUB/Thrust/LibCUDACXX) usage in ATen (#153373)
+- Add maybe unused flag to remove warning (#157655)
+- Use new CCCL API in v2.8 (#160554)
+- Improve cupy device placement when device is provided with explicit index (#158529)
+
+## CPU (AArch64)
+- Made PyTorch compilable with gcc-14 on ARM (#157867)
+
+## MPS
+- Add `shifted_chebyshev_polynomial_[tuvw]`, `igamma/igammac,grid_sampler_3d, native_dropout`/`native_dropout_backward`  (#157488, #161927, #160541, #162108)
+- Extend atomic operations to all int types (#158179)
+- Extend `index_put` to complex types (#160159)
+- Extend `addmm` to integral types (#160270)
+- Add support for unsigned types (#159094)
+- Add API to query GPU core count (#160414)
+- Add `kthvalue` (#161817)
+- Type-promote tensor-iterator common dtype (#160334)
+- Implement `logcumsumexp` metal kernel (#156858)
+- Enable `dlpack` integration (#158888)
+- Dynamic reductions (#159355)
+- Update `avg_pool2d` to use Metal kernel when `ceil_mode=True` (#161011)
+
+## ROCm
+- Additional hipify mappings (#158056, #158352, #161992)
+- Refactor `composable_kernel` (CK) backend user interface to improve user experience (#152951)
+- Allow use of `rocSOLVER` for Cholesky inversion. (#157154)
+- AOT Inductor enable gfx950 for max autotune using CK (#159195)
+- Add flag `torch.backends.miopen.immediate` to toggle MIOpen Immediate Mode instead of relying on `deterministic=True` and `benchmark=False` (#158951)
+- MIOpen convolutions no longer call `reshape_` or unexpectedly change memory formats (#161687)
+
+## XPU
+- Support Intel GPU quantization ops in AOTInductor (#156572)
+- Add `device_id` to Intel GPU properties to distinguish iGPUs with identical names (#156481)
+
+# Bug Fixes
+## Python Frontend
+- Add option in `torch.utils.cpp_extension.load_inline` to override gencode (#156850)
+- Fix `max_width` computation in Tensor printing (#126859)
+- Improve `pin_memory` error message on CPU-only systems (#159994)
+- Making batching rule for `F.embedding` DTensor-aware (#162117)
+
+## Autograd
+- Fix `torch.autograd.Function` memory leak due to `torch.utils.checkpiont` early stopping (#161171)
+- Fix `torch.autograd.graph.GradientEdge` for `torch.autograd.Function` (#160098)
+- Match 0-dim gradients device type regardless of subclass-ness (#160165)
+
+## Distributed
+### c10d
+  - Fix slow init due to repeated dns resolution failure in socket (#159596)
+  - Fix `setGroupName` and `setGroupDesc` in `group_split` and `merge_remote_group` (#159429)
+  - Fix a bug of distributed 'gather' with noncontiguous tensors on the Gloo backend (#158903)
+  - Fix a bug of distributed 'gather' with noncontiguous tensors on the NCCL backend (#159549)
+  - Fix data inconsistencies when using `batch_isend_irecv` with 2D tensor views by making P2P tensors dense (#163719)
+  - Handle discontiguous `allgather`/`reducescatter` inputs (#163712)
+### Device Mesh
+  - Fix the not incorrectly chained each of the strings as iterables (#160709)
+### DistributedDataParallel (DDP)
+  - Fix incorrect interaction between `DDPOptimizer` and donated buffers (#160745)
+### DTensor
+  - Fix DTensor handling of conjugate bit (#158030)
+  - Fix `OpSchema` equality check (#161231)
+  - Fix `grouped_mm` strategy for invalid stride cases (#158245)
+  - Fix `F.one_hot` in DTensor (#162307)
+  - Always disabled `ShardingPropagation` cache if compiling (#156868)
+### FullyShardedDataParallel (FSDP)
+  - Fix the bug in FSDP offload `pin_memory` (#157147)
+  - Fix to ensure writeback handles `NO_SHARD` correctly by flattening tensors before copying (#154369)
+### FullyShardedDataParallel2 (FSDP2)
+  - Fix error message for `fsdp_pre_all_gather` (#160817)
+  - Fix the issue with `set_reduce_scatter_divide_factor` errors and `MixedPrecisionPolicy`  (#155964)
+### Pipeline Parallelism (PP)
+  - Fix eval step under `no_grad()` (#159293)
+  - Fix zero bubble schedules for `eval()` (#159475)
+### TensorPipe
+  - Fix `import torch` if compiled without `TensorPipe` (#159461)
+### TorchElastic
+  - Fix wrong log file name in the docs of `torch.distributed.elastic.multiprocessing.start_processes()` (#160396)
+
+## Linear Algebra Frontend
+- Avoid downcasts for fp16 matmul on the BLAS backend (#161999)
+
+## Profiler
+- Fix Linter for Global Annotations flag in Snapshot (#157858)
+
+## FX
+- Fix `split_module` with symint (#160093)
+- Fix `getattr_recursive` with ModuleList (#161204)
+- Skip const folding with symbolic expression (#161437)
+- Fix qualified name for methods of `torch.Tensor` (#162224)
+
+## Dynamo
+- Fix segfault due to interaction between Dynamo backends and `torch.compiler.reset()` (#156527)
+- Fix crash due to bad interaction with recompilations and with blocks in Python 3.11+ (#162318)
+
+## torch.nn
+- Fix silent correctness w/ backpropping grads for `FlexAttention` (#163677)
+- Fix `return_lse` warning message in `FlexAttention` (#163578)
+- Fix `FlexAttention` head broadcast (#163426)
+
+## Inductor
+- Fix wrong meta function for `constant_pad_nd` (#159878)
+- Fix learnable bias assertion error in Inductor (#161170)
+- Fix int64 from `MutationOutput` Buffer (#162020)
+- Fix Inductor CUDA sort `NaN` behavior (#159308)
+- Fix layout for local buf in outer loop fusion (#160857)
+- Fix slice scatter `dtype` consistency (#160851)
+- Fix 3d tiled online softmax (#162341)
+- Fix unsafe collective reorder past wait in Inductor (#157489)
+- Fix `FallbackKernel` alias function to avoid incorrect aliasing for custom ops (#163227)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Fix a bug from `load_constants` (#161887)
+- Fix wrong propagation of fallback_ops_dict in `gen_aoti_c_shim` (#159904)
+- Fix unbacked symint and memory leak in Inductor memory planning (#159839)
+- Fix memory leak in AOTI when calling `aoti_torch_as_strided` (#162118)
+- Explicitly delete `wait_tensor` returned tensor (#159502)
+- Fix memory leak from `all_reduce` (#159818)
+
+## Composability
+- Make functionalization ViewMeta serializable with pickle (#163769)
+
+## Export
+- Fix bug in constants lifting pass (#157719)
+- Fix `from_node` provenance in unlift pass (#157943)
+- Fix `NaN` serialization (#155359)
+- Fix deserialization for unbacked symbol ranges (#158681)
+- Fix runtime assert handling in deserialization (#159060)
+- Fix for FQN handling in unflattener (#159418)
+- Fix `nn_module_stack` for `assert_tensor_metadata` nodes (#159625)
+- Fix usage for `move_to_device_pass` (#159992, #160528, #162301)
+- Avoid name overwrites for aliased exported module parameters (#160600)
+- Avoid inling `dynamo.disables` in unflattening (#161306)
+- Fix deserialization issue for storage offset (#162172)
+- Remove `.contiguous()` when saving weights to raw bytes to preserve original storage size of tensor (#163587)
+
+## Quantization
+- Avoid `NaN` in fp8 output of CPU `qlinear` and `qconv` ops (#160957)
+- Fix segmentation fault when `choose_qparams_optimized` (#161966)
+
+## Foreach
+- `chunk_size` should always be `int64_t` for Foreach functors (#156872)
+
+## ONNX
+- Make onnx export SDPA match ATen behavior (#159973)
+- Fix `rotary_embedding_23` implementation (#162865)
+- Fix export behavior when model has `None` as output (#160200)
+- Fix lower opset version support in `dynamo=True` (#161056)
+- Fix `index_put_` usage (#161263)
+
+## C++ Extensions
+- Fix CPP extension distributed warning for `TORCH_CUDA_ARCH_LIST` to only log when running on non-distributed or on rank 0 (#162764)
+
+## C++ Frontend
+- Fix `torch.utils.cpp_extension` parser for clang version 20.1.7+libcxx (#157666)
+- Fix `MakeTensor::computeStorageSize()` calculation (#158690)
+- Fix static initialization order issue with `AllocatorConfig` (#159629)
+
+## Build Frontend
+- Turn on `BUILD_BUNDLEPTXAS=1` to allow compile on newer GPUs(#163988)
+
+## CUDA
+- Handle uninitialized `torch.backends.cuda.matmul.fp32_precision` (#161102)
+- Fix nansum in non-JIT build (#158633)
+- Decrease launch bounds of CTCLoss backward for blackwell to avoid crash (#159522)
+- Implement workaround for `cudaErrorNotSupported` (#162412)
+- Fix missing `__syncthreads` in MultiMarginLoss backward (#158994)
+- Roll-back cuDNN frontend upgrade and update Meta registration due to compile issues (#163104)
+- Disable cuDNN for 3D convolutions with `kernel size != 1` for cuDNN 9.8+ (#163581)
+
+## CPU
+- Add check so non-aarch64 platforms can hit `MKLDNN` path (#162168)
+
+## MPS
+- Fix batch norm incorrect gradient (#156867)
+- Do not crash if `tensor dim &gt; INT_MAX` (#158824)
+- Avoid outputing zeros from `exponential_` for MPS (#159386)
+- Fix MPS autocast for `ConvTranspose3d` (#160345)
+- Fix MPS `conv3d` autocast bias dtype mismatch (#160423)
+- Fix error check for `torch.var` on scalar (#160889)
+- Fix `index_add` for complex + int64, int64 input + zerodim index (#160926, #161511)
+- Fix `constant_pad_nd_mps` bug when pad is empty (#161149)
+- Fix `index_select` for `scalar_types` (#161206)
+- Fix `index_copy` for scalars and `index_copy` for strided indices (#161267, #161333)
+- Ensure that tensors are contiguous before using MPS linear kernel (#161641)
+- Address `NaN`s if SDPA is called with all values masked from query (#157727)
+- Fix invalid formatting (#158436)
+- Fix empty input in posneg functions (#161824)
+- Migrate round unary op to Metal (#161712)
+- Type-promote tensor-iterator common dtype (#160334)
+- Fix regression in 2.8.0 for `scaled_dot_product_attention` using MPS (#163598)
+- Chunk `fillBuffer` into 4Gb slices to avoid regression on MacOS 26 (#164108)
+- Fix latent bug that can result in segfault in CPP extensions (#164093)
+
+## ROCm
+- Fix Inductor with cudagraph trees `hip:0` device error (#161221)
+- Fix some build failures and support some BLAS calls on Windows (#161981)
+- Fix undefined symbol linker error after exposing MIOpen symbols on Windows (#156479)
+- Fix finding ROCm/HIP version on Windows (#156486)
+- Fix LoadHIP handling of environment variable paths on Windows (#159080)
+- Add hipcc compatibility flags to `cpp_extension.py` on Windows (#159790)
+- In SDPA via AOTriton, `logsumexp` needs scaling back to natural base (#156903)
+- Check stream graph capture status in `memcpy_and_sync` inline function (#158165)
+
+## XPU
+- Fix `cpp_extension` compatibility with `intel-deep-learning-essentials-2025.2` (#161012)
+
+## JIT
+- Make `ErrorReport::CallStack` thread-safe (#160386)
+- Fix `RemoveProfileNodesAndSpecializeTypes` handling for `Tensor?` that is resolved to `None` (#161538)
+
+# Performance
+## Optimizer
+- Use `addmm` to improve Newton–Schulz orthogonalization in Muon (#161379)
+- Avoid stream sync in SWA `AveragedModel.update_parameters()` (#157705)
+
+## Autograd
+- Fix SVD forward-mode AD multiplication priority (#161027)
+
+## Dynamo
+- Recursive `dict` tag optimization for faster guard evaluation (#159183)
+
+## Inductor
+- Improve performance of A16W4 and A16W8 `GEMM` template (#159127, #161148)
+- More aggressive persistent reduction (#161055)
+- Add a few outer dimension reduction cases for LOAF (#162028)
+- Fuse two RoPE kernels into a single kernel and improving runtime efficiency (#161420)
+
+## Export
+- Caching optimizations for placeholder naming pass (#158594)
+- Add Static Dispatch Kernel for `fmod.Scalar` and `scale_gradient` (#160654, #160454)
+
+## CUDA
+- Use a nonblocking copy to avoid stream synchronization for GPU tensor indexing with CPU mask (#156384)
+- Disable cudagraph GCs by default to improve capture performance (#158649)
+
+## Release Engineering
+- Upgrade to ROCm 6.4.1 and 6.4.2 patch releases (#156636, #158887, #158886, #158651, #159001)
+- Migrate RPyTorch ROCm CI to MI325 capacity (#159059, #159649, #161184)
+- Enable B200 PyTorch benchmark testing (#158011, #157341)
+
+## MPS
+- Optimize cummin/cummax metal kernels (#156794)
+- Speedup `torch.full` for 1-byte types (#158874)
+- Speedup `argmax`/`argmin` (#159524)
+- Improve performance of `max_pool3d` (#157875)
+- Avoid calling tensor ops in `max_pool3d` impl (#157874)
+- Move `max_pool2d` to Metal for `stride != 1` (#157876)
+
+## ROCm
+- SDPA now uses AOTriton to 0.11b (#161754)
+- `hipblaslt` is used by default on gfx908 for ROCm &gt;= 6.3 (#159092)
+- Enable miopen channels last 3d for conv and batchnorm (#160529)
+- Remove extra transposes in NHWC convolutions on MIOpen (#160435)
+- Remove extra sync in `tensor.item()` (#158486)
+- Elementwise and reduction kernel perf improvements (#159430, #159652, #160444, #160466, #161054, #161180, #161181)
+- Enable build of `fbgemm_gpu genai` sources for grouped GEMM support (#160676)
+
+## XPU
+- Enable tensor memory descriptor Triton template for Intel GPU (#161600)
+
+# Documentation
+## Python Frontend
+- Improve documentation for `torch.lobpcg`, `torch.clone`, `torch.matmul`, `torch.max`, `torch.gather`, `torch.Tensor.scatter_`, `torch.empty_like`, `torch.randint`, `torch.mul`, `torch.min`, `torch.max`. `torch.sort`, `torch.full_like`, `torch.histogramdd`, `torch.hamming_window` (#156139, #157007, #161424, #156153, #157929, #157920, #158050, #158731, #160312, #161539, #162051, #158275, #152682)
+- Remove torchscript related sections in serialization docs (#156648)
+- Fix typo in `torch.set_float32_matmul_precision` docs (#158191)
+- Fix docstring for `torch.nn.utils.clip_grads_with_norm_` to reflect clamping behavior (#158200)
+- Fix the Doc issue on the description of edge_order in `torch.gradient` (#159130)
+- Add `torch.segment_reduce` docs (#154352)
+- Add examples to `torch.is_floating_point` and `torch.is_complex` docs (#161951)
+## torch.nn
+- Improve description of `padding` for `avg_poolnd` (#159142)
+- Improve `CrossEntropyLoss` docs with example of incorrect target specification (#155649)
+- Remove redundant dtype conversion in `scaled_dot_product_attention` example (#161613)
+
+## Optimizer
+- Document specific optimizer modules APIs e.g., `torch.optim.adam.Adam`, properly (#158483, #158669, #160194)
+- Add note for clarity in Adafactor doc #154862 (#155248)
+- Minorly improve `zero_grad` description (#161239)
+
+## Autograd
+- Improve `torch.inference_mode` docs and error message (#161164)
+
+## Distributed
+### c10d
+  - Documented barrier collective's interaction with `device_id` (#159389)
+  - Fix comment to match logic in `distributed_c10d.py` (#162158)
+### DTensor
+  - Rewrote doc of `TupleStrategy` (#158132)
+  - Documented `redistribute_costs` (#158495)
+### FullyShardedDataParallel (FSDP)
+  - Removed FSDP1 developer note (#158991)
+
+## Profiler
+- Update PT2 Profiler Torch-Compiled Region Image (#158066)
+- Fix Experimental Config Documentatation(#156586)
+- Update README (#159816)
+
+## FX
+- Fix typos in `torch/` (`torch/fx/`, #156604)
+- Add typing (#158450)
+- Fix typo in FX interpreter class docs (#162055)
+- Remove allow-untyped-defs from `torch/fx/experimental/migrate_gradual_types/util.py` (#157236)
+
+## Inductor
+- Add documentation for CUDAGraph partition (#159450)
+
+## Export
+- Update docs around draft export, dynamism, and PT2 Archive (#157750)
+
+## ONNX
+- Update export docstring (#162622)
+- Delete deprecated tutorial page link (#157310)
+- Filter out torchscript sentences (#158850)
+- Fix doc typo for `symbolic_multi_out` (#160702)
+- `onnx.md` to simplify deprecated entities (#159312)
+- Update export docstring and set `fallback=False` by default (#162622, #162726)
+- Fix typo in error message: summit -&gt; submit (#162587)
+
+## Release Engineering
+- Add decorator to create deprecation warnings (#155127)
+- Add runnable code examples to export documentation (#158506)
+- Add developer notes for integrating new backends into PyTorch (#158644)
+
+## XPU
+- Update supported OS to Windows 11 &amp; Ubuntu 24.04/25.04 for Intel client GPU (#161699)
+
+# Security
+## Python Frontend
+- Don't store flamegraph to tmp folder (#157374)
+
+# Developers
+## Python Frontend
+- Better sample inputs for addmm OpInfo (#160234)
+
+## Distributed
+### c10d
+  - Add `waitcounter` for watchdog and heartbeat monitoring thread (#157480)
+  - Made `torch.distributed.breakpoint` set a long timeout (#158481)
+  - Add `check_rng_sync` util (#160283)
+  - Add `FlightRecorder` support for `ProcessGroupXCCL` (#158568)
+  - Add `early_stop` kwarg to `torch.utils.checkpoint` (#160781)
+### DTensor
+  - Wrap sharding prop error with contextual exception (#161574)
+  - Add check if tracing for sharding propagation to handle un-hashable keys in DTensor (#160798)
+### Device Mesh
+  - Add error when users try to slice non contiguous flattened dim submesh (#157523)
+  - Make the repr shorter when debug ENV not set (#158822)
+### ShardedTensor
+  - Make error message descriptive in ShardedTensor creation (#150627, #159423)
+### Pipeline Parallelism (PP)
+  - Add profiling to schedule execution (#160753)
+
+## FX
+- Consolidate stack trace in Tracer (#156257, #157302, #158266)
+- Separate provenance tracking to different levels (#160383, #158399, #158796, #159484)
+- Fix `register_foward_pre_hook not supported on ScriptModule` error (#156904)
+- Add `__eq__` function to NodeSource (#158170)
+- Add `__hash__` function to NodeSource (#158322)
+- Cache dict and string rep for better perf in NodeSource (#158372)
+- Recover node source from dict (#158373, #158473)
+- Include error stacktrace and graph module in `tlparse` error (#158469)
+- Add `expanded_def` option for FX printing, render descriptor, update tests (#158708)
+- Remove `co_lnotab` in favor of `co_linetable` (#159227)
+- Remove duplicate imports (#161685)
+- Include Output tensor metadata for `CompiledFxGraph` (#159311)
+
+## Inductor
+- Deprecate `allow_tf32` in `tl.dot(..., allow_tf32=...)`, use `tl.dot(..., input_precision=...)` (#160711)
+- Log autotune choices and benchmark result to scuba/chrome trace (#159496)
+- Add TLParse artifact for logging runtime of collective and compute ops (#159730)
+- Call `jit_post_compile_hook` within Inductor Triton Kernel compile path (#161443)
+- Prune configs that require more shared memory than the hardware limit (#161996)
+- Runtime estimations using nccl estimator on mm only benchmark mode (#161405)
+- Don't use `torch.backends.cuda.matmul.allow_tf32` in Inductor cache key (#159480)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Better error message when no .so/cpp files are found (#156863)
+- Clean up old APIs in AOTI c shim (#158400)
+- Add Inductor provenance mapping for cpp extern kernel (#161656, #162069)
+- Print out error msg when nvcc compiler fails (#157203)
+- Add kernel information JSON generation for AOTI packages (#160540)
+
+## Composability
+- Stop suggesting to use `guard_size_oblivious` on data dependent errors (#160510)
+- Avoid unnecessary slices resulting in data-dependent errors (#157528)
+
+## Quantization
+- Revamp dtype documentation (#156087)
+- Use new type statement to fix public API of types (#158487)
+
+## Dataloader Frontend
+- Add `torch.utils.data` samplers benchmark script (#156974)
+- Add `torch.utils.data.Dataloader` benchmark script (#159432)
+
+## Release Engineering
+- Replace `setup.py develop` with `pip install -e` for development builds (#155998, #156027, #156710)  (#156709)
+
+## XPU
+- Upgrade Intel GPU software stack package to intel-deep-learning-essentials-2025.2 (#158733)
+</description>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/releases/tag/v2.9.0</guid>
+      <pubDate>Wed, 15 Oct 2025 17:12:27 GMT</pubDate>
+      <author>seemethere</author>
+    </item>
+    <item>
+      <title>PyTorch 2.8.0 Release</title>
+      <link>https://github.com/pytorch/pytorch/releases/tag/v2.8.0</link>
+      <description># PyTorch 2.8.0 Release Notes
+- [Highlights](#highlights)
+- [Backwards Incompatible Changes](#backwards-incompatible-changes)
+- [Deprecations](#deprecations)
+- [New Features](#new-features)
+- [Improvements](#improvements)
+- [Bug fixes](#bug-fixes)
+- [Performance](#performance)
+- [Documentation](#documentation)
+- [Developers](#developers)
+
+
+# Highlights
+&lt;table&gt;
+  &lt;tr&gt;
+   &lt;td&gt;&lt;strong&gt;Unstable&lt;/strong&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;torch::stable::Tensor&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;High-performance quantized LLM inference on Intel CPUs with native PyTorch&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Experimental Wheel Variant Support&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Inductor CUTLASS backend support&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Inductor Graph Partition for CUDAGraph&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Control Flow Operator Library&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;HuggingFace SafeTensors support in PyTorch Distributed Checkpointing&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;SYCL support in PyTorch CPP Extension API&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;A16W4 on XPU Device&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Hierarchical compilation with torch.compile&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Intel GPU distributed backend (XCCL) support&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+For more details about these highlighted features, you can look at the [release blogpost](https://pytorch.org/blog/pytorch-2-8/).
+Below are the full release notes for this release.
+
+# Tracked Regressions
+### Windows wheel builds with CUDA 12.9.1 stack overflow during build (#156181)
+Due to a bug introduced in CUDA 12.9.1, we are unable to complete full Windows wheel builds with this
+version, as compilation of `torch.segment_reduce()` crashes the build. Thus, we provide a wheel
+without `torch.segment_reduce()` included in order to sidestep the issue. If you need support
+for `torch.segment_reduce()`, please utilize a different version.
+
+# Backwards Incompatible Changes
+
+## CUDA Support
+### Removed support for Maxwell and Pascal architectures with CUDA 12.8 and 12.9 builds (#157517, #158478, #158744)
+Due to binary size limitations, support for sm50 - sm60 architectures with CUDA 12.8 and 12.9 has
+been dropped for the 2.8.0 release. If you need support for these architectures, please utilize
+CUDA 12.6 instead.
+
+## Python Frontend
+### Calling an op with an input dtype that is unsupported now raises `NotImplementedError` instead of `RuntimeError` (#155470)
+Please update exception handling logic to reflect this.
+
+In 2.7.0
+```
+try:
+    torch.nn.Hardshrink()(torch.randint(0, 5, (10,)))
+except RuntimeError:
+    ...
+```
+
+In 2.8.0
+```
+try:
+    torch.nn.Hardshrink()(torch.randint(0, 5, (10,)))
+except NotImplementedError:
+    ...
+```
+
+### Added missing in-place on view check to custom `autograd.Function` (#153094)
+
+In 2.8.0, if a custom `autograd.Function` mutates a view of a leaf requiring grad,
+it now properly raises an error. Previously, it would silently leak memory.
+```
+   class Func(torch.autograd.Function):
+        @staticmethod
+        def forward(ctx, inp):
+            inp.add_(1)
+            ctx.mark_dirty(inp)
+            return inp
+
+        @staticmethod
+        def backward(ctx, gO):
+            pass
+
+    a = torch.tensor([1.0, 2.0], requires_grad=True)
+    b = a.view_as(a)
+    Func.apply(b)
+```
+Output:
+
+Version 2.7.0
+```
+Runs without error, but leaks memory
+```
+Version 2.8.0
+```
+RuntimeError: a view of a leaf Variable that requires grad is being used in an in-place operation
+```
+
+### An error is now properly thrown for the out variant of `tensordot` when called with a `requires_grad=True` tensor (#150270)
+
+Please avoid passing an out tensor with `requires_grad=True` as gradients cannot be
+computed for this tensor.
+
+In 2.7.0
+```
+a = torch.empty((4, 2), requires_grad=True)
+b = torch.empty((2, 4), requires_grad=True)
+c = torch.empty((2, 2), requires_grad=True)
+# does not error, but gradients for c cannot be computed
+torch.tensordot(a, b, dims=([1], [0]), out=c)
+```
+
+In 2.8.0
+```
+a = torch.empty((4, 2), requires_grad=True)
+b = torch.empty((2, 4), requires_grad=True)
+c = torch.empty((2, 2), requires_grad=True)
+torch.tensordot(a, b, dims=([1], [0]), out=c)
+# RuntimeError: tensordot(): the 'out' tensor was specified and requires gradients, and
+# its shape does not match the expected result. Either remove the 'out' argument, ensure
+# it does not require gradients, or make sure its shape matches the expected output.
+```
+
+## torch.compile
+### Specialization of a tensor shape with `mark_dynamic` applied now correctly errors (#152661)
+
+Prior to 2.8, it was possible for a guard on a symbolic shape to be incorrectly
+omitted if the symbolic shape evaluation was previously tested with guards
+suppressed (this often happens within the compiler itself). This has been fixed
+in 2.8 and usually will just silently &quot;do the right thing&quot; and add the correct
+guard. However, if the new guard causes a tensor marked with `mark_dynamic` to become
+specialized, this can result in an error. One workaround is to use
+`maybe_mark_dynamic` instead of `mark_dynamic`.
+
+See the discussion in issue #157921 for more
+context.
+
+Version 2.7.0
+```python
+import torch
+
+embed = torch.randn(2, 8192)
+x = torch.zeros(8192)
+
+torch._dynamo.mark_dynamic(x, 0)
+
+@torch.compile
+def f(embedding_indices, x):
+    added_tokens_mask = torch.where(x &gt; 10000, 1, 0)
+    ei = torch.narrow(embedding_indices, 1, 0, x.size(0))
+    return ei.clone()
+
+f(embed, x)
+```
+
+Version 2.8.0
+```python
+import torch
+
+embed = torch.randn(2, 8192)
+x = torch.zeros(8192)
+
+torch._dynamo.maybe_mark_dynamic(x, 0)
+
+@torch.compile
+def f(embedding_indices, x):
+    added_tokens_mask = torch.where(x &gt; 10000, 1, 0)
+    ei = torch.narrow(embedding_indices, 1, 0, x.size(0))
+    return ei.clone()
+
+f(embed, x)
+```
+
+### Several config variables related to `torch.compile` have been renamed or removed
+- Dynamo config variable `enable_cpp_framelocals_guard_eval` has changed to no longer have any effect (#151008).
+- Inductor config variable `rocm.n_max_profiling_configs` is deprecated (#152341).
+Instead, use ck-tile based configs `rocm.ck_max_profiling_configs` and
+`rocm.ck_tile_max_profiling_configs`.
+- Inductor config variable `autotune_fallback_to_aten` is deprecated (#154331).
+Inductor will no longer silently fall back to `ATen`. Please add `&quot;ATEN&quot;` to
+`max_autotune_gemm_backends` for the old behavior.
+- Inductor config variables `use_mixed_mm` and `mixed_mm_choice` are deprecated (#152071). Inductor now supports prologue fusion, so there is no need for
+special cases now.
+- Inductor config setting `descriptive_names = False` is deprecated (#151481). Please use one of the other available
+options: `&quot;torch&quot;`, `&quot;original_aten&quot;`, or `&quot;inductor_node&quot;`.
+- `custom_op_default_layout_constraint` has moved from inductor config to functorch config (#148104). Please reference it via
+`torch._functorch.config.custom_op_default_layout_constraint` instead of
+`torch._inductor.config.custom_op_default_layout_constraint`.
+- AOTI config variable `emit_current_arch_binary` is deprecated (#155768).
+- AOTI config variable `aot_inductor.embed_cubin` has been renamed to `aot_inductor.embed_kernel_binary` (#154412).
+- AOTI config variable `aot_inductor.compile_wrapper_with_O0` has been renamed to `compile_wrapper_opt_level` (#148714).
+
+### Added a stricter aliasing/mutation check for `HigherOrderOperator`s (e.g. `cond`), which will explicitly error out if alias/mutation among inputs and outputs is unsupported (#148953, #146658).
+
+For affected `HigherOrderOperator`s, add `.clone()` to aliased outputs to address this.
+
+Version 2.7.0
+```python
+import torch
+
+@torch.compile(backend=&quot;eager&quot;)
+def fn(x):
+    return torch.cond(x.sum() &gt; 0, lambda x: x, lambda x: x + 1, [x])
+
+fn(torch.ones(3))
+```
+
+Version 2.8.0
+```python
+import torch
+
+@torch.compile(backend=&quot;eager&quot;)
+def fn(x):
+    return torch.cond(x.sum() &gt; 0, lambda x: x.clone(), lambda x: x + 1, [x])
+
+fn(torch.ones(3))
+```
+
+### `guard_or_x` and `definitely_x` have been consolidated (#152463)
+We removed `definitely_true` / `definitely_false` and associated APIs, replacing them with
+`guard_or_true` / `guard_or_false`, which offer similar functionality and can be used to
+achieve the same effect. Please migrate to the latter.
+
+Version 2.7.0
+```python
+from torch.fx.experimental.symbolic_shapes import definitely_false, definitely_true
+
+...
+if definitely_true(x):
+  ...
+
+if definitely_false(y):
+  ...
+```
+
+Version 2.8.0
+```python
+from torch.fx.experimental.symbolic_shapes import guard_or_false, guard_or_true
+
+...
+if guard_or_false(x):
+  ...
+
+# alternatively: if guard_or_false(torch.sym_not(y))
+if not guard_or_true(y):
+  ...
+```
+
+## torch.export
+### `torch.export.export_for_inference` has been removed in favor of `torch.export.export_for_training().run_decompositions()` (#149078)
+
+Version 2.7.0
+```python
+import torch
+
+...
+exported_program = torch.export.export_for_inference(mod, args, kwargs)
+```
+
+Version 2.8.0
+```python
+import torch
+
+...
+exported_program = torch.export.export_for_training(
+    mod, args, kwargs
+).run_decompositions(decomp_table=decomp_table)
+```
+
+### Switched default to `strict=False` in `torch.export.export` and `export_for_training` (#148790, #150941)
+
+This differs from the previous release default of `strict=True`. To revert to the old default
+behavior, please explicitly pass `strict=True`.
+
+Version 2.7.0
+```python
+import torch
+
+# default behavior is strict=True
+torch.export.export(...)
+torch.export.export_for_training(...)
+```
+
+Version 2.8.0
+```python
+import torch
+
+# strict=True must be explicitly passed to get the old behavior
+torch.export.export(..., strict=True)
+torch.export.export_for_training(..., strict=True)
+```
+
+## ONNX
+### Default opset in `torch.onnx.export` is now 18 (#156023)
+
+When `dynamo=False`, the default ONNX opset version has been updated from 17 to 18. Users can set `opset_version` to explicitly select an opset version.
+
+Version 2.7
+
+```py
+# opset_version=17
+torch.onnx.export(...)
+```
+
+Version 2.8
+
+```py
+# To preserve the original behavior
+torch.onnx.export(..., opset_version=17)
+
+# New: opset_version=18
+torch.onnx.export(...)
+```
+
+### The `JitTraceConvertStrategy` has been removed (#152556)
+
+Support for JIT traced and scripted modules in the ONNX exporter when `dynamo=True` has been removed. You are encouraged to export an nn.Module directly, or create an `ExportedProgram` using `torch.export` before exporting to ONNX.
+
+### `onnxscript&gt;=0.3.1` is required for the `dynamo=True` option (#157017)
+
+You must upgrade `onnxscript` to version 0.3.1 or higher for it to be compatible with PyTorch 2.8.
+
+## Build Frontend
+### Removed the `torch/types.h` include from `Dispatcher.h` (#149557)
+This can cause build errors in C++ code that implicitly relies on this include (e.g. very old versions of `torchvision`).
+
+Note that `Dispatcher.h` does not belong as an include from `torch/types.h` and was only present as a
+short-term hack to appease `torchvision`. If you run into `torchvision` build errors, please
+update to a more recent version of `torchvision` to resolve this.
+
+### Upgraded `DLPack` to 1.0 (#145000)
+As part of the upgrade, some of the `DLDeviceType` enum values have been renamed. Please switch
+to the new names.
+
+Version 2.7.0
+```
+from torch.utils.dlpack import DLDeviceType
+
+d1 = DLDeviceType.kDLGPU
+d2 = DLDeviceType.kDLCPUPinned
+...
+```
+
+Version 2.8.0
+```
+from torch.utils.dlpack import DLDeviceType
+
+d1 = DLDeviceType.kDLCUDA  # formerly kDLGPU
+d2 = DLDeviceType.kDLCUDAHost  # formerly kDLCPUPinned
+...
+```
+
+### NVTX3 code has been moved from `cmake/public/cuda.cmake` to `cmake/Dependencies.cmake` (#151583)
+
+This is a BC-breaking change for the build system interface. Downstream projects that previously got NVTX3 through `cmake/public/cuda.cmake`
+(i.e.. calling `find_package(TORCH REQUIRED)`) will now need to explicitly configure NVTX3 support in the library itself (i.e. use `USE_SYSTEM_NVTX=1`).
+The change is to fix the broken behavior where downstream projects couldn't find NVTX3 anyway due to the `PROJECT_SOURCE_DIR` mismatch.
+
+Version 2.7.0:
+- A downstream project using `-DUSE_SYSTEM_NVTX` would be able to find NVTX3 and `torch::nvtx3` via PyTorch's `cmake/public/cuda.cmake` logic.
+- A downstream project NOT using `-DUSE_SYSTEM_NVTX` would encounter build errors with CUDA 12.8 or above.
+
+Version 2.8.0:
+- A downstream project using `-DUSE_SYSTEM_NVTX` will not be able to find NVTX3 or `torch::nvtx3` via PyTorch's `cmake/public/cuda.cmake`. The downstream project now needs to explicitly find NVTX3 and torch::nvtx3 by implementing the same logic in PyTorch's `cmake/Dependences.cmake`.
+- A downstream project NOT using `-DUSE_SYSTEM_NVTX` will proceed building without NVTX unless another part of the build process re-enables NVTX.
+
+# Deprecations
+### MPS support for MacOS Ventura will be removed in 2.9
+PyTorch 2.8 is the last release that will support GPU acceleration on MacOS Ventura. In the next
+release (2.9), MacOS Sonoma (released in Sept. 2023) or above will be required to use the MPS
+backend.
+
+### `torch.ao.quantization` is deprecated and will be removed in 2.10 (#153892)
+To migrate:
+- Eager mode quantization (`torch.ao.quantization.quantize`, `torch.ao.quantization.quantize_dynamic`)
+  - Weight-only and dynamic quantization: use `torchao` eager mode `quantize_`.
+  - Static quantization: use `torchao` PT2E quantization.
+- FX graph mode quantization (`torch.ao.quantization.quantize_fx.prepare_fx`, `torch.ao.quantization.quantize_fx.convert_fx`): use `torchao` PT2E quantization (`torchao.quantization.quantize_pt2e.prepare_pt2e`, `torchao.quantization.quantize_pt2e.convert_pt2e`).
+
+Note that PT2E quantization has been migrated to `torchao` (https://github.com/pytorch/ao/tree/main/torchao/quantization/pt2e). See https://github.com/pytorch/ao/issues/2259 and https://docs.pytorch.org/ao/main/quick_start.html#pytorch-2-export-quantization for more details.
+
+### The `dynamo=False` (current default) option for `torch.onnx.export` is deprecated (#152478, #155580)
+
+The default will be `dynamo=True` starting from PyTorch 2.9. You are encouraged to migrate to use the `dynamo=True` option in `torch.onnx.export`. This flag makes `torch.export.export` the default export path, replacing `TorchScript`.
+
+To maintain the old behavior, set `dynamo=False` explicitly. You are encouraged to also experiment with the `fallback=True` option that will make the exporter fall back to the `dynamo=False` path if there are errors.
+
+# New Features
+## CUDA
+- Support capture of event record and wait in CUDAGraphs for timing (#155372)
+
+## torch.compile
+#### Dynamo
+- Added support for hierarchical compilation via `nested_compile_region` (#156449)
+- Allow guards to be dropped with custom filter functions via `guard_filter_fn` (#150936)
+- Added `dont_skip_tracing` decorator to skip over most Dynamo `skipfiles` rules (#150586)
+
+#### Inductor
+- Added support for mapping a Dynamo graph to multiple different Inductor graphs, which can be optimized separately (#147648, #147038)
+
+## torch.export
+- Introduced [`draft-export`](https://docs.pytorch.org/docs/main/export/draft_export.html), an export variant designed to consistently produce a graph and generate a debugging report of issues encountered during tracing (#152637, #153219, #149465, #153627, #154190, #155744, #150876, #150948, #151051, #151065, #150809, #151797)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Added support for `TorchBind` objects (#150196, #154265)
+- Added config variable `aot_inductor.model_name_for_generated_files` for specifying model name (#154129)
+
+## MPS
+- `MPSInductor`: `torch.compile` for Apple GPUs (#150121, #149342, #151449, #151754, #149687, #149180, #149221, #153598, #152788, #153787, #152214, #151152, #155891, #154578, #151272, #151288, #153997, #151871, #153362, #156566, #150661, #153582)
+
+## ONNX
+- Added new strategy `draft_export` (#147529, [docs](https://docs.pytorch.org/docs/main/draft_export.html)) to provide debugging information upon data-dependent / constraint errors when obtaining an `ExportedProgram` with `torch.onnx.export`
+
+- Added support for symbolic operators in the `dynamo=True` export path (#148905, #149678, #150038, [docs](https://docs.pytorch.org/docs/main/onnx_ops.html#symbolic-operators)). Two operators `torch.onnx.ops.symbolic` and `torch.onnx.ops.symbolic_multi_out` are defined to allow you to create symbolic ONNX operators directly in your PyTorch models. You can use them in a `forward` method:
+
+```python
+def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+    # Optionally use is_in_onnx_export to control the behavior during onnx export
+
+    if torch.onnx.is_in_onnx_export():
+        # Create a symbolic ONNX operator with the name &quot;CustomOp&quot; in the &quot;custom_domain&quot; domain.
+        # The output tensor will have the specified dtype and shape
+        return torch.onnx.ops.symbolic(
+            &quot;custom_domain::CustomOp&quot;,
+            (x,),
+            dict(attr_key=&quot;attr_value&quot;),
+            dtype=x.dtype,
+            shape=x.shape,
+            version=1,
+        )
+    else:
+        return x
+```
+
+## Python Frontend
+- Added Generalized Pareto Distribution (GPD) (#135968)
+
+## Quantization
+- Introduced `torch.float4_e2m1fn_x2` dtype (#148791)
+
+## XPU
+- Support Intel distributed backend (XCCL) (#141856)
+- Support SYCL kernels through C++ extension (#132945)
+
+# Improvements
+## Build Frontend
+- Removed outdated warning about `TORCH_CUDA_ARCH_LIST` (#152715, #155314)
+- Made Eigen an optional build dependency (#155955)
+- Updated CUTLASS to 3.9.2 (#152779)
+
+## Composability
+- Enhanced custom op support with serializable op profiles and fake registration overrides (#151817, #150807, #150806)
+
+## C++ Frontend
+- Exposed `bicubic` mode for `torch::nn::functional::grid_sample` (#150817)
+
+## CUDA
+- Introduced `no_implicit_headers` mode for `load_inline()` on custom CUDA extensions (#149480)
+- Support large batch sizes in SDPA memory-efficient attention backend (#154029, #154663)
+- Fixed invalid indexing in SDPA memory-efficient attention backward (#155397)
+- Support SDPA attention backends on sm121 (DGX Spark) (#152314)
+- Added FP8 row-wise scaled-mm for sm12x (GeForce Blackwell) (#155991)
+
+## cuDNN
+- Updated cuDNN frontend version to 1.12 (#153888)
+
+## Distributed
+#### c10d
+- Enhanced `TCPStore` with clone and queuing features (#150966, #151045, #150969, #151485)
+- Added a collective time estimator for NCCL comms (#149343)
+- Made `getDefaultBackend` more fault tolerant without relying on exceptions (#149152)
+- Specified the default PyTorch Distributed backend for MPS (#149538)
+- Supported `masterListenFd` in `TCPStoreLibUvBackend` (#150215)
+- Used shared stores in gloo (#150230)
+- Improved FR dump robustness with all watchdog broadcast wait, reduce dump timeout and shrinked mutex range (#150652, #151329, #155949)
+- Added the record of each individual collective being coalesced in FR (#151238)
+- Implemented safer book-keeping of NCCL communicators (#150681)
+- Clarified behavior of `TORCH_NCCL_USE_TENSOR_REGISTER_ALLOCATOR_HOOK` (#150682)
+- Registered also future allocations in mempool with NCCL (#150684)
+- Avoided computing `global_rank` when `group_rank` is used (#151373)
+- Exposed NCCL communicator from `ProcessGroupNCCL` via an unsafe API (#152496)
+- Added split sizes info dump for uneven all2all bw calculation (#151438)
+- Made FR vendor neutral so that other backends can use it and integrated into gloo. (#152585, #152563, #154929, #152614)
+- Added `needs_contiguous_strides` tag in functional collective (#153399, #153523)
+- Allowed `split_group` to work with non-nccl backends (#152175)
+- Simplified `new_subgroups()` by using `new_subgroups_by_enumeration()` (#153843)
+- Made only current thread allocate to pool in `ProcessGroupNCCL` (#153990)
+- Enabled using `c10::Half` for gloo (#153862)
+- Released GIL in PG destructor (#154976)
+- Enhanced `get_process_group_ranks()` to accept `group=None` (#154902)
+- Skipped updating the default device distributed backend if already registered (#155320)
+- Enabled querying the build and runtime NCCL versions (#156305)
+- Disabled NCCL NVLS when using deterministic mode (#156381)
+- Made `init_process_group` support index-only device id (#156214)
+- Support enabling / disabling NaN detector per-`ProcessGroup` (#151723)
+- Added support for `reduce_scatter` and `ReduceOp::AVG` in `ProcessGroupGloo` (#149781, #149869)
+- Added FP8 support in `ProcessGroupNCCL` (#152706)
+- Added `ibverbs` backend in gloo and enabled gloo CUDA when used with a backend that supports `GPUDirect` (#153015, #153425, #153406)
+
+#### DeviceMesh
+- Improved device selection logic (#150897)
+
+#### DistributedDataParallel (DDP)
+- Added one option to allow skipping all reduce unused parameters (#151503)
+- Added check on received data to avoid segfault in the DDP reducer (#152143)
+- Propagated `use_python_reducer` to C++ reducer (#152735)
+`DistributedStateDict` (DSD)
+- Supported non-tensor-data `write_size` in planner write items (#149699)
+- Skip popping meta device tensors (#153185)
+
+#### DTensor
+- Made `StridedShard` support uneven sharding (#150490)
+- Added op support for `torch.cumsum` (#151071)
+- Added `DTensor` `redistribute` fwd/bwd datatype conversion to enable `SimpleFSDP` mixed precision training (#150740)
+- Added rich support to `torch.distributed.tensor.debug.visualize_sharding` (#152027)
+
+#### FullyShardedDataParallel2 (FSDP2)
+- Added `PrivateUse1` backend in FSDP collectives and device type to pre forward hook (#147260, #149487)
+- Added `set_reshard_after_forward` (#149103)
+- Allowed different dtypes for no grad model params (#154103)
+- Respected `reshard_after_forward=True` for root model and kept root unsharded when not specifying `reshard_after_forward` (#154704, #155319)
+- Allowed forcing FSDP2 to always use SUM reductions (#155915)
+- Made assert on `all_reduce_event` only if it's not CPU device (#150316)
+- Enabled NCCL zero-copy (user buffer registration) for FSDP2 (#150564)
+
+#### Pipeline Parallelism
+- Added schedule visualizer (#150347)
+- Allowed unused kwargs in ZB path (#153498)
+- Added `get_pipeline_order()` for Gpipe and 1F1B (#155935)
+
+#### ShardedTensor
+- Added support for 0-size `ShardedTensor` and recalculated metadata from `all_gather` (#152583)
+
+#### TensorParallel
+- Added a `ParallelStyle PrepareModuleInputOutput` (#150372)
+
+#### torchelastic
+- No shutdown of rendezvous on leaving workers (#152525)
+
+## torch.compile
+#### Dynamo
+- Improved tracing support for python sets, tensor subclasses with `__torch_function__`, and `namedtuple` subclasses (#153150, #149792, #153982)
+- Eliminated all Compiled Autograd dynamic shapes recompiles for compile time reduction (#151962, #152119,
+#151962, #149707, #149709,
+#148799, #148801)
+- Added `reason` field to `torch.compiler.disable` (#150341)
+- Removed `lru_cache` warnings for functions in the top-level `torch` namespace (#157718)
+
+#### Inductor
+- Added block sparse support for FlexAttention on CPU (#147196)
+- Introduced new config settings:
+  - `aot_inductor.custom_ops_to_c_shims` and `aot_inductor.custom_op_libs`: allow for specifying custom op C shim (#153968)
+  - `max_fusion_buffer_group_pairwise_attempts`: limits fusions to specified node distance (#154688)
+  - `cuda.cutlass_enabled_ops`: controls CUTLASS operation selection (#155770)
+  - `triton.cudagraph_capture_sizes`: allows specifying certain shapes for which to capture CUDAGraphs; skips CUDAGraphs for other shapes (#156551)
+  - `use_static_cuda_launcher`: enables launching compiled triton statically to improve cold start times (#148890)
+  - `assume_unaligned_fallback_output`: allows inductor to track unaligned outputs (#150777)
+  - `cuda.cutlass_tma_only`: controls whether or not to only use TMA-compatible kernels in CUTLASS (#152815)
+  - `static_launch_user_defined_triton_kernels`: enables statically launching user defined triton kernels (#153725)
+  - `precompilation_timeout_seconds`: controls the timeout on precompilation (#153788)
+  - `disable_decompose_k`: disables new `DecomposeK` GEMM Kernels (#154421)
+  - `min_num_split`: sets the minimum number of splits in a split reduction (#155941)
+  - `max_autotune_flex_search_space`: allows specifying the size of the search space for flex attention autotuning (#156307)
+- Introduced environment variable `LOG_AUTOTUNE_RESULTS` for autotune log (#156254)
+- Improved numerical stability of CPU Welford reduction for normalizations (#145061)
+
+## torch.export
+- Improved handling of builtin ops (`min`, `max`, `math.pow`) (#151348)
+- Added min/max ranges for dim hints (#149590)
+- Allow registering normal classes to `pytree.register_dataclass` (#147752)
+- Allow specifying integer inputs as dynamic (#151842)
+- Inline `jit.script`ed functions in export (#155180)
+- Pretty printing for graph signature (#149710)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Support for device-side TMA (#157241)
+- Added `num_runners` to `AOTIModelPackageLoader` (#149364)
+
+## FX
+- Updated codegen compare op to `==` (#150611)
+- Map names to operand indices when const folding submodules (#150692)
+- Improved stacktrace when tracing (#151029, #155486)
+- Support edge dialect ops in `normalize_function` (#143689)
+- Fixed path naming in minifier (#153130)
+- Added `graph_code_verbose_log` artifact for FX passes (#153775)
+- Improved cache key graph printing performance (#151928)
+- Added flag to `fx.passes.split_module` to normalize input names (#157793)
+
+## Linear Algebra Frontend
+- Add tensor overlap check for `cross` (#154999)
+
+## MPS
+- Added support for a number of `torch.special` operations as well as `index_copy`, `hardshrink`, `rsub`, `col2im`, and `isin` (#149174, #149203 #149123, #149368, #149378, #149563, #149687, #149705, #149783, #149407/#149680, #150279, #151754, #153786, #154326, #155304, #156263, #155382, #154010, #149816, #152282, #156090, #150060, #151600, #155002, #154671)
+- Extended dtype support for:
+  * `index_put` with half precision floats (#151869)
+  * `ConvTranspose3D` with FP32 and complex (#154696)
+  * `log1p` and `sigmoid` with int64 (#151791)
+- Compute activation kernels at float precision (#155735)
+
+## Nested Tensor (NJT)
+- Fixed contiguity in NJT string representation (#153529)
+
+## torch.nn
+- Added warning for module full backward hook when no input requires gradient (#155339)
+- Added Half support for `weight_norm` on CPU (#148878)
+
+## ONNX
+- Updated ONNX to 1.18 (#152200)
+- Added support for opsets (18-23) when `dynamo=True` (#149901, #154596)
+- Added float4 support (#151069, #156353)
+- Added support for ONNX operators `Attention-23` and `RotaryEmbedding-23` as native PyTorch ops (#156431, #156367, #154745)
+- Added support for `torch.scan` (#154513)
+- Added support for 0/1-sized example inputs on dynamic dimensions (#155717)
+- Add `group_norm` support from opset 21 (#152138)
+- Added `asdict` method to `VerificationInfo` class (#151024)
+- Support running bfloat16 models with ONNX Runtime (#149646)
+- Updated ONNX program doc formatting and improve robustness (#151623)
+- Updated `dynamic_shapes` behavior to use `torch.export.dim.DYNAMIC` (#153065)
+- Set the name of the producing node using the value name (#155413)
+- Improved support for symbolic operators `sym_float`, `sym_not`, `sym_min`, `sym_max` (#153200, #152111, #152196)
+
+## Optimizer
+- Added `TensorLR` variant for fused Adagrad on CPU (#153078)
+- Convert tensor lr to 0-dim as needed for the optimizer to normally work (#145674)
+- Added `lr_lambda` type check in `MultiplicativeLR` (#151973)
+
+## Profiler
+- Added support for on-demand memory snapshot (#150559)
+- Added PT2 compile context to visualizer (#152862)
+- Added PT2 to memory snapshot (#152707)
+- Added flag to toggle global and local callbacks for annotations (#154932)
+- Pass overload names to Kineto (#149333)
+- Set duration to -1 for unfinished CPU events (#150131)
+- Start at index with most events (#154571)
+
+## Python Frontend
+- Introduced `torch.AcceleratorError` (#152023)
+- Implemented `Size.__radd__()` (#152554)
+- Updated `get_default_device()` to also respect `torch.device` context manager (#148621)
+
+## Quantization
+- Improved x86 PT2E quantization support with new uint8 ops (pointwise `mul` / `add` / `add_relu` and `batch_norm2d`), qconv1d-relu fusion, and lowering pass (#151112, #152411, #152811, #150751, #149708)
+- Support boolean tensor for `torch.fused_moving_avg_obs_fake_quant` on CUDA (#153699)
+
+## Release Engineering
+- Updated gcc11 to gcc13 in manylinux images (#152825, #152825, #150635, #158445)
+- Updated to cmake 3.27.2 (#154783, #150549, #153380)
+
+## ROCm
+- Allow user to override default flags for `cpp_extension` (#152432)
+- Enabled support for sparse compressed `mm`/`bmm`/`addmm` (#153262)
+
+## Sparse Frontend
+- Enabled sparse compressed tensor invariant checks for `PrivateUse1` extension (#149374)
+
+## torch.func
+- Add batching rules for ops: `torch.Tensor.scatter_add_` (#150543), `torch.matrix_exp` (#155202)
+
+## XPU
+- Support safe softmax, GQA, fp32 causal mask for SDP and increase maximum head dim from 256 to 576 on Intel GPU (#151999, #150992, #152091)
+- Add memory reporting to Memory Profiler for Intel GPU (#152842)
+- Support Intel GPU profiler toggle functionality (#155135)
+- Support distributed memory tracker integration for Intel GPU (#150703)
+- Improved error handling and reporting in Intel GPU CMake files (#149353)
+- Support `embed_cubin` and `multi_arch_kernel_binary` options in AOTI for Intel GPU (#154514, #153924)
+- Added generic and Intel GPU specific Stream and Event in `UserDefineClass` (#155787)
+- Support int4 WOQ GEMM on Intel GPU (#137566)
+
+# Bug Fixes
+## Build Frontend
+- Support builds with `CMake-4.x` (#150203)
+- Fixed fbgemm build with `gcc-12+` (#150847)
+- Force build to conform to C++ standard on Windows by adding `/permissive-` flag (#149035)
+
+## Composability
+- Fixed support for 1-element tuple returns from custom ops (#155447)
+- Avoid overflow in `torch.norm` for scalar input (#144073)
+
+## CPU (x86)
+- Fixed apparent copy-paste bug in `log_softmax` reduced-precision fp kernel (#156379)
+
+## CUDA
+- Fixed deterministic indexing with broadcast (#154296)
+- Fixed `torch.backends.cuda.matmul.allow_fp16_accumulation` crash when using cuBLASLt (#153083)
+- Enable `AsyncMM` on Blackwell (#153519)
+- Fixed `torch.cuda.MemPool` for multithreaded use-cases (#153356)
+- Fix to avoid calling `sum()` on a default-constructed gamma / beta in `layer_norm` (#156600)
+- Avoid hangs by erroring out for negative offsets or K=0 in grouped GEMMs (#153226)
+- Don't error out in `empty_cache` under mempool context (#158180)
+
+## Distributed
+#### c10d
+- Fixed extra CUDA context created by barrier (#149144)
+- Fixed the logic to use group rank instead of global rank when possible (#149488)
+- Fixed ET trace collection of `all_to_all` (#149485)
+- Disabled start event recording for coalesced col and improved profile title (#150863)
+- Fixed connection reset in tcp store (#150987, #151052)
+- Fixed unused `group` input argument in `new_subgroups()` (#152765, #153798)
+- Fixed tcp init when using port 0 (#154156)
+- Adopted a vector to temporarily keep the reference to future object to avoid blocking inside Flight Recorder (#156653)
+
+#### Distributed Checkpointing (DCP)
+- Fixed to use global coordinator rank in `broadcast_object` util function (#155912)
+
+#### DistributedDataParallel (DDP)
+- Fixed `DDPOptimizer` issue on static tensor index (#155746)
+
+#### DTensor
+- Fixed `local_map` with multi-threading (#149070)
+- Fixed `new_local_tensor` in `redistribute` be None case (#152303)
+- Fixed bug visualizing 1D Tensor using rich (#152871)
+
+#### Pipeline Parallelism
+- Optimized memory usage by releasing output memory earlier (#153383)
+
+#### RPC
+- Made torch importable if compiled without `TensorPipe` (#154382)
+
+#### ShardedTensor
+- Fixed sharded tensor `gather` when a local tensor on certain ranks has zero elements (#150914)
+
+#### TensorParallel
+- Turn async-TP applicability asserts back into silent skips (#158736)
+
+## torch.compile
+#### Dynamo
+- Eliminated silent incorrectness issues in the Compiled Autograd initial trace (#149014, #155521, #155289, #149336)
+- Fixed various tracing errors involving einops, `dict(mapping_proxy)`, and the FlexAttention HOP (#157754, #157515, #157519)
+- Fixed unpack hook semantics for memory savings in checkpointing and offloading for Compiled Autograd (#147242, #153300)
+- Fixed sources for dataclass defaults and the `lru_cache` method (#158689, #157308)
+- Fixed spammy errors when an invalid `TORCH_LOGS` argument is passed (#151678)
+
+#### Inductor
+- Support special kwargs in AMD triton configs (#154605)
+- Fixed minifier when one has multiple Python runtimes (#155918)
+- Bug fix for int8 GEMM compensation epilogue (#152408)
+
+## torch.export
+- Fixed tracing of the following: `aten.is_nonzero` (#149637), `torch.bincount()` (#152497), `aten.div` (#150874) slicing (#150104), and `attn_mask` (#158618), `aten.to` (#153972), scalar tensor construction (#154661)
+- Fixed `dynamic_shapes` spec for kwargs (#148772, #149528, #150103)
+- Fixed input bugs in unflattener (#149206, #153474, #153000)
+- Fix nonstrict tracing of `functools.partial` (#153408), and higher order ops (#149295)
+- Fixed serialization/deserialization of `None` inputs (#150515), `math` module (#154643), `call_torchbind` (#155647), and enums (#154821)
+- Fixed state dict modification in run_decompositions (#151436)
+- Fixed subclass access custom op bug (#149698)
+
+
+## Ahead-Of-Time Inductor (AOTI)
+- Fixed AOTI `update_constant_buffer` issue (#149243)
+- Fixed a memory leak in `model_package_loader` (#152334)
+- Don't alloc weights in `AOTIModel` if they don't exist (#152692)
+- Fixed state of `ConstantFolding` (#153152)
+- Fixed index offset for optional tensor return (#155073)
+- Fixed float8 type printing for min/max value printing (#154466)
+
+## Linear Algebra Frontend
+- Fix to workaround LAPACK workspace size being returned as a floating point value (#149682)
+- Fixed the accumulation type for `dot` and `gemv` (#152676)
+- Fixed `torch.lobpcg` to compute same largest eigenvalue as scipy and `np.linalg.eig` (#152789)
+- Fixed 32-bit indexing overflows in `ReducedPrecisionGemV` (#150949)
+
+## MPS
+- Fixed various op support issues: unary/binary ops with `2**32`+ element inputs, binary ops with inputs with different dtypes, ops with complex scalar inputs, `cholesky` decomp, `floor_divide` type promotion, `index_kernel` with large inputs, `lerp` with complex inputs, `logit` with half/bfloat16 inputs, SDPA memory leak, `torch.special.entr`, `tri[ul]`, matrix inversion with `N&gt;1024`, and `where` with non-contiguous `cond` (#152479, #155183, #149233, #151176, #151282, #158239, #152371, #149974, #158237, #146754, #158867, #155184, #152204)
+
+## torch.nn
+- Fixed `load_state_dict` behavior for `nn.LazyLinear` (#147599)
+
+## ONNX
+- Fixed bfloat16 support in `onnx_program` callable (#151121)
+- Produce correct dtypes for bf16/f8 in IR TorchTensor (#151259)
+- Preserve all legacy exporter params in fallback (#156659)
+- Fixed 4D tensor conversion for SDPA (#157509)
+
+## Optimizer
+- Fixed bug where `lr_scheduler` unexpectedly calls `step()` when init argument `last_epoch &gt; -1` (#149312)
+- Fixed `CosineAnnealingWarmRestarts` resetting `T_cur` (#151289)
+
+## Profiler
+- Fixed empty C call queue in python tracer (#150370)
+- Removed decref from python context in python tracer (#151625)
+- Enable all configured activities in CUPTI Range Profiler mode (#154749)
+
+## Python Frontend
+- Fixed segfault during numpy string tensor conversion (#155364)
+- Added checks for empty tensor list (#155383)
+- Fixed sample validation for `MixtureSameFamily` distribution (#151317)
+- Fixed bug where creating a second `Wishart` or `Uniform` distribution modifies constraints on the first (#154361)
+- Fix to properly export `torch::utils::tensor_to_numpy` symbol (#154178)
+- Fixed `torch.[con]cat[enate]` to avoid crashing on empty inputs (#155460)
+- Unify `torch.tensor` and `torch.ops.aten.scalar_tensor` behavior (#158655)
+
+## Release Engineering
+- Checkout optional submodules when publishing a release tarball (#156615)
+- Fixed MacOS MP hang in Python-3.12+ (#155698)
+- Fixed static functions when using module in MSVC (#148675)
+- Fixed VS2022-caused AVX512 illegal instruction issue (#153480)
+
+## ROCm
+- Fixed build error for opportunistic fastatomics with newer compilers (#152841)
+
+#### TunableOp
+- More TF32 support (#149088)
+- Fixed offline tuning for `ScaledGEMM` (#149677)
+- Fixed row-wise `ScaledGEMM` (#152403)
+- Support submatrices in offline tuning for ROCm (#151138)
+
+## Vulkan
+- Fixed `torch.is_vulkan_available()` on Mac (#155595)
+
+## XPU
+- Fixed matmul accuracy when `offset &gt; 0` (#154495)
+- Fixed `torch.xpu.is_bf16_supported` to correctly report presence of Intel GPU (#152317)
+- Fixed AOT compilation in SYCL C++ extension (#156364)
+
+# Performance
+## Autograd
+- Improved autograd streams synchronization (#151079, #157914)
+
+## CPU (AArch64)
+- Compute `ELU(0)` with the cheaper definition (#155765)
+
+## CUDA
+- Improved performance of `cat` and `index_select` (#150233, #152380, #151715)
+
+## Dataloader Frontend
+- Reduced memory usage of `SubsetRandomSampler` by iterating over list instead of tensor (#149126)
+
+## torch.compile
+#### Inductor
+- Improved performance of GEMMs (#147315, #151530, #149373, #156174, #155444)
+- Added a config option `cpp.use_small_dequant_buffer` to use a small dequant buffer for WOQ int4 GEMM (#156395)
+- Support graph partitioning on custom ops (#149782)
+- Optimized the heuristics of parallel reduction on CPU (#149614)
+
+## torch.export
+- Cache unflattened graph module (#150030)
+
+## JIT
+- Improved Dead Code Elimination (DCE) compile times for large graphs (#153645)
+
+## Linear Algebra Frontend
+- Introduced fast path for `torch.dot` with float16/bfloat16 (#152799)
+
+## MPS
+- Improved performance of `LayerNorm`, `mm` / `bmm`, `sum` / `prod` reductions, arithmetic ops,
+binary kernels, SDPA, `linear`, and `cumsum` / `cumprod` (#152010, #150541, #150566, #147644, #149730, #152781, #152210, #157494)
+
+## Python Frontend
+- Optimized SVE embedding performance (#150176)
+- Improved performance for `torch.tensordot` when contracting to a scalar (#145936)
+
+## ROCm
+- Improved performance of `softmax`, `NLLLoss`, in-place sum, max pooling backward / reductions on NHWC
+inputs, max pooling, multi-dimensional reductions, and non-vectorized elementwise kernels (#149076, #149779, #149548, #151230, #152267, #154522, #154619, #155806, #153184)
+- Improved scatter add performance on MI250X (#151724)
+- Extended vectorized elementwise kernel to more heterogenous tensor types (#149738)
+- Use `HipSparseLT` to further accelerate semi-structured (e.g. 2:4) sparsity (#150578)
+
+## Sparse Frontend
+- Skip sparse tensor invariant validation when loading sparse Tensors from external storage (#154610, #154759, #154638)
+
+## XPU
+- Enabled post-op fusion for oneDNN convolution on Intel GPU (#150287)
+- Reduced host overhead for Intel GPU by eliminating meaningless API calls (#151111)
+- Improved INT4 WOQ GEMM for Intel GPU by introducing a cache mechanism to reduce the oneDNN integration overhead further (#147693)
+- Improved scalar tensor case handling in `addmm`, `baddmm` to reduce oneDNN integration overhead on Intel GPU (#153051)
+
+# Documentation
+## Autograd
+- Added more details on why `ctx.save_for_backward` is important in note about extending autograd (#153005)
+- Updated docs of `torch.autograd.graph.saved_tensors_hooks` to avoid refcycle (#153049)
+- Updated gradient behavior note in `torch.amin` and `torch.amax` (#155071)
+
+## CUDA
+- Fixed deprecated amp APIs in docs (#154553)
+- Documented device memory apis in correct module (#155126)
+- Documented non-pytorch CUDA memory allocation and how to query it (#150880)
+
+## Distributed
+#### c10d
+- Documented object collectives limitations (#150815)
+- Updated `NCCLConfig` with QOS variable (#151821)
+- Documented `get_default_backend_for_device` (#158236)
+
+#### FullyShardedDataParallel2 (FSDP2)
+- Updated `ignored_params` docstring and added unit tests (#149074)
+- Added pointer to torchtitan (#153079)
+- Added warning for incorrected grad results at world size 1 (#154928)
+
+## torch.export
+- Added mini tutorial for provenance tracking (#152211)
+- Updated docs for `Dims` and `ExportGraphSignature` (#156262, #156244)
+
+## Linear Algebra Frontend
+- Addressed ambiguity in docs for `torch.linalg.norm()`'s ord argument of +2 &amp; -2 (#155148)
+
+## torch.nn
+- Improved documentation for transformer-related layers, `nn.RNN`, `nn.functional` loss functions, `interpolate` saturate cast behavior, `ConvTranspose2d` `stride` / `output_size` arguments, and `register_full_backward_hook` (#155123, #153620, #148436, #151304, #150819, #150609, #151785)
+- Fixed examples for `nn.Sequential` and `nn.LazyModuleMixin` (#147304, #150596)
+- Documented padding size limitations in `nn.modules.padding` and `AvgPoolND` (#155618, #152680)
+
+## ONNX
+- Convert .rst doc files to markdown (#155228, #155556)
+- Improved docstring of ONNX symbolic ops (#149668)
+- Added note for attention op symbolic function (#156441)
+- Added ONNX Dynamo metadata documentation (#155816)
+
+## Optimizer
+- Added scripts to generate plots of `LRScheduler`s (#149189)
+- Included other accelerators in capturable docstr for optimizers (#149770)
+- Updated SGD documentation to match implementation and document that dampening is skipped in SGD first step (#149884, #152833)
+- Fixed doc for `CosineAnnealingLR` to accurately reflect its recursive learning rate schedule (#152936)
+- Fixed incorrect citation of authors in `Adafactor` documentation (#145209)
+- Added `load_state_dict` hint doc about invoke order work with `lr_scheduler` (#149942)
+
+## Python Frontend
+- Make `torch.Library`'s `kind` have no default value to be consistent with the code (#149390)
+- Added 32-bit complex to the list of dtypes (#144590)
+- Clarified behavior when integer dtype is used with `requires_grad=True` in `tensor.to()` (#150913)
+- Optimized `cdist` param description (#151178)
+- Updated serialization docs (#153631)
+- Render `Example:` and not `Example::` in docs (#153978)
+- Added docstring indicating undefined behavior for converting inf to int (#154781)
+- Updated `as_strided()` docs (#149146)
+- Fixed `keepdim` param optional description (#151197)
+- Clarify that x and dx are mutually exclusive in `torch.trapezoid` docs (#151190)
+- Documented `out_dtype` arg for torch GEMM operations (#151704)
+- Fixed the basic description of `torch.min()`, `torch.max()`, `torch.all()`, and `torch.any()` (#152658)
+- Added `torch.triu_indices`, `torch.tril_indices` dtype description (#150749)
+- Optimized `torch.equal` description (#149618)
+
+## Quantization
+- Fixed incorrect `get_default_qat_qconfig` in `prepare_qat_fx` docs (#155100)
+
+## Release Engineering
+- Migrated to new theme (#149331)
+
+## XPU
+- Improved &quot;Getting Started on Intel GPU&quot; hardware requirements and notes (#151886)
+
+# Developers
+## Distributed
+#### c10d
+- Added param recording for uniqueID broadcasting and allgather (#149166)
+- Added logger config and more loggings, e.g. `nccl_version` and thread name/id, for flight record in PGNCCL (#150356, #150513, #151048, #152648, #155142, #155754)
+- Surfaced error type when we unlink and create named pipe for DumpPipe (#150648)
+- Improved the logs on remote shutdown of tcpstore (#153586)
+- Enhanced Error Logging in `new_subgroups()` for Non-Divisible World Sizes (#154124)
+- Added a logger for all nccl collectives with its time duration when completed (#156008)
+- Updated error message in `get_backend()` with more details (#141796)
+
+#### FullyShardedDataParallel (FSDP1)
+- Print FQNs when debugging `FlatParamHandle` (#151336)
+
+#### FullyShardedDataParallel2 (FSDP2)
+- Added FSDP2 logging (#155826)
+
+#### RPC
+- Correctly pass exceptions raised from `rpc_init` to CPython (#154325)
+
+#### torchelastic
+- Added the logging of start of torch elastic workers (#150849)
+- Passed event log handler to record function calls (#155457)
+- Added `torch.distributed.run` option to provide destination for event logging (#155268)
+
+## torch.export
+- Add `TracingContext` (#149294)
+- Monkeypatch fake mode so it errors on invalid custom ops (#149410)
+- Fixed torch export docs for preserve_module_call_signature (#151140)
+- Improved error message for deserializing custom triton op (#152029)
+- Better type annotation for lift_constants_pass (#152072)
+- Fixed bug in `detect_attr_assignment` (#151824)
+
+## Ahead-Of-Time Inductor (AOTI)
+- Refactor `AOTInductor` runtime API for Intel GPU (#153929)
+- Improve stable library APIs (#152040)
+- Add a basic shim and `stable::Tensor is_contiguous` API (#156228)
+
+## FX
+- Gracefully exit minimizer when there is no discrepancy in block mode (#154076)
+
+## Optimizer
+- Improve decorator typing for Optimizer subclasses (#153374)
+- Optimize typing in `lr_scheduler.py` (#151219)
+- Fixed the type hint of `step()` with default value (#153367)
+
+## Release Engineering
+- Added support for CUDA 12.9 in CI/CD (#154980, #156630, #155895, #155799, #155496, #155340, #155819, #156108)
+- Added support for ROCm 6.4 in CI/CD (#151236, #151345, #151355, #153253, #156112)
+- Moved CI from ubuntu 20.04 images to ubuntu 22.04 and 24.04 (#154437, #154153, #149142)
+- Moved CI to CUDA 12.8 (#154004, #152810, #155087, #148963)
+- Enabled CI on MI300 (#150667, #152133, #148394, #153134)
+- Enabled CI on H100 (#153900, #154562, #153170, #155861, #155719, #156429)
+- Enabled CD for Windows Arm64 (#150310, #152109, #149850, #152099)
+- Enabled testing of binary Docker builds in CI/CD (#151483, #151488, #151489, #151706)
+- Added smoke test to validate NCCL and cuDNN versions in PyPI packages (#149885, #150194)
+- Enabled monitoring for performance tests (#153452, #153453, #153454, #153456)
+- Improved benchmarking and performance testing on MacOS (#151721, #151747, #151748, #153897, #155493, #153897, #155493)
+- Use `setup-python` from for Mac tests (#155698)
+- Removed CUDA 11.8 and 12.4 support in CI/CD (#155509, #154169, #152362, #155555, #154893)
+- Removed Anaconda support in CI/CD (#147789, #152338, #152431, #152377, #152433, #147476, #151035, #152860, #152702, #154303, #154309)</description>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/releases/tag/v2.8.0</guid>
+      <pubDate>Wed, 06 Aug 2025 17:06:10 GMT</pubDate>
+      <author>jbschlosser</author>
+    </item>
+    <item>
+      <title>PyTorch 2.7.1 Release, bug fix release</title>
+      <link>https://github.com/pytorch/pytorch/releases/tag/v2.7.1</link>
+      <description>This release is meant to fix the following issues (regressions / silent correctness):
+
+### Torch.compile
+Fix Excessive cudagraph re-recording for HF LLM models ([#152287](https://github.com/pytorch/pytorch/pull/152287)) 
+Fix torch.compile on some HuggingFace models  ([#151154](https://github.com/pytorch/pytorch/pull/151154))
+Fix crash due to Exception raised inside torch.autocast ([#152503](https://github.com/pytorch/pytorch/pull/152503))
+Improve Error logging in torch.compile ([#149831](https://github.com/pytorch/pytorch/pull/149831))
+Mark mutable custom operators as cacheable in torch.compile ([#151194](https://github.com/pytorch/pytorch/pull/151194))
+Implement workaround for a graph break with older version einops ([#153925](https://github.com/pytorch/pytorch/pull/153925))
+Fix an issue with tensor.view(dtype).copy_(...) ([#151598](https://github.com/pytorch/pytorch/pull/151598))
+
+### Flex Attention
+Fix assertion error due to inductor permuting inputs to flex attention ([#151959](https://github.com/pytorch/pytorch/pull/151959))
+Fix performance regression on nanogpt speedrun ([#152641](https://github.com/pytorch/pytorch/pull/152641))
+
+### Distributed
+Fix extra CUDA context created by barrier ([#149144](https://github.com/pytorch/pytorch/pull/149144))
+Fix an issue related to Distributed Fused Adam in Rocm/APEX when using nccl_ub feature ([#150010](https://github.com/pytorch/pytorch/pull/150010))
+Add a workaround random hang in non-blocking API mode in NCCL 2.26 ([#154055](https://github.com/pytorch/pytorch/pull/154055))
+
+### MacOS
+Fix MacOS compilation error with Clang 17 ([#151316](https://github.com/pytorch/pytorch/pull/151344))
+Fix binary kernels produce incorrect results when one of the tensor arguments is from a wrapped scalar on MPS devices ([#152997](https://github.com/pytorch/pytorch/pull/152997))
+
+### Other
+Improve PyTorch Wheel size due to introduction of addition of 128 bit vectorization ([#148320](https://github.com/pytorch/pytorch/pull/148320)) ([#152396](https://github.com/pytorch/pytorch/pull/152396))
+Fix fmsub function definition ([#152075](https://github.com/pytorch/pytorch/pull/152075))
+Fix Floating point exception in torch.mkldnn_max_pool2d ([#151848](https://github.com/pytorch/pytorch/pull/151848))
+Fix abnormal inference output with XPU:1 device ([#153067](https://github.com/pytorch/pytorch/pull/153067))
+Fix Illegal Instruction Caused by grid_sample on Windows ([#152613](https://github.com/pytorch/pytorch/pull/152613))
+Fix ONNX decomposition does not preserve custom CompositeImplicitAutograd ops ([#151826](https://github.com/pytorch/pytorch/pull/151826))
+Fix error with dynamic linking of libgomp library ([#150084](https://github.com/pytorch/pytorch/pull/150084))
+Fix segfault in profiler with Python 3.13 ([#153848](https://github.com/pytorch/pytorch/pull/153848))</description>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/releases/tag/v2.7.1</guid>
+      <pubDate>Wed, 04 Jun 2025 18:13:15 GMT</pubDate>
+      <author>atalman</author>
+    </item>
+    <item>
+      <title>PyTorch 2.7.0 Release</title>
+      <link>https://github.com/pytorch/pytorch/releases/tag/v2.7.0</link>
+      <description># PyTorch 2.7.0 Release Notes
+- [Highlights](#highlights)
+- [Tracked Regressions](#tracked-regressions)
+- [Backwards Incompatible Changes](#backwards-incompatible-changes)
+- [Deprecations](#deprecations)
+- [New Features](#new-features)
+- [Improvements](#improvements)
+- [Bug fixes](#bug-fixes)
+- [Performance](#performance)
+- [Documentation](#documentation)
+- [Developers](#developers)
+
+# Highlights
+&lt;table&gt;
+  &lt;tr&gt;
+   &lt;td&gt;&lt;strong&gt;Beta&lt;/strong&gt;
+   &lt;/td&gt;
+   &lt;td&gt;&lt;strong&gt;Prototype&lt;/strong&gt;
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Torch.Compile support for Torch Function Modes
+   &lt;/td&gt;
+   &lt;td&gt;NVIDIA Blackwell Architecture Support
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;Mega Cache
+   &lt;/td&gt;
+   &lt;td&gt;PyTorch Native Context Parallel
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;Enhancing Intel GPU Acceleration
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;FlexAttention LLM &lt;span style=&quot;text-decoration:underline;&quot;&gt;first token processing&lt;/span&gt; on X86 CPUs 
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;FlexAttention LLM &lt;span style=&quot;text-decoration:underline;&quot;&gt;throughput mode optimization&lt;/span&gt; on X86 CPUs
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;Foreach Map
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;Flex Attention for Inference
+   &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;
+   &lt;/td&gt;
+   &lt;td&gt;Prologue Fusion Support in Inductor
+   &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+For more details about these highlighted features, you can look at the [release blogpost](https://pytorch.org/blog/pytorch2-7/).
+Below are the full release notes for this release.
+
+# Tracked Regressions
+
+### NCCL init hits CUDA failure 'invalid argument' on 12.2 driver
+Some users with 12.2 CUDA driver (535 version) report seeing &quot;CUDA driver error: invalid argument&quot; during NCCL or Symmetric Memory initialization. This issue is currently under investigation, see #150852. If you use PyTorch from source, a known workaround is to rebuild PyTorch with CUDA 12.2 toolkit. Otherwise, you can try upgrading the CUDA driver on your system.
+
+# Backwards Incompatible Changes
+
+### Dropped support for Triton &lt; 2.2.0. Removed Support for CUDA 12.4, Anaconda in CI/CD.
+- Removed CUDA 12.4 support in CI/CD in favor of 12.8 (#148895, #142856, #144118, #145566, #145844, #148602, #143076, #148717)
+- Removed Anaconda support in CI/CD (#144870, #145015, #147792)
+- Dropped support for Triton &lt; 2.2.0 (versions without ASTSource) (#143817)
+
+### C++ Extensions `py_limited_api=True` is now built with `-DPy_LIMITED_API` (#145764)
+
+We formally began respecting the `py_limited_api=True` kwarg in 2.6 and stopped linking `libtorch_python.so` when the flag was specified, as libtorch_python.so does not guarantee using APIs from from the stable Python limited API. In 2.7, we go further by specifying the `-DPy_LIMITED_API` flag which will enforce that the extension is buildable with the limited API. As a result of this enforcement, **custom extensions that set `py_limited_api=True` but do not abide by the limited API may fail to build**. For an example, see #152243.
+
+This is strictly better behavior as it is sketchy to claim CPython agnosticism without enforcing with the flag. If you run into this issue, please ensure that the extension you are building does not use any APIs which are outside of the Python limited API, e.g., `pybind`.
+
+### Change `torch.Tensor.new_tensor()` to be on the given Tensor's device by default (#144958)
+
+This function was always creating the new Tensor on the &quot;cpu&quot; device and will now use the same device as the current Tensor object. This behavior is now consistent with other `.new_*` methods.
+
+### Use Manylinux 2.28 and CXX11_ABI=1 for future released Linux wheel builds. 
+With Migration to manylinux_2_28 (AlmaLinux 8 based), we can no longer support OS distros with glibc2_26. These include popular Amazon Linux 2 and CentOS 7. (#143423, #146200, #148028, #148135, #148195, #148129)
+
+### `torch.onnx.dynamo_export` now uses the ExportedProgram logic path (#137296)
+
+Users using the `torch.onnx.dynamo_export` API may see some `ExportOptions` become
+unsupported due to an internal switch to use `torch.onnx.export(..., dynamo=True)`: `diagnostic_options`, `fake_context` and `onnx_registry` are removed/ignored by `ExportOptions`. Only `dynamic_shapes` is retained.
+
+Users should move to use the `dynamo=True` option on `torch.onnx.export` as
+`torch.onnx.dynamo_export` is now deprecated. Leverage the [`dynamic_shapes`](https://pytorch.org/docs/stable/export.html#torch.export.export) argument in `torch.onnx.export` for specifying dynamic shapes on the model.
+
+Version 2.6.0
+
+```python
+torch.onnx.dynamo_export(model, *args, **kwargs)
+```
+
+Version 2.7.0
+
+```python
+torch.onnx.export(model, args, kwargs=kwargs, dynamo=True)
+```
+
+### Finish deprecation of `LRScheduler.print_lr()` along with the `verbose` kwarg to the LRScheduler constructor. (#147301)
+
+Both APIs have been deprecated since 2.2. Please use `LRScheduler.get_last_lr()` to access the learning rate instead.`print_lr` and `verbose` were confusing, not properly documented and were little used, as described in #99270, so we deprecated them in 2.2. Now, we complete the deprecation by removing them completely. To access and print the learning rate of a LRScheduler:
+
+Version 2.6.0
+```python
+optim = ...
+lrsched = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, verbose=True)
+// lrsched will internally call print_lr() and print the learning rate      
+```
+
+Version 2.7.0
+```python
+optim = ...
+lrsched = torch.optim.lr_scheduler.ReduceLROnPlateau(optim)
+print(lrsched.get_last_lr())
+```
+
+### libtorch_python.so symbols are now invisible by default on all platforms except Apple (#142214)
+Previously, the symbols in libtorch_python.so were exposed with default visibility. We have transitioned to being more intentional about what we expose as public symbols for our python API in C++. After #142214, public symbols will be marked explicitly while everything else will be hidden. Some extensions using private symbols will see linker failures with this change.
+
+### Please use `torch.export.export` instead of `capture_pre_autograd_graph` to export the model for pytorch 2 export quantization (#139505)
+
+`capture_pre_autograd_graph` was a temporary API in `torch.export`. Since now we have a better longer term API: `export` available, we can deprecate it.
+
+Version 2.6.0
+```python
+from torch._export import capture_pre_autograd_graph
+from torch.ao.quantization.quantize_pt2e import prepare_pt2e
+from torch.ao.quantization.quantizer.xnnpack_quantizer import (
+    XNNPACKQuantizer,
+    get_symmetric_quantization_config,
+)
+quantizer = XNNPACKQuantizer().set_global(
+    get_symmetric_quantization_config()
+)
+m = capture_pre_autograd_graph(m, *example_inputs)
+m = prepare_pt2e(m, quantizer)
+```
+
+Version 2.7.0
+```python
+from torch.export import export
+from torch.ao.quantization.quantize_pt2e import prepare_pt2e
+# please get xnnpack quantizer from executorch (https://github.com/pytorch/executorch/)
+from executorch.backends.xnnpack.quantizer.xnnpack_quantizer import (
+    XNNPACKQuantizer,
+    get_symmetric_quantization_config,
+)
+quantizer = XNNPACKQuantizer().set_global(
+    get_symmetric_quantization_config()
+)
+m = export(m, *example_inputs)
+m = prepare_pt2e(m, quantizer)
+```
+
+### New interface for `torch.fx.passes.graph_transform_observer.GraphTransformObserver` to enable Node Level provenance tracking (#144277)
+We now track a mapping between the nodes in the pre-grad and post-grad graph. See the issue for an example frontend to visualize the transformations. To update your `GraphTransformObserver` subclasses, instead of overriding `on_node_creation` and `on_node_erase`, there are new functions `get_node_creation_hook`, `get_node_erase_hook`, `get_node_replace_hook` and `get_deepcopy_hook`. These are registered on the `GraphModule` member of the `GraphTransformObserver` upon entry and exit of a `with` block
+
+Version 2.6.0
+
+```python
+class MyPrintObserver(GraphTransformObserver):
+    def on_node_creation(self, node: torch.fx.Node):
+        print(node)
+```
+Version 2.7.0
+```python
+class MyPrintObserver(GraphTransformObserver):
+    def get_node_creation_hook(self):
+        def hook(node: torch.fx.Node):
+            print(node)
+        return hook
+```
+
+### `torch.ao.quantization.pt2e.graph_utils.get_control_flow_submodules` is no longer public (#141612)
+We are planning to make all functions under `torch.ao.quantization.pt2e.graph_utils` private. This update marks `get_control_flow_submodules` as a private API. If you have to or want to continue using `get_control_flow_submodules`, please make a private call by using `_get_control_flow_submodules`.
+
+**Example:**
+Version 2.6:
+```python
+&gt;&gt;&gt; from torch.ao.quantization.pt2e.graph_utils import get_control_flow_submodules
+  ```
+
+Version 2.7:
+```python
+&gt;&gt;&gt; from torch.ao.quantization.pt2e.graph_utils import get_control_flow_submodules
+ImportError: cannot import name 'get_control_flow_submodules' from 'torch.ao.quantization.pt2e.graph_utils'
+&gt;&gt;&gt; from torch.ao.quantization.pt2e.graph_utils import _get_control_flow_submodules  # Note: Use _get_control_flow_submodules for private access
+```
+
+# Deprecations
+
+### `torch.onnx.dynamo_export` is deprecated (#146425, #146639, #146923)
+
+Users should use the `dynamo=True` option on `torch.onnx.export`.
+
+Version 2.6.0
+
+```python
+torch.onnx.dynamo_export(model, *args, **kwargs)
+```
+
+Version 2.7.0
+
+```python
+torch.onnx.export(model, args, kwargs=kwargs, dynamo=True)
+```
+
+### `XNNPACKQuantizer` is deprecated in PyTorch and moved to ExecuTorch, please use it from `executorch.backends.xnnpack.quantizer.xnnpack_quantizer` instead of `torch.ao.quantization.quantizer.xnnpack_quantizer`. (#144940)
+
+`XNNPACKQuantizer` is a quantizer for xnnpack that was added into pytorch/pytorch for initial development. However, as it is not related to our core quantization workflow, we have moved it to ExecuTorch instead. Please use it from `executorch.backends.xnnpack.quantizer.xnnpack_quantizer` instead of `torch.ao.quantization.quantizer.xnnpack_quantizer`.
+
+Version 2.6.0
+```python
+from torch._export import capture_pre_autograd_graph
+from torch.ao.quantization.quantize_pt2e import prepare_pt2e
+from torch.ao.quantization.quantizer.xnnpack_quantizer import (
+    XNNPACKQuantizer,
+    get_symmetric_quantization_config,
+)
+quantizer = XNNPACKQuantizer().set_global(
+    get_symmetric_quantization_config()
+)
+m = capture_pre_autograd_graph(m, *example_inputs)
+m = prepare_pt2e(m, quantizer)
+```
+Version 2.7.0
+```python
+# we also updated the export call
+from torch.export import export
+from torch.ao.quantization.quantize_pt2e import prepare_pt2e
+# please get xnnpack quantizer from executorch (https://github.com/pytorch/executorch/)
+from executorch.backends.xnnpack.quantizer.xnnpack_quantizer import (
+    XNNPACKQuantizer,
+    get_symmetric_quantization_config,
+)
+quantizer = XNNPACKQuantizer().set_global(
+    get_symmetric_quantization_config()
+)
+m = export(m, *example_inputs)
+m = prepare_pt2e(m, quantizer)
+```
+
+# New features
+## Release Engineering
+- Added support for CUDA 12.8 in CI/CD  (#145567, #145789, #145792, #145765, #146019, #146378, #146957, #147037, #146265, #147607, #148000, #149584)
+- Added Python 3.13 and 3.13t support in CI/CD (#144698, #143078, #144697, #143074, #141806, #146614)
+- Added aarch64 support for pytorch-triton package (#148768, #148705)
+- Added support Windows XPU CI/CD (#148755, #147637, #148313, #143185, #148319, #144316, #144644, #144034, #145255)
+- Added support for ROCm MI300 CI/CD (#143673, #145504, #146675, #147904, #145398, #145621, #145829, #145790, #144594)
+- Added support for [PEP585](https://peps.python.org/pep-0585/), Type Hinting Generics In Standard Collections (#145707, #145177, #145708, #145342, #145101)
+- Added Windows Arm64 Nightly Builds (#139760)
+
+## Python Frontend
+- Introduce a new `torch.utils.serialization.config` namespace for all serialization related configurations (#143324)
+- Add `torch.serialization.config.save.use_pinned_memory_for_d2h` to speed up `torch.save` when passed gpu devices (#143342)
+- Add `torch.utils.serialization.config.load.calculate_storage_offsets` to reduce random reads and significantly improve performance for storage with bad random access performance (#143880)
+- Add support for `__torch_function__` handler on dtype arguments, similar to subclass objects (#145085)
+
+## C++ Extensions
+- Support libtorch-agnostic extensions with stable torch ABI (#148892, #148832, #148124, #149208, #149052)
+
+## Distributed
+#### Context Parallel
+- We provided a Context Parallel API (#131351) for users to parallelize `torch.nn.functional.scaled_dot_product_attention` over the sequence dimension. We implemented
+  Ring Attention (#131351) and an AllGather-based approach (#132820) where the all-gather is issued before the first local SDPA
+  and the subsequent local SDPAs will have to wait until the all-gather completes, and offered a user API (#142093) to select the desired approach. The implementation
+  currently supports three SDPA kernels: `SDPBackend.FLASH_ATTENTION`, `SDPBackend.EFFICIENT_ATTENTION`, and `SDPBackend.CUDNN_ATTENTION` (#148537). We also
+  verified that our Context Parallel implementation is compatible with other parallelisms and `torch.compile`.
+#### c10d
+- Implemented ncclCommInitRankScalable (merging #136789) (#144794)
+#### Distributed Checkpoint (DCP)
+- Cache save plans: to mitigate overhead from planning steps (#147116, #147343)
+- Build a storage reader/writer to write checkpoints in HF format (#148089)
+
+## CUDA
+- Blackwell support added across native kernels, CUDA math libraries, and `torch.compile` (#145270)
+- Make `torch.cuda.gds` APIs public (#147120)
+
+## MPS
+- Prototype of torch.compile for Metal (#143893)
+- Provide Metal kernel authoring via Python (#148972)
+
+## ROCm
+- CK Memory-Efficient Attention (attention bias support) (#147778)
+- CK Flash Attention Backend (#143695)
+- Enhanced Windows support for PyTorch on ROCm (#148563, #144098)
+- Support for gfx1102 arch (Navi33) in wheel builds (#147761)
+- hipblaslt rowwise f8 gemm (#144432)
+
+## XPU
+- Add AOT Inductor support for Intel GPU (#140269, #140664, #149175)
+- Support `torch.compile` on Windows Platform for XPU (#147637, #144316, #149511)
+- Support SYCL with `torch.utils.cpp_extension` APIs (#132945)
+- Enhance Intel GPU performance on PyTorch 2 Export Post Training Quantization (#136753, #135465,#135337, #135189)
+- Enable windows Kineto profiler(#148319)
+- Enable TF32 support for XPU based on oneDNN backend (#137570)
+
+## torch.compile
+#### Dynamo
+- Support tracing `contextlib.contextmanager` in Dynamo (#136033)
+- `nonstrict_trace` escape hatch to apply non-strict tracing to difficult-to-compile code (#146367)
+- Delayed compile for dynamic shapes (#147983)
+- Support tracing generators (#141055)
+- Whitelist of source files to apply dynamic shapes to (#147979)
+- Support tracing `list` subclasses (#146819)
+#### Inductor
+- Enable non power-of-2 `head_dim` for FlexAttention (#133495).
+- Add FlexAttention kernel parameter tuning options: `num_warps` and `num_stages` (#139639).
+- Support vectorization for score and mask in FlexAttention CPU (#143638).
+- `ConfigFuzzer`: a new debugging tool designed to fuzz Torch compile configurations. Given a test function, it will identify combinations of configs that throw errors during compilation and execution (#139736) (#145565).
+- Support fusion of pointwise ops into Template Prologues. `TORCHINDUCTOR_PROLOGUE_FUSION` enables this feature (#147008).
+- Add instantiation level for generating configs in the CUTLASS backend. Set `TORCHINDUCTOR_CUTLASS_INSTANTIATION_LEVEL`. Consult config.py for information (#146230).
+- Add L2 Swizzle config for CUTLASS backend: `cuda.cutlass_max_profiling_swizzle_options` (#146088).
+- Emit a CMakeLists.txt when `package_cpp_only` is specified in AOTI (#143352).
+- One Dynamo graph can now map to multiple inductor graphs with different `graph_partition` functions. Set the `graph_partition` in inductor config to enable (#147038).
+
+
+## Profiler
+- Add overload names to profiler (#143114)
+- Enable profiling on all threads via `experimentalConfig` (#143659)
+
+## Quantization
+- Enables kernel from KleidAI to run model that was quantized such that weights are in int4 (with symmetric quantization either using channel-wise or group-wise, with the group size being a multiple of 32), while at runtime the activations are dynamically quantized from fp32 to int8 and weights are upcast from int4 to int8 so that int8 matrix multiplication is executed. This dynamic quantization of activations and matrix multiplication is performed inside of function `torch.ops.aten._dyn_quant_matmul_4bit`, while the weights, scaled and optional bias are packed in `torch.ops.aten._dyn_quant_pack_4bit_weight`. To use it on your model you can quantize it using the following example that leverages `torchao`:
+```python
+from torchao.dtypes import PlainLayout
+from torchao.experimental.packed_linear_int8_dynamic_activation_intx_weight_layout import (
+    PackedLinearInt8DynamicActivationIntxWeightLayout,
+)
+from torchao.experimental.quant_api import (
+    int8_dynamic_activation_intx_weight,
+)
+from torchao.quantization.granularity import (
+    PerGroup,
+    PerRow,
+)
+from torchao.quantization.quant_api import quantize_
+from torchao.quantization.quant_primitives import MappingType
+my_model = Model()
+quantize_(
+    my_model,
+    int8_dynamic_activation_intx_weight(
+        weight_dtype=torch.int4,
+        granularity=PerGroup(32), # PerRow() is also supported
+        has_weight_zeros=True, # Should be True
+        weight_mapping_type=MappingType.SYMMETRIC_NO_CLIPPING_ERR # MappingType.SYMMETRIC can also be used but increases error
+        layout=PackedLinearInt8DynamicActivationIntxWeightLayout(target=&quot;aten&quot;),
+    ),
+)
+```
+
+## ONNX
+#### `torch.onnx.verification.verify_onnx_program` (#148396, #148706, #148730, #148707)
+
+A new verification API `torch.onnx.verification.verify_onnx_program` can now be used to verify numerical accuracy of the exported ONNX model. Users can use the `compare_intermediates` option to identify any operator that causes numerical discrepancies in intermediate tensors. It is possible to use a tool like [model-explorer](https://github.com/justinchuby/model-explorer-onnx) to visualize the verification results.
+
+- Support custom axis name through `dynamic_shapes` (#146321)
+- `torch.onnx.export(dynamo=True)` now optimizes the output model by default (#146187)
+
+
+
+# Improvements
+
+## Release Engineering
+- Added TorchCache Benchmark tests (#147641, #147688, #147782, #147780, #147781, #147783, #147546)
+- Upgrade CD to 6.3 for ROCm (#142152, #142151, #143613)
+- Add cufile to a dependency list for CUDA 12.x builds and enable use by default (#145748, #148465, #148137)
+- Add support for gfx1102 and gfx12 to ROCm  wheel and libtorch builds (#147761, #148562)
+
+## Python Frontend
+- Add support for CPU scalar in `torch.addcmul` (#143264)
+- Set `-DPy_LIMITED_API` flag for `py_limited_api=True` cpp_extensions (#145764)
+- Add support for serialization for uintx/intx in weights_only (#147500)
+- Add warning to `torch.jit.load` (#143403)
+- Make record/storage alignment in `torch.save` configurable (#147788)
+- Support `with` statement on torch.Stream (#140138)
+
+## Autograd
+- Allow `torch.autograd.graph.GradientEdge` as `torch.autograd.backward` outputs #144744
+- Implement gradient for the `residuals` of `torch.linalg.lstsq` #148526
+- Add deterministic kernel for `reflection_pad2d_backward` (#136241)
+- Improve softmax backward pass native CUDA implementation (#145866)
+- Improve Pareto frontier plot for AutoAC (#148678)
+
+## Dataloader
+- Dataloader distributes tasks to workers as they become available when `in_order` is `False` (#142324)
+- Update pin memory related APIs to not pass `device` argument. `device` and `pin_memory_device` are discouraged and will be deprecated in the future. (#131858)
+
+## Linear Algebra
+- Improve dim argument validation for empty inputs for `torch.cum{min,max}`. (#143920)
+- Properly throw an error when trying to sort complex numbers. (#144113)
+
+## Nested Tensor (NJT)
+- Support NJT `chunk()` backward on batch dim (#144584)
+- Support remaining `*_like` factory functions for NJT (#144889)
+- Improve `matmul` with NJTs via backward support and composition with dense tensors (#144587, #146405)
+
+## torch.nn
+- Add `strict` kwarg to `nn.Module.set_submodule` and fix bug for non dot-delineated strings (#143455)
+- Improve input dimensions check for `reflection_pad1d`, `reflection_pad2d` and `reflection_pad3d` (#141670)
+
+## torch.optim
+- Refactor AdamW to subclass Adam (#143710, #144972)
+- Add support for differentiable LR and weight_decay in SGD, Adam(W) (#143510, #143679, #143726)
+
+## Build Frontend
+- Make PyTorch with HomeBrew installed OpenMP (#145870)
+- Enable onednn in pytorch for ppc64le architecture (#143743)
+- Enable build for Blackwell GPU family (#145436)
+- Fix OOM whle building on RasberryPi by sharding codegenerated files (#144364)
+
+## C++ Frontend
+- Introduce a new API `isAcceleratorExcluded` (#144959)
+
+## Distributed
+#### c10d
+- Simplified `abort` and `shutdown` by adding both to `Backend` and `ProcessGroup` objects (#148798)
+- Used `new_group` instead of `split_group` on non-CUDA device (#141469)
+- Removed `call_guard` in pybind object init of c10d (#143598)
+- Enabled coalescing path on XPU and dispatch to XPU tensor barrier if XCCL backend is specified. (#143735)
+- Preserved PyWork's Python reference counting when used in functional collectives (#146376)
+- Enabled soft fail bind when agent store active inside TCPStore (#147465)
+- Made `getDefaultBackend` more fault tolerant (#148596)
+#### DistributedDataParallel (DDP)
+- Added `init_sync` option to control collectives during initialization (#142824)
+- Decoupled python reducer from compilation mode (#147123)
+#### FullyShardedDataParallel2 (FSDP2)
+- Clamp `reduce_dtype` in lazy init (#143297)
+- Enabled FSDP2 on XPU device (#143737)
+- Made post-backward condition more robust (#144781)
+- Enabled MTIA device in FSDP2 library code (#145842)
+- Avoided resetting version counter of all_gather_output in inference_mode (#146709)
+- Supported ignoring parameters in FSDP2 (#146631)
+- Enabled FSDP tests on XPU device (#147518)
+- Enabled FSDP2 on HPU device (#148667)
+#### DTensor
+- Added `aten.amin/amax` to `linear_reduction_strategy` (#143747)
+- Added `src_data_rank` to `distribute_tensor` API (#143883)
+- Added strategy for `_scaled_mm` (#143760)
+- Added `aten.view.dtype` op support (#144404)
+- Enabled sharding prop to handle cross mesh computation (#147869)
+- Added CuDNN SDPA op support to DTensor (#148537)
+- Optimized `shard_dim_alltoall` to use `alltoall_single` (#148868)
+- Deprecated `_shard_tensor` to use `src_data_rank=None` (#144171)
+- Added pointwise ops strategy for `aten.minimum` (#145816)
+#### TensorParallel
+- Propagated `src_data_rank` kwarg in TP API (#144005)
+#### Torch Elastic
+- Added kill logic for current process when killing a worker (#141060)
+- Made `etcd_rendezvous` publicly importable (#145396)
+- Exposed the rendezvous keepalive arguments (#145228)
+#### Pipelining
+- Added `generate_stage_to_rank_mapping` utility (#146193)
+- Removed `stage_index_to_group_rank` from schedule (#146217)
+
+
+## CPU
+#### General
+- Implement blend operation for float, double, int in VEC ATen backend for SVE (#146479)
+- Upgrade submodule oneDNN to v3.7.1 (#148293)
+#### x86
+- Add support for int8 `brgemm` (#143384)
+
+## CUDA
+- Refine CUDA Stream priority (#143849)
+- Expose `sharedMemPerMultiprocessor` device property to python (#143119)
+- Expose remaining sharedMem `cudaDeviceProps` to python (#143226)
+- Add range check for embedding_bag on input `index &gt;= 0` of cuda device (#140791)
+- Fix linter warnings (#147386)
+- Change behavior of pinning memory so it does not init a cuda context if one is not already present (#145752, #149033)
+- Add cutlass kernel for rowwise scaled mm on SM 10.0 (blackwell) (#148421)
+- Add `get_stream_from_external` API for CUDA backend (#143799)
+- Update cuDNN-frontend submodule to 1.10.0, used by cuDNN convolution and SDPA integrations (#145780)
+
+## MPS
+- Adding support to MPS for operators: `angle`, `entr`, `spherical_bessel_j0`,`xlog1py`,` sinc`,`round.decimals`, `linalg.det`,` cholesky.ex`,` bilineard2d_aa`,`linalg.solve`, `zeta`, `cholesky`, `fused_rms_norm`, `lu_unpack`, `lu_factor_ex`, `slogdet` and `logdet` (#143449, #147948, #146818, #147687, #146539, #147266, #146279, #146799, #145526, #146531, #146465, #145701, #145301, #146681, #144651, #145341, #146771, #147914)
+- Extending data type support for `angle` and `atan2` for long type, `torch.special.sinc` to complex, `torch.mm` / `torch.bmm` to integral types (#149017, #146648, #145809, #147526)
+- Support `torch.accelerator.synchronize()` on MPS (#143171)
+- Add error checking when dispatching kernel (#146458)
+- For MPSInductor
+  * Fix index generation for transpose (#143973)
+  * Fix multi rangevar kernel invocation (#144050)
+  * Better error when kernel fails to compile (#144649)
+  * Fix large prod and sum reductions (#148975)
+  * Adding support to MPSInductor for operators: `gamma`, `zeta`, `sinc`, `spherical_bessel_j0`, `entr` (#145341, #146465, #146539, #147650, #148128)
+
+## ROCm
+- Fix TunableOp UTs: Rotating Buffer (#143172)
+- Enable *_load_dwordx4 ISA for BFloat16 and Half. (#141397)
+- Fix condition for small tensor tuning (#144087)
+
+## XPU
+- Enable FP64 GEMM (#140677)
+- Enable Sparse CSR support (#144722)
+- Improve XPU Stream implemenation(#141123,#141119,#142347)
+- Enable XPU for Inductor MM Triton Kernel Benchmark (#148237)
+- Align XPU `convolution_backward` output layout between fake tensor and real output tensor (#146880)
+- Improve error handling and reporting in CMake files (#149353)
+- Refine `torch.xpu.get_device_properties` API error message (#144379)
+- Enable `nested_layer_norm` support for XPU (#148593)
+- Generalize `is_big_gpu()` check in Inductor (#143491)
+- Allow XPU device in sparse compressed tensor factory functions (#147306)
+
+## Profiler
+- Add optional flag to profiler to toggle external correlations (#143314)
+- Add delimeter in memory vizualizer to show where allocation addr begins (#147461)
+- Add last entry to truncated values in Kineto args (#148576)
+- Add profiler activity for HPU devices (#148182)
+- Add HPU availabilities to profiler (#149115)
+
+## torch.compile
+#### Dynamo
+- Better tracing support for user-defined `dict` subclasses (#143548)
+- Improved graph break messages for some common graph break sites (#146525)
+- Improved tracing of exceptions (#146492)
+- Remove a number of builtin and third-party modules from `trace_rules.py` skipfiles (#145856)
+- Remove some specialized variables for specific third-party classes (e.g. `transformers` `ModelOutput`) (#143567)
+- Compiled Autograd dropped annotation requirements for custom autograd functions (#146229, #146720)
+#### AOTDispatcher
+* Fix a quadratic compile time edge case during training when you have long parallel chains of compute (#145082)
+* handle compiling mutations on tangents in custom autograd.Functions (#141131)
+* handle compiling buffer input mutations of the form `buffer.copy_(int)` (#141161)
+* Fix handling of mutable custom operators in compile when used with `torch.inference_mode` (#147925)
+#### Dynamic Shapes
+* Better unbacked symint handling for `topk` (#147017)
+* dynamic shape support for `interpolate(antialias=True)` backward (#141198)
+* Better unbacked symint handling in the partitioner (#143877)
+* Support dynamic shape inputs to `nonzer_static` (#146006)
+* Improve logging in the symbolic shapes framework (provenance tracking, error messages) (#143378, #146625, #146583, #146532, #145354, #146858, #146939, #146955, #147240,#146413m  #145848, #147836, #146298)
+* Simplify and speed up `_compute_symbolic_stride()` (#138844)
+* Add max kwarg to `torch._check` (#144471)
+* Apply hints to symbol not expr when materializing unbacked tensor intermediates in the partitioner (#144097)
+* Add `backed_size_oblivious` config (#148696)
+* Add `mark_unbacked` strict mode (#147333, #147342)
+#### Decompositions, FakeTensor and meta tensors
+Several operator decomps received improvements/bugfixes:
+* `torch._refs.tensor` (#143461)
+* `torch._refs.mean` (#147188)
+* `linspace` (#147997)
+* `addmv` (#143792)
+New meta tensor implementations for a few pytorch operators:
+* `nonzero` (#144727)
+* `silu`, `sigmoid`, `_softmax`, `embedding` (#147862)
+New fake tensor implementation for a few pytorch operators:
+* `unique_consecutive` (#145649)
+Several general FakeTensor improvements
+* force `UntypedStorage.from_buffer(buf)` to return meta storage under FakeTensorMode (#146642)
+* support `meta_tensor.to(device='cpu')` under `fake_mode` (#146729)
+#### Inductor
+- Add profiling support for codegened CPU FlexAttention kernels (#145894).
+- Other FlexAttention improvements: (#147765) (#147435) (#147010) (#146657) (#145059) (#144938) (#143299) (#142281) (#147918) (#148857).
+- Add Inductor support for non-power-of-2 cooperative RSPLIT (#145689).
+- Remove runtime dependency on packaging (#149125) 
+- Add Cutlass support for runtime param choices, starting with `swizzle` (#147223).
+- Make Inductor cpp backend enable_floating_point_contract_flag take string. Previously, the only options were &quot;on&quot; or &quot;off&quot;. Now the value of `INDUCTOR_CPP_ENABLE_FLOATING_POINT_CONTRACT_FLAG` will be passed to `ffp-contract` (#143450).
+- Add upcasting FP16/BF16 math reductions to FP32 in Triton (#141052).
+- Support for more types of async_compile pools. Set variable `TORCHINDUCTOR_WORKER_START` to one of &quot;subprocess&quot;, &quot;fork&quot;, or &quot;spawn&quot; (#144491).
+- Create a new benchmarker to replace Triton's `do_bench` (#133058).
+- Inplace-padding support for cpp-wrapper (#145325).
+- New environment variables for `emulate_precision_casts`: `TORCHINDUCTOR_EMULATE_PRECISION_CASTS` (#145948).
+- New environment variables to filter cutlass kernels: `TORCHINDUCTOR_CUTLASS_ALLOWLIST` and `TORCHINDUCTOR_CUTLASS_DENYLIST` (#148161).
+- Add option to disable runtime scalar assertions: `TORCHINDUCTOR_SCALAR_ASSERTS` (#146462).
+- Add new inductor configs to compiler bisector: `layout_optimization` and `comprehensive_padding` (#148450).
+- Add an option to skip optimizing generated wrapper code. Set `AOT_INDUCTOR_COMPILE_WRAPPER_WITH_O0=1` (#144866).
+- Support dynamic shape constraints in Export (#146044).
+- Handle MLIR scf.yield more accurately in user Triton code (#147762).
+- Support Triton 3.3: add a `global_scratch` arg, fix cpp_wrapper (#148051, #149973).
+- Removed an unnecessarily struct runtime alignment assertion, allowing more flexible use cases of AOTI (#143236).
+- Support `_int_mm` in AOTI (#144571).
+- Support AOTI + CUDAGraphs when calling from Python (#148601).
+- New post grad pass to remove `torch.ops.aten._assert_tensor_metadata.default` for AOTI (#145028).
+- Support basic TorchBind in `aot_compile` and `aoti_compile_and_package` (#148506).
+- Add top level tlparse logging for AOTI (#147760)
+- Added Inductor dashboard benchmarks  (#144427, #145791, #145654, #145655, #146449, #145683, #141371, #143223)
+- Add AOTI shim for `_weight_int4pack_mm_cpu_tensor` (#149031)
+
+
+## torch.fx
+- Fix subgraph rewriter to support matched pattern with no users (#143842)
+- Improve error message to include entire GraphModule (#146197, #148090)
+- Allow overriding of ShapeProp (#148784)
+
+## torch.export
+#### serialization
+- Add float8 support in serialization schema (#143343)
+- Allow pickle protocol overriding for serialization (#142253)
+- Add serialization support for SymInt inputs in higher-order op subgraphs (#142284)
+- Unify single-output and multi-output serialization schemas for higher-order op subgraphs (#143227)
+- Add `&quot;+export&quot;` logging to de/serialization process (#145283)
+- Sync model container types to serialization schema (#145959)
+- Serialize pytree namedtuple field names in input spec (#145956)
+- Replace `builtins.getattr` with serializable higher-order-op for tensor subclasses (#145772)
+#### dynamic shapes
+- Support slice operations with SymInt indices in non-strict export (#143217)
+- Export with automatic dynamic shapes (`Dim.AUTO`) for TorchScript -&gt; Export Converter (#138273)
+- Support partially specifying dimensions in `ShapesCollection` (#147534)
+#### draft export
+- Report frequency of data-dependent errors in draft export (#145030)
+- Report LOC for data-dependent errors in draft export (#145443)
+- Add tlparse for draft export (#145810)
+- Deduplicate `expression_created` logging in draft export (#146859)
+- Remove `report` as return output for draft export, attached as `ep._report` (#147558)
+#### miscellaneous
+- Don't decompose custom triton ops when exporting (#144284)
+- Handle input/buffer mutations for joint-graph export (#144806)
+- Allow `builtin` bitshift ops in verifier (#145802)
+- Introduce `aoti_call_delegate` higher-order-op for eager-mode runnability (#145630)
+- Include tensor subclass buffers in parametrization rules (#145991)
+- Expose pytree namedtuple metadata to `FlatArgsAdapter` (#146107)
+- Implement OSS-only model runner (#146440)
+- Exclude core ATen ops `upsample_bilinear2d.vec`, `nearest2d.vec` from default decomposition table (#147153)
+- Improve error message for unsupported input types (#147532)
+- Initial support for exporting methods (#147573)
+
+## Quantization
+- Add an option `keep_original_weights` in `_lower_to_native_backend` (#141049)
+- Handle meta tensors in FX quantization (#144726)
+- Add fp8 support to index_cuda (#144747)
+- Add the `torch.float8_e8m0fnu` dtype to PyTorch (#147466)
+- Improve the performance of 8 bit quantized linear and addition operation on AArch64 by leveraging operations from Arm Compute Library (#148585)
+- Enables int8 linear operations to use mkl-dnn when activations, weights and accumulation are all signed 8-bit integers (#139887)
+
+## ONNX
+- Dynamic shapes support is improved (#144801)
+- Automatically convert `dynamic_axes` to `dynamic_shapes` with `torch.export.Dim.AUTO` (#143158)
+- Fix bug for exporting `torch.cdist` into onnx and support 'compute_mode' (#144213)
+- Remove `LegacyDynamoStrategy` (#145442)
+- Set warning stacklevel so it appears at the `torch.onnx` call site (#147165)
+- Pick up missing types in `dynamic_shapes` renaming (#147407)
+- Update saved exported program in debugging report if the exporting passes `run_decomposition()` (#148617)
+- Use `torch export` to get `dynamic_shapes` for JIT convert strategy (#148627)
+- Use `torch.export.Dim.AUTO` in `dynamo_export` (#144356)
+- Support complex comparison when `verify=True` (#148619)
+
+## JIT
+- Relax type-checks for empty dicts (#147167)
+
+## Lazy Tensor
+- Introduce cache clearing APIs for the lazy graph executor (#144489)
+
+## torch.package
+- Add support for UntypedStorage tensors (#143930)
+
+
+# Bug fixes
+
+## Python Frontend
+- Fix `torch.lerp` type promotion (#141117)
+- Fix memory leak on `torch.Tensor` when both slots and python gc are used (#143203)
+- Fix `torch.bfloat16` support for `__cuda_array_interface__`. (#143042)
+- Fix rare dispatcher bug for inplace operations that would make the returned `torch.Tensor` incorrect. (#145530)
+- Stop using MKL for randomness generation on CPU (#146174)
+- Move accelerator detection to use build time (#146098)
+- Fix `torch.load` under `FakeTensorMode` to create `FakeTensor` with correct devices (for plain Tensors) (#147786)
+- Fix `torch.acos`, `torch.asin`, `torch.atan`, `torch.exp`, `torch.sigmoid`, `torch.div`, for `torch.complex` datatypes on CPU (#134838, #140358, #140391, #140375, #144749)
+
+## Autograd
+- Fix `torch.autograd.graph.allow_mutation_on_saved_tensors` for inplace foreach ops #145520
+- Fix boundary conditions for `hardswish` backward (#143899)
+- Use float data type for Half sum in fallback implementation of `batchnorm` backward on CPU (#147353)
+- Fix `torch.compile` + ddp + non-reentrant AC pack hook firing count (#144271)
+
+## Linear Algebra
+- Fix workarea compute in `eigh` (#146456)
+
+## Nested Tensor (NJT)
+- Fix NJT `min` / `max` backward() for non-ragged reductions (#144583)
+- Fix NJT `frexp()` to handle both outputs (#144585)
+- Fix NJT `fill.Scalar` for contiguous inputs (#144586)
+- Fix inference mode for composite implicit ops without nested-specific kernel (#146633)
+- Fix flop counter for SDPA and test (#147032)
+
+## torch.nn
+- Fix broken meta function for flex-attention backwards (#146563)
+
+## Build Frontend
+- Fix unbalanced `#pragma diagnostic pop` in VecLib (#148354)
+- Fix atomic operation compatibility for ARMv8-A (Raspberry Pi 4) by adjusting compilation flags (#148070)
+- Make PyTorch buildable by CMake-4.x (#150203)
+
+## C++ Frontend
+- Fix Apple Clang ICE when building with -march=armv8.6a (#142879)
+- Fix inductor regression on aarch64 neoverse-v1 with gcc10.2 by disabling tree vectorization (#148489)
+
+## Distributed
+#### Distibuted Checkpoint (DCP)
+- fix dcp gather_object/scatter_object_list (#147675)
+#### Distributed (c10d)
+- Fixed `CudaEventCache` for dangling references (#144496)
+- Make `all-reduce` input contiguous in `distributed.nn.all_reduce` (#144267)
+- Removed `Alltoallv` specialization for PyTorch generic `all_to_all` (#145045)
+- Added a handle case when remote peer closes connection for TCPStore (#145757)
+- Fixed memory leak on shutdown (#145507)
+- Fixed an issue where functional collectives don't force fx stride on inputs when compiled (#146467)
+- Associated tensor allocation support with NCCL version (#146842)
+- Modified API to get device string from device with `torch.device` (#146290)
+- Fixed `dist.init_process_group` on windows (#148266)
+- Fixed capturability of `isend` and `irecv` (#148462)
+#### DistributedStateDict (DSD)
+- Fixed `strict=False` case for DDP (#143038)
+- Fixed issue when there is a PG without parameters (#147730)
+- Fixed the shared parameter mismatch for optimizer state_dict when flattening FQNs are used (#148825)
+#### FullyShardedDataParallel2 (FSDP2)
+- Rooted fix for FP8 tensor (#143248)
+- Added workaround to fix `buffer_dtype` without root parameters (#143989)
+- Supported custom all reduce hook across FSDP units (#147114)
+- Fixed bug in FSDP wrapped module with zero argument  (#147771)
+#### DTensor
+- Fixed `torch.distributed._functional_collectives.AsyncCollectiveTensor` for `aten.to`. (#134661)
+- Deferred DTensor RNG state sync until first random op call or manual_seed call to support more flexible OffsetBasedRNGTracker init (#147025)
+- Fixed `_scaled_dot_product_flash_attention` sharding (#148125)
+- Fixed redistribution cost for `all-reduce` (#148761)
+#### Pipelining
+- Fixed backward_one_chunk when the output of the model is a view (#142237)
+- Threw error with ZB and compile (#143599)
+- Fixed FSDP+PP stream sync bug (#144535)
+- Fixed PP grad scaling (#144352)
+- No allowing for num_microbatches &gt; num_stages for single stage schedules (#144702)
+- Fixed shape_inference for V-schedules (#147000)
+
+## CPU
+#### General
+- Use sleef implementation for CPP backend `asinh` codegen (#142360)
+#### x86
+- Constrain the shape of other tensor for `Conv/Linear` + broadcast `add` fusion (#141759)
+
+## CUDA
+- Let `PYTORCH_NO_CUDA_MEMORY_CACHING` has effect only when value is 1 (#145905)
+- Fix race condition in cuda initialization (#143238)
+- Fix a few 64-bit indexing issues, account for number of threads in `complex128` scan (#143401)
+- Fix acquire pattern (correctness with respect to memory model) in topk (#144945)
+- `Int64` indexing fix for `UpSampleNearest3D` (#144865)
+- Fix printing of the number of GPUs when certain asserts are raised (#146838)
+- Update the number of threads in `avg_pool2d` backward for SM 10.0 to prevent runtime crash (#145669)
+- Only use `f8f8bf16` rowwise scaled matmul to SM 9.0 (precedes #148421 adding of kernel) (#145728)
+- Fix 64-bit indexing for `Upsample2D` (#141923)
+- Fix path lookup in `_preload_cuda_deps` (#149808)
+- Help support Blackwell: Fix backward launch bounds again for `sm100`, `sm120` (#150640)
+
+## MPS
+- Workaround for `gather_out` in MPS backend (#135543)
+- Fix fmin/fmax for scalar argument (#143934)
+- Fix crash when mm is invoked with mixed dtypes (#143948)
+- Fix `torch.add(x,y, alpha=2)` crash (#143949)
+- Fix `nllnd_loss_backward` crash with different dtypes (#144170)
+- Make sure that MPSStream is usable from C++ (#144559)
+- Make MPSProfiler usable from C++ (#144560)
+- Fix regression in con-contiguous bitwise ops (#146085)
+- Fix lu factor for large tensors with bs\&gt;1 (#146753)
+- Ensure 4d input in `_scaled_dot_product_attention_math_mps` (#146623)
+- Fix `cholesky_ex` for empty inputs (#147159)
+- Fix attention for \&gt;4d tensors (#147545)
+- Fix empty placeholder error for smooth l1 loss (#148133)
+- Fix sqrt and other for `torch.chalf` (#148285)
+- Fix `unary_kernel_strided` logic (#148512)
+- Fix scalar to tensors bitshifts (#148686)
+- Fix multinomial sampling for non-contiguous tensors (#141515)
+- Fix triangular for \&gt;3D tensors (#144545)
+- Fix missing autorelease in `lstm_mps` causing leaked memory (#145503)
+- Fix missing autoreleasepool around runUniqueGraph to prevent leaks (#145512)
+- Workaround rng bug for 5D tensors (#147667)
+- Fix Wreorder-init-list (#148839)
+- Fix invalid format string in libfmt calls (#148855)
+- Fix `c10::metal::log_gamma` correctness on M4 (#145740)
+- Fix lu factor for non contiguous tensors (#146279)
+- Fix attention `enable_gqa` crash on MPS (#149147)
+- Fix dot/mm for conj_tensors (#150157)
+- Fix `tril` op not handling infs correctly (#149866)
+- In MPSInductor:
+  * Fix `min`/`max` reductions over large dims (#149004)
+  * Fix argmin/max signatures (#149020)
+  * Fix `masked`/`where` for inf values (#144500)
+  * Move threadfence to before first read from shared memory, not after (#149437)
+
+## ROCm
+- TunableOp use thread-safe getenv functions (#142274)
+- fix torch.layer_norm invalid configuration problem when input is large tensor (#144007)
+- [Inductor][CK] hackfix for segfault in `addmm` op (#144519)
+- Fix `torch.layer_norm` invalid configuration when input is large tensor (#144007)
+- Fix `isnan` integer overload errors on MicroSoft STL (#146605)
+- Fixes and improvements to CUDA-&gt;HIP flag conversion for CPP extensions (#149245)
+
+## XPU
+- Fix SDPA dummy log_sum_exmp output to match meta function (#148652)
+- Fix memory leak in deconv backward (#144385)
+- Add XPU support to `torch.utils._content_store` to accelerate XPU tensor hashing for tensor serialization (#147785)
+- Enabling XPU in `OffsetBasedRNGTracker` to unbreak `torch.distributed` (#148360)
+- `torch.backends.mkldnn.flags()` CM should not warn (#150358)
+
+## Profiler
+- Hide Kineto `step()` for iterative on-demand tracking behind environment variable (#144494)
+- Enable CUPTI on Windows (#141454)
+- Fix device setting error of other backends in `torch.profiler` (#144237)
+- Fix assertion failure in PyTorch profiler (#143940)
+
+## torch.compile
+- Do not depend on numpy during `torch._functorch` import (#149683)
+#### Dynamo
+- Guard on global autocast state (#143592)
+- Fix some internal crashes involving undefined names (#144784)
+- Multiple silent incorrectness fixes for Compiled Autograd (#144707)
+- Fix graph break in FlexAttention when using Compiled Autograd (#144533)
+#### Inductor
+- Fix a bug where the options dictionary on `torch.compile` calls was ignored (#145131).
+- Inductor now supports `nanj` in cpp wrapper CPU (#144064).
+- Fix a bug in the `fractional_max_pool` lowering in Inductor (#144395).
+- FlexAttention: Fix a few more symbolic shape issues (#142816).
+- Fix a bug in `associative_scan` (#143048).
+- Fix the Index Put lowering with same input of self and values (#139366).
+- Fix a bug in `torch.polygamma(n)` when n == 0 (#144058).
+- Fix bug in integer `avg_pool` that was causing 0 rounding (#144059).
+- Change `avg_pool` with `uint` to match eager (#144313).
+- Fix bug in max-autotune on smaller GPUs (&lt;68 SMs) (#145133).
+- Fix bug in `torch.logit` decomposition (#145576).
+- Fix bug in the strides when lowering custom op (#148367).
+- Update triton support to account for changes in AttrsDescriptor (#145051) (#145348) (#145575) (#145583) (#145515).
+- Fix bug where the `benchmark_harness` isn't generated, but is called in some cases (#145532).
+- Make sure not using cpp wrapper when setting nvtx training annotation (#145538).
+- Fix bug where `SVE256` features were run on `SVE128` systems (#146207).
+- Fix an unaligned memory access issue in `mm_template` (#146293).
+- Fix intermediate debug information with `cpp_wrapper` (#145527).
+- Fix bug where inductor was codegen-ing wrong shapes for bucketize when it was fused as an epilogue (#148769).
+- Fix bug in AOTI one-pass codegen when max-autotune is turned on (#143098).
+- Fix a memory leak in package `AOTIModelPackageLoaderPybind::boxed_run` (#146100).
+- Fix `None` and `equal_to_1` arguments issue in Triton kernel generated by AOTI (#148102)
+- Fix backwards compatibility for `AOTIModelPackageLoader()` constructor defaults (#149082)
+- Fix blank space break windows file path (#149388)
+- Fix inductor windows linker error (#150256)
+
+## torch.fx
+- Fix `get_source_partitions` when weights are tied (#142446)
+- Prevent DCE of ATen rng nodes (#144319)
+- Fix incorrect type comparison (#145449)
+- Fix DCE of setitem node (#145714)
+- Fix pytree.register_constant to be usable in export (#147533)
+- Fix edge case in translation validation bisector (#145414)
+
+## torch.export
+#### serialization
+- Rewrite the export schema format to archive without BC-breakage (#142511)
+- Serialize all dataclass fields, including default-valued members, in export schema (#142286)
+- Fix SymBool incorrectly serialized as bools (#144295)
+- Fix serialization roundtrippability for nodes with default arguments (#144686)
+- Fix deserializing bool graph outputs (#144791)
+- Fix deserialization for `and_` operator (#145506)
+- Explicitly serialize `unbacked_bindings` (#144894)
+- Relax serialization assertion to warning for `unbacked_bindings` keys (#145777)
+- Avoid always printing GraphModule in de/serialization logging (#145857)
+- Bump ShapeEnv unbacked symbol counters for `unbacked_bindings` in deserialization (#145882)
+- Fix serialization for nested terms in `nn_module_stack` (#145901)
+- Fix typo in SymFloat serialization (#146112)
+- Fix deserialization for `.requires_grad` field (#146351)
+- Support `math.trunc` ops for serialization (#146715)
+- Serialize `math.inf` and `NaN` as strings (#146490)
+- Loosen SymInt input serialization for Inductor (#147237)
+#### draft export
+- Fix dense-in-memory check for fake-kernel inference, for draft export (#145653)
+- Fix `lazy_trace_handler` bug in draft export logging (#146106)
+- Only clear pending unbacked symbols for overwritten fake-kernels for draft export (#147427)
+- Ignore when real-tensor fallback fails in draft export (#147779)
+#### miscellaneous
+- Fix dynamic shape constraint checking when non-strict retracing (#143442)
+- Fix `._modules` corner case for `nn_module_stack` metadata in strict-mode (#142823)
+- Fix placeholder name ordering for kwargs in non-strict mode (#144278)
+- Extend support for distributed ops (`all_reduce`, `all_gather`, `all_gather_into_tensor`, `all_to_all_single`, `reduce_scatter_tensor`) in non-strict mode (#147133, #147417)
+- Fix error with unflattener submodule reordering (#146181)
+- Make `stack_trace` field optional in `insert_custom_op_guards` pass (#146438)
+- Differentiate `ScriptModules` and `ScriptObjects` for TorchBind (#147399)
+- Restore lost input mutations with `export_tracepoint` (#148709)
+- Symintify `transpose_` (#149057)
+
+## ONNX
+- Support subgraphs with 1+ outputs (#145860)
+- Delete `rename_dynamic_shapes_with_model_inputs` (#146002)
+- Handle number of outputs in builder (#147164)
+- Fix missed None type support in `dynamic_shapes` string cases (#148025)
+
+
+# Performance
+
+## Release Engineering
+- Add perf testing on H100 (#146868, #147947)
+## Sparse Frontend
+- Remove unnecessary tensor `clone`s throughout codebase (#148159)
+
+## Distributed
+#### Distributed Checkpoint (DCP)
+- Introduce process based async checkpointing (#147039)
+#### c10d
+- Changed `ALLOC_BUFFER_SIZE` from 4000 to 4096 to be a power of 2 for TCPStore (#145759)
+- Improved IPC tensor release performance by releasing the IpcMutex when deleting the `ExpandableSegments` object and the GIL in WorkNCCL destructor (#148805)
+
+## CPU
+#### General
+- Simplify vec128 bfloat16/half `fmadds` (#144486)
+- Parallelize `sort` (#142391)
+#### x86
+- Set `prop_kind` to `forward_inference` when grad is not needed for `mkldnn_convolution_pointwise` (#142855)
+- Support reduce ops for `add` and `max` (#144065)
+- use zero-point to decide `conv` src zp mask (#149473)
+
+## CUDA
+- Let `PYTORCH_NO_CUDA_MEMORY_CACHING` has effect only when value is 1 (#145905)
+- Fix race condition in cuda initialization (#143238)
+- Fix a few 64-bit indexing issues, account for number of threads in `complex128` scan (#143401)
+- Fix acquire pattern (correctness with respect to memory model) in topk (#144945)
+- `Int64` indexing fix for `UpSampleNearest3D` (#144865)
+- Fix printing of the number of GPUs when certain asserts are raised (#146838)
+- Update the number of threads in `avg_pool2d` backward for SM 10.0 to prevent runtime crash (#145669)
+- Only use `f8f8bf16` rowwise scaled matmul to SM 9.0 (precedes #148421 adding of kernel) (#145728)
+- Fix 64-bit indexing for `Upsample2D` (#141923)
+
+
+## MPS
+- Faster integer batched matmul (#147877)
+- Implement linear1d as shader (#148154)
+- Metal unary kernel for sqrt (#148272)
+- Faster unary operations for strided tensors (#148350)
+- Introduce strides unary op (#148468)
+- Implemented `masked_fill_scalar` as shader (#147369)
+- Implement `bilineard2d` as shader (#145581)
+- Optimize Cholesky (#145722)
+- Speedup interpolation (#148277)
+
+## ROCm
+- Improve backwards indexing when stride is not one (#147630)
+- Improvements for vectorized elementwise kernels (#143269)
+- Skip L1 cache for single-use buffers in tl.load (#143115)
+- Improve performance of reduce sum for 3D shapes (#143137)
+- Enable `_load_dwordx4` ISA for BFloat16 and Half (#141397)
+- Improve reduce sum calculation for low CU count (#141378)
+- Tune 3d tensor sums when not using fastest dimension (#146170)
+- Optimize the stride one indexing backwards kernel (#146420)
+- Use IPT=8 for block radix sort (#147657)
+- Improve performance of reduce sum for 3D shapes (#143137)
+- change preferred blas lib defaults (#150212)
+
+## XPU
+- Optimize SDPA Inference Performance for XPU (#147614, #147612)
+- Improve zero-point memory creation (#148640)
+- Avoid unnecessary copy when the destination tensor of Matmul is non-contiguous or input is broadcasted  (#144759, #143784)
+
+## torch.compile
+#### Dynamo
+- Implement dynamic shape guards in C++ (#139899)
+- Directly access Python frame locals in guard checks (#140063)
+- Misc. Dynamo tracing time improvements (#143066)
+#### Inductor
+- Support for Arm Neon and SVE support for FP32 Gemm Wrapper (#144327).
+- New GEMM kernel: `persistent_tma` (#142101).
+- Enable CPP Grouped GEMM Template (#143796).
+- Auto-tuning support for i8 x i8 -&gt; i32 GEMM kernel on AMX ISA (#143187).
+- Add new GEMM templates for CPU AVX512: `_weight_int4pack_mm_for_cpu` (#146756).
+- Fuse `SmoothQuant` int8 linear pattern (#142036).
+- Add torchao da8w8 pattern with symmetric quantized activations and weights (#142110).
+- Support tiling reduction dimensions: Instead of having a single reduction dimension called &quot;r&quot;, we can now support 2D reductions with &quot;r0_&quot; and &quot;r1_&quot; dimensions. 2D reductions generate two nested loops, with different block pointer advancements in each loop body (#137243).
+- New config to skip L1 cache for single-use buffers in triton codegen (#143115).
+- Implement `max_pool2d_with_indices` as a reduction for large window sizes (#147876).
+- Optimize the heuristics of outer loop fusion in Inductor CPU backend (#147523).
+- Support parallel reduction for GroupNorm in Inductor CPU backend (#144020).
+- Add support for online softmax. Online softmax uses a customized reduction to compute max and sum at the same time by accessing the data in one pass (#127011).
+- Add ROCm specific matmul tuning parameters (#148437).
+
+## torch.fx
+- Micro-optimization in `Graph.nodes.__iter__` (#144631)
+- Micro-optimization in `map_aggregate(immutable_dict)` (#147691)
+- Move DCE rand check to import time (#145118)
+
+## Quantization
+- Enable fast qlinear static/dynamic path for AArch64 through ACL directly (#148585)
+- Improve KleidiAI 4 bit kernel performance (#146476)
+- Add NEON implementation for 8 bit quantized embedding bag on AArch64 to improve performance by ~5.5x on Neoverse V1 cores (#147322)
+
+
+# Documentation
+
+## Python Frontend
+- Fix description of `input` in `torch.addbmm()` (#146664)
+- fix numpy docs reference (#147697)
+- Add `torch.cat` type promotion documentation (#141339)
+- Add details `torch.topk` indices stability when duplicate values (#143736)
+- Add overloads to `torch.diagonal` documentation (#144214)
+- remove incorrect warnings from `torch.{min,max}` documentation (#146725)
+- Update addbmm, addmm, addmv and baddbmm description (#146689)
+- Fix `torch.max` optional args `dim`, `keepdim` description (#147177)
+- Update `torch.bucketize` documentaion (#148400)
+- Fix docs recommending inefficient tensor op order (#144270)
+
+## Autograd
+- Suppress vmap warning from `torch.autograd.gradcheck` #144287
+
+## Nested Tensor (NJT)
+- Update OSS nested tensor docs to focus on NJT (#145402)
+
+## torch.nn
+- Add clarification for target types in `CrossEntropyLoss` doc (#145444)
+
+## torch.optim
+- Clarify what we mean by decoupled weight decay in the *AdamWs (#144101, #144984)
+- Corrected description of AMSGrad algorithm (#142351)
+
+## Build Frontend
+- Removing doc references to PRE_CXX11_ABI. (#149756)
+
+## Distributed
+#### FullyShardedDataParallel2 (FSDP2)
+- Highlighted equivalence of `set_requires_gradient_sync` and `no_sync` (#148715)
+#### Distributed (c10d)
+- Updated docs for `wait()` (#143305)
+- Added comments to the end of Macro for better readability (#144789)
+#### DTensor
+- Added some documentation for `from_group` API and add a 2D test (#146364)
+- Expose the `__create_chunk_list__` in the doc (#144100)
+#### DistributedStateDict (DSD)
+- Updated the document to mention the limitation of `set_optimizer_state_dict` (#148918)
+## Torch Elastic
+- Replaced incorrect .. note:: invocations (#142868)
+- Fixed the doc string for `record` (#146968)
+#### Pipelining
+- Updated tutorials and documentation (#143045)
+
+## CUDA
+- Correct docs for clock_rate to MHz, fixes #147098 (#147393)
+
+## XPU
+- Improve &quot;Getting Started on Intel GPU&quot; hardware requirements and notes(#147802, #148168, #150397)
+- Improve SYCL extension, source build and AOT Inductor documentation (#147988, #143476, #149299)
+- Update Doc for Intel XPU Profiling (#134515)
+- Update CMAKE_PREFIX_PATH for XPU windows README (#148863)
+
+## torch.compile
+#### Dynamo
+- Remove the suggestion to use `suppress_errors` on compiler error (#146553)
+- Automatically generated Dynamo docs (#146736)
+#### Inductor
+- Spruce up docs for `emulate_precision_casts` (#145579).
+- Minor fixes to export and AOTI docs (#144513).
+- Update AOTI tutorial (#143390).
+- `inductor.config.descriptive_names = False` is no longer a suggested option (#145523).
+
+## torch.fx
+- Improve logging for splitter (#143771)
+- Update literal typing for torch/fx/graph nodelist (#144650)
+- Improve typing for torch/fx/_pytree.py and torch/utils/_pytree.py (#145173)
+- Fix minor mistake in docstring of replace_pattern (#147611)
+
+## torch.export
+- [Export Programming Model](https://pytorch.org/docs/main/export.programming_model.html): #143546
+- Update dynamic shapes docs for `dims()` and suggested fixes parser: #142510
+- Clean up docstring for `torch.export.load()`: #141490
+
+## Quantization
+- Add torchao docs link to PyTorch libraries (#145412)
+
+## ONNX
+- Update TorchDynamo-based ONNX Exporter memory usage example code. (#144139)
+- Deprecation message follow up (#147005)
+- Expose verification utilities (#148603)
+
+
+# Developers
+
+
+## Python Frontend
+- Collect packages with importlib in collect_env (#144616)
+- added `__add__` and `__mul__` hints to `torch.Size` (#144322)
+
+## Distributed
+#### FullyShardedDataParallel2 (FSDP2)
+- Enabled the typing of `fully_shard` so that the return value can be chained with typing enabled (#147489)
+#### Distributed (c10d)
+- Improved the dump mechanism for flight recorder (#143446)
+- Added log trace capture enabled or not in flight recorder (#143865)
+- Added file flush in file based dumper of flight recorder (#145458)
+- Caught c10 error and log message inside monitoring thread (#145413)
+- Added an API to get the status/error code at the PG level (#144498)
+- Moved record param for init to the right place (#148571)
+- Enabled testing generelization for multiple accelerator devices (#139749)
+#### TensorParallel
+- Added warning when module is distributed twice (#147006)
+#### Pipelining
+- Improved shape inference debug logging (#144929)
+
+## MPS
+- Support includes in metal objects (#145087)
+- Context manager to capture Metal commands for debugging/profiling (#144561)
+
+## XPU
+- Reduce the binary size of the XPU Windows package (#148313)
+- Add Python 3.13 build for XPU (#146614)
+- Make XPU Triton build supports manylinux 2.28 (#148195)
+- Fix XPU builds inside venv (#150300)
+
+## Benchmark
+- Remove old ONNX benchmarks from operator benchmarks (#146325)
+- Add option to write operator benchmark output to a JSON (#142809)
+- Improve operator benchmark results parsing (#144297)
+- Add more operators {`add_`, `addcmul`, `arange`, `baddbmm`, `bmm`, `clamp`, `div`, `div_`, `gelu`, `index_add`, `logical_and`, `mul_`, `sub_`, `topk`, `where`} to operator benchmark (#145625)
+- Add cachebench to operator benchmarks for PT2 caching (#147537)
+
+## torch.compile
+#### Dynamo
+- New internal graph break API that enforces better error messages (#146525)
+- Replace internal calls to `torch._dynamo.optimize()` with `torch.compile()` (#142451)
+#### Inductor
+- Support for export to unwrap/wrap subclasses AOT, resolves UX issue in torchao where users had to manually unwrap their subclasses before calling export (#141941).
+- Autotuning logs will now show up in `TORCH_LOG`s under the name &quot;autotuning&quot; (#147222).
+- Replace `set` by `OrderedSet`: only use OrderedSet in the Inductor codebase (#138466).
+- Now MPS is considered a `GPU_TYPE` (#143634).
+- Separate unary post op fusion and lowering for `qlinear` (#143903).
+- New classes to help with kernel memory analysis in heuristics (#142026).
+- Move ir_pre_fusion.txt and ir_post_fusion.txt from `TORCH_COMPILE_DEBUG` to TORCH_LOGS. For example, `TORCH_LOGS=&quot;+ir_pre_fusion&quot;` (#147248).
+- Implement `deepcopy` for AOTICompiledModel (#145423)
+
+## torch.fx
+- Downgrade some logs (#147538, #145075)
+- Refactor immutable collections implementation (#144640)
+- Make `fx.node.map_arg()` and `.map_aggregate()` generic (#146248)</description>
+      <guid isPermaLink="true">https://github.com/pytorch/pytorch/releases/tag/v2.7.0</guid>
+      <pubDate>Wed, 23 Apr 2025 16:16:06 GMT</pubDate>
+      <author>janeyx99</author>
+    </item>
+  </channel>
+</rss>
