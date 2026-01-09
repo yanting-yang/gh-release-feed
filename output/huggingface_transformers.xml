@@ -5,7 +5,169 @@
     <link>https://github.com/huggingface/transformers/releases</link>
     <description>Latest releases from huggingface/transformers on GitHub</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Jan 2026 01:01:47 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 09 Jan 2026 01:02:39 GMT</lastBuildDate>
+    <item>
+      <title>Release candidate 5.0.0rc2</title>
+      <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</link>
+      <description>## What's Changed
+
+This release candidate is focused on fixing `AutoTokenizer`, expanding the dynamic weight loading support, and improving performances with MoEs!
+
+## MoEs and performances:
+&lt;img width=&quot;2048&quot; height=&quot;1451&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3ed2508e-3eb1-4f13-8717-cd9027d12a39&quot; /&gt;
+
+* batched and grouped experts implementations by @IlyasMoutawwakil in https://github.com/huggingface/transformers/pull/42697
+* Optimize MoEs for decoding using batched_mm by @IlyasMoutawwakil in https://github.com/huggingface/transformers/pull/43126
+
+## Tokenization:
+The main issue with the tokenization refactor is that `tokenizer_class` are now &quot;enforced&quot; when in most cases they are wrong. This took a while to properly isolate and now we try to use `TokenizersBackend` whenever we can. #42894 has a much more detailed description of the big changes!
+
+
+* use `TokenizersBackend` by @ArthurZucker in https://github.com/huggingface/transformers/pull/42894
+* Fix convert_tekken_tokenizer by @juliendenize in https://github.com/huggingface/transformers/pull/42592
+* refactor more tokenizers - v5 guide update by @itazap in https://github.com/huggingface/transformers/pull/42768
+* [`Tokenizers`] Change treatment of special tokens by @vasqu in https://github.com/huggingface/transformers/pull/42903
+
+
+## Core
+Here we focused on boosting the performances of loading weights on device! 
+* [saving] Simplify general logic by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42766
+* Do not rely on config for inferring model dtype by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42838
+* Improve BatchFeature: stack list and lists of torch tensors by @yonigozlan in https://github.com/huggingface/transformers/pull/42750
+* Remove tied weights from internal attribute if they are not tied by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42871
+* Enforce call to `post_init` and fix all of them by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42873
+* Simplify tie weights logic by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42895
+* Add buffers to `_init_weights` for ALL models by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42309
+* [loading] Really initialize on meta device for huge perf gains by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42941
+* Do not use accelerate hooks if the device_map has only 1 device by @Cyrilvallez in https://github.com/huggingface/transformers/pull/43019
+* Move missing weights and non-persistent buffers to correct device earlier by @Cyrilvallez in https://github.com/huggingface/transformers/pull/43021
+
+## New models
+* Sam: Perception Encoder Audiovisual by @eustlb in https://github.com/huggingface/transformers/pull/42905
+* adds jais2 model support by @sarathc-cerebras in https://github.com/huggingface/transformers/pull/42684
+* Add Pixio pre-trained models by @LiheYoung in https://github.com/huggingface/transformers/pull/42795
+* [`Ernie 4.5`] Ernie VL models by @vasqu in https://github.com/huggingface/transformers/pull/39585
+* [loading][TP] Fix device placement at loading-time, and simplify sharding primitives by @Cyrilvallez in https://github.com/huggingface/transformers/pull/43003
+* GLM-ASR  Support by @zRzRzRzRzRzRzR in https://github.com/huggingface/transformers/pull/42875
+
+## Quantization
+* [Devstral] Make sure FP8 conversion works correctly by @patrickvonplaten in https://github.com/huggingface/transformers/pull/42715
+* Fp8 dq by @SunMarc in https://github.com/huggingface/transformers/pull/42926
+* [Quantization] Removing misleading int8 quantization in Finegrained FP8 by @MekkCyber in https://github.com/huggingface/transformers/pull/42945
+* Fix deepspeed + quantization by @SunMarc in https://github.com/huggingface/transformers/pull/43006
+
+## Breaking changes
+Mostly around processors!
+* 🚨 Fix ConvNeXt image processor default interpolation to BICUBIC by @lukepayyapilli in https://github.com/huggingface/transformers/pull/42934
+* 🚨 Fix EfficientNet image processor default interpolation to BICUBIC by @lukepayyapilli in https://github.com/huggingface/transformers/pull/42956
+* Add fast version of `convert_segmentation_map_to_binary_masks` to EoMT by @simonreise in https://github.com/huggingface/transformers/pull/43073
+* 🚨Fix MobileViT image processor default interpolation to BICUBIC by @lukepayyapilli in https://github.com/huggingface/transformers/pull/43024
+
+Thanks again to everyone ! 
+## New Contributors
+* @ZX-ModelCloud made their first contribution in https://github.com/huggingface/transformers/pull/42833
+* @AYou0207 made their first contribution in https://github.com/huggingface/transformers/pull/42863
+* @wasertech made their first contribution in https://github.com/huggingface/transformers/pull/42864
+* @preetam1407 made their first contribution in https://github.com/huggingface/transformers/pull/42685
+* @Taise228 made their first contribution in https://github.com/huggingface/transformers/pull/41416
+* @CandiedCode made their first contribution in https://github.com/huggingface/transformers/pull/42885
+* @sarathc-cerebras made their first contribution in https://github.com/huggingface/transformers/pull/42684
+* @nandan2003 made their first contribution in https://github.com/huggingface/transformers/pull/42318
+* @LiheYoung made their first contribution in https://github.com/huggingface/transformers/pull/42795
+* @majiayu000 made their first contribution in https://github.com/huggingface/transformers/pull/42928
+* @lukepayyapilli made their first contribution in https://github.com/huggingface/transformers/pull/42934
+* @leaderofARS made their first contribution in https://github.com/huggingface/transformers/pull/42966
+* @qianyue76 made their first contribution in https://github.com/huggingface/transformers/pull/43095
+* @stefgina made their first contribution in https://github.com/huggingface/transformers/pull/43033
+* @HuiyingLi made their first contribution in https://github.com/huggingface/transformers/pull/43084
+* @raimbekovm made their first contribution in https://github.com/huggingface/transformers/pull/43038
+* @PredictiveManish made their first contribution in https://github.com/huggingface/transformers/pull/43053
+* @pushkar-hue made their first contribution in https://github.com/huggingface/transformers/pull/42736
+* @vykhovanets made their first contribution in https://github.com/huggingface/transformers/pull/43042
+* @tanmay2004 made their first contribution in https://github.com/huggingface/transformers/pull/42737
+* @atultw made their first contribution in https://github.com/huggingface/transformers/pull/43061
+
+**Full Changelog**: https://github.com/huggingface/transformers/compare/v5.0.0rc1...v5.0.0rc2</description>
+      <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</guid>
+      <pubDate>Thu, 08 Jan 2026 10:33:33 GMT</pubDate>
+      <author>ArthurZucker</author>
+    </item>
+    <item>
+      <title>Release candidate 5.0.0rc1</title>
+      <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc1</link>
+      <description>## What's Changed
+
+This release candidate was focused mostly on `quantization` support with the new dynamic weight loader, and a few notable 🚨 breaking changes🚨:
+
+1. Default dtype for any model when using `from_pretrained` is now `auto`! 
+* Default auto 🚨 🚨  by @ArthurZucker in https://github.com/huggingface/transformers/pull/42805
+2. Default shard size when saving a model is now 50GB:
+* 🚨🚨 [saving] Default to 50GB shards, and remove non-safe serialization by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42734
+This is now as fast as before thanks to xet, and is just more convenient on the hub.
+3. Kwargs. They are fundamental to enable integration with vllm and other toosl:
+* Every model forward() should have **kwargs by @Rocketknight1 in https://github.com/huggingface/transformers/pull/42603
+
+
+### Dynamic weight loader updates:
+Mostly QOL and fixed + support back CPU offloading.
+* mark params as _is_hf_initialized with DS Zero3 from weight conversion by @winglian in https://github.com/huggingface/transformers/pull/42626
+* [loading] Allow loading to happen without threading by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42619
+* [loading] Correctly load params during offloading &amp; careful memory considerations by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42632
+* allow registration of custom checkpoint conversion mappings by @winglian in https://github.com/huggingface/transformers/pull/42634
+
+### New models:
+* Add FastVLM by @camilla-deckard in https://github.com/huggingface/transformers/pull/41112
+* Lasr model by @eustlb in https://github.com/huggingface/transformers/pull/42648
+* [Model] Add PaddleOCR-VL Model Support by @zhang-prog in https://github.com/huggingface/transformers/pull/42178
+
+
+### Some notable quantization fixes:
+Mostly added support for `fbgemme` , `quanto`, 
+* Fix fp8 + some enhancement by @SunMarc in https://github.com/huggingface/transformers/pull/42455
+* Fix eetq quanto quant methods by @SunMarc in https://github.com/huggingface/transformers/pull/42557
+* [Quantization] per tensor quantization kernel by @MekkCyber in https://github.com/huggingface/transformers/pull/42560
+* [Quantization] fix fbgemm by @MekkCyber in https://github.com/huggingface/transformers/pull/42561
+* [Quantization] Fix FP8 experts replacing by @MekkCyber in https://github.com/huggingface/transformers/pull/42654
+* [Quantization] Fix Static FP8 Quantization by @MekkCyber in https://github.com/huggingface/transformers/pull/42775
+* [core] fix fp-quant by @MekkCyber in https://github.com/huggingface/transformers/pull/42613
+
+### Peft:
+The dynamic weight loader broke small things, this adds glue for all models but MoEs.
+* FIX Error when trying to load non-LoRA PEFT by @BenjaminBossan in https://github.com/huggingface/transformers/pull/42663
+* Fix PEFT integration with new weight loader by @Cyrilvallez in https://github.com/huggingface/transformers/pull/42701
+
+### Misc
+Tokenization needed more refactoring, this time its a lot cleaner!
+* Refactor-tokenization-more by @ArthurZucker in https://github.com/huggingface/transformers/pull/42563
+* Only default `rope_parameters` to empty `dict` if there is something to put in it by @hmellor in https://github.com/huggingface/transformers/pull/42651
+
+We omitted a lot of other commits for clarity, but thanks to everyone and the new contributors! 
+
+## New Contributors
+* @camilla-deckard made their first contribution in https://github.com/huggingface/transformers/pull/41112
+* @Aaraviitkgp made their first contribution in https://github.com/huggingface/transformers/pull/42466
+* @ngazagna-qc made their first contribution in https://github.com/huggingface/transformers/pull/40691
+* @arrdel made their first contribution in https://github.com/huggingface/transformers/pull/42577
+* @marconaguib made their first contribution in https://github.com/huggingface/transformers/pull/42587
+* @Xiao-Chenguang made their first contribution in https://github.com/huggingface/transformers/pull/42436
+* @Furkan-rgb made their first contribution in https://github.com/huggingface/transformers/pull/42465
+* @mertunsall made their first contribution in https://github.com/huggingface/transformers/pull/42615
+* @anranlee99 made their first contribution in https://github.com/huggingface/transformers/pull/42438
+* @UserChen666 made their first contribution in https://github.com/huggingface/transformers/pull/42335
+* @efazal made their first contribution in https://github.com/huggingface/transformers/pull/41723
+* @Harrisonyong made their first contribution in https://github.com/huggingface/transformers/pull/36416
+* @hawon223 made their first contribution in https://github.com/huggingface/transformers/pull/42384
+* @Bissmella made their first contribution in https://github.com/huggingface/transformers/pull/42647
+* @AgainstEntropy made their first contribution in https://github.com/huggingface/transformers/pull/42689
+* @dongluw made their first contribution in https://github.com/huggingface/transformers/pull/42642
+* @hqkqn32 made their first contribution in https://github.com/huggingface/transformers/pull/42620
+* @zhang-prog made their first contribution in https://github.com/huggingface/transformers/pull/42178
+
+**Full Changelog**: https://github.com/huggingface/transformers/compare/v5.0.0rc0...v5.0.0rc1</description>
+      <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v5.0.0rc1</guid>
+      <pubDate>Thu, 08 Jan 2026 10:15:16 GMT</pubDate>
+      <author>ArthurZucker</author>
+    </item>
     <item>
       <title>Transformers v5.0.0rc0</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc0</link>
@@ -1563,539 +1725,6 @@ As it affects a lot of users we are gonna yank the previous release</description
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v4.57.2</guid>
       <pubDate>Mon, 24 Nov 2025 17:54:34 GMT</pubDate>
       <author>Cyrilvallez</author>
-    </item>
-    <item>
-      <title>Patch release v4.57.1</title>
-      <link>https://github.com/huggingface/transformers/releases/tag/v4.57.1</link>
-      <description>This patch most notably fixes an issue with an optional dependency (`optax`), which resulted in parsing errors with `poetry`. It contains the following fixes:
-
-- [fix optax dep issue](https://github.com/huggingface/transformers/commit/0645c9ec3188e000aecf5060e2cdabcc156bb794)
-- [remove offload_state_dict from kwargs](https://github.com/huggingface/transformers/commit/a92b1e8a45e1863b95c5e2caa12f5597aee80279)
-- Fix bnb fsdp loading for pre-quantized checkpoint (#41415)
-- Fix tests fsdp (#41422)
-- Fix trainer for py3.9 (#41359)</description>
-      <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v4.57.1</guid>
-      <pubDate>Tue, 14 Oct 2025 15:39:34 GMT</pubDate>
-      <author>Cyrilvallez</author>
-    </item>
-    <item>
-      <title>v4.57.0: Qwen3-Next, Vault Gemma, Qwen3 VL, LongCat Flash, Flex OLMO, LFM2 VL, BLT, Qwen3 OMNI MoE, Parakeet, EdgeTAM, OLMO3</title>
-      <link>https://github.com/huggingface/transformers/releases/tag/v4.57.0</link>
-      <description>## New model additions
-
-### Qwen3 Next
-
-&lt;img width=&quot;1200&quot; height=&quot;511&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3abad6c4-5650-412d-a831-f8a30a5d962e&quot; /&gt;
-
-The Qwen3-Next series represents the Qwen team's next-generation foundation models, optimized for extreme context length and large-scale parameter efficiency. 
-The series introduces a suite of architectural innovations designed to maximize performance while minimizing computational cost:
-- **Hybrid Attention**: Replaces standard attention with the combination of **Gated DeltaNet** and **Gated Attention**, enabling efficient context modeling.  
-- **High-Sparsity MoE**: Achieves an extreme low activation ratio as 1:50 in MoE layers — drastically reducing FLOPs per token while preserving model capacity.
-- **Multi-Token Prediction(MTP)**: Boosts pretraining model performance, and accelerates inference.
-- **Other Optimizations**: Includes techniques such as **zero-centered and weight-decayed layernorm**, **Gated Attention**, and other stabilizing enhancements for robust training.  
-
-Built on this architecture, they trained and open-sourced Qwen3-Next-80B-A3B — 80B total parameters, only 3B active — achieving extreme sparsity and efficiency.
-
-Despite its ultra-efficiency, it outperforms Qwen3-32B on downstream tasks — while requiring **less than 1/10 of the training cost**. 
-Moreover, it delivers over **10x higher inference throughput** than Qwen3-32B when handling contexts longer than 32K tokens.
-
-For more details, please visit their blog [Qwen3-Next](qwen3_next) ([blog post](https://qwenlm.github.io/blog/qwen3_next/)).
-
-* Adding Support for Qwen3-Next  by @bozheng-hit in #40771
-
-### Vault Gemma
-
-&lt;img width=&quot;1282&quot; height=&quot;392&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/9412905b-4083-4994-9000-aa0dbf97eb6f&quot; /&gt;
-
-[VaultGemma](https://services.google.com/fh/files/blogs/vaultgemma_tech_report.pdf) is a text-only decoder model derived from [Gemma 2](https://huggingface.co/docs/transformers/en/model_doc/gemma2), notably it drops the norms after the Attention and MLP blocks, and uses full attention for all layers instead of alternating between full attention and local sliding attention. VaultGemma is available as a pretrained model with 1B parameters that uses a 1024 token sequence length.
-
-VaultGemma was trained from scratch with sequence-level differential privacy (DP). Its training data includes the same mixture as the [Gemma 2 models](https://huggingface.co/collections/google/gemma-2-release-667d6600fd5220e7b967f315), consisting of a number of documents of varying lengths. Additionally, it is trained using [DP stochastic gradient descent (DP-SGD)](https://arxiv.org/abs/1607.00133) and provides a (ε ≤ 2.0, δ ≤ 1.1e-10)-sequence-level DP guarantee, where a sequence consists of 1024 consecutive tokens extracted from heterogeneous data sources. Specifically, the privacy unit of the guarantee is for the sequences after sampling and packing of the mixture.
-
-* add: differential privacy research model  by @RyanMullins in #40851
-
-### Qwen3 VL
-
-&lt;img width=&quot;3544&quot; height=&quot;1886&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5afa70cb-506e-4d56-baa3-30e7522ac653&quot; /&gt;
-
-[Qwen3-VL](https://huggingface.co/papers/2502.13923) is a multimodal vision-language model series, encompassing both dense and MoE variants, as well as Instruct and Thinking versions. 
-
-Building upon its predecessors, Qwen3-VL delivers significant improvements in visual understanding while maintaining strong pure text capabilities. Key architectural advancements include: enhanced MRope with interleaved layout for better spatial-temporal modeling, DeepStack integration to effectively leverage multi-level features from the Vision Transformer (ViT), and improved video understanding through text-based time alignment—evolving from T-RoPE to text timestamp alignment for more precise temporal grounding. 
-
-These innovations collectively enable Qwen3-VL to achieve superior performance in complex multimodal tasks.
-
-* Adding Support for Qwen3-VL Series  by @JJJYmmm in #40795
-
-### Longcat Flash
-
-&lt;img width=&quot;763&quot; height=&quot;468&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/289d33e0-6c71-458d-ae07-b7d454ac2adf&quot; /&gt;
-
-The LongCatFlash model was proposed in [LongCat-Flash Technical Report](https://huggingface.co/papers/2509.01322) by the Meituan LongCat Team. LongCat-Flash is a 560B parameter Mixture-of-Experts (MoE) model that activates 18.6B-31.3B parameters dynamically (average ~27B). The model features a shortcut-connected architecture enabling high inference speed (&gt;100 tokens/second) and advanced reasoning capabilities.
-
-The abstract from the paper is the following:
-
-*We present LongCat-Flash, a 560 billion parameter Mixture-of-Experts (MoE) language model featuring a dynamic computation mechanism that activates 18.6B-31.3B parameters based on context (average ~27B). The model incorporates a shortcut-connected architecture enabling high inference speed (&gt;100 tokens/second) and demonstrates strong performance across multiple benchmarks including 89.71% accuracy on MMLU and exceptional agentic tool use capabilities.*
-
-Tips:
-
-- LongCat-Flash uses a unique shortcut-connected MoE architecture that enables faster inference compared to traditional MoE models
-- The model supports up to 128k context length for long-form tasks
-- Dynamic parameter activation makes it computationally efficient while maintaining high performance
-- Best suited for applications requiring strong reasoning, coding, and tool-calling capabilities
-- The MoE architecture includes zero experts (nn.Identity modules) which act as skip connections, allowing tokens to bypass expert computation when appropriate
-
-* Add LongCat-Flash  by @molbap in #40730
-
-### Flex Olmo
-
-&lt;img width=&quot;700&quot; height=&quot;414&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7b92ee0f-5f5a-459c-ad4d-e01b5c10202e&quot; /&gt;
-
-[FlexOlmo](https://huggingface.co/papers/2507.07024) is a new class of language models (LMs) that supports (1) distributed training without data sharing, where different model parameters are independently trained on closed datasets, and (2) data-flexible inference, where these parameters along with their associated data can be flexibly included or excluded from model inferences with no further training. FlexOlmo employs a mixture-of-experts (MoE) architecture where each expert is trained independently on closed datasets and later integrated through a new domain-informed routing without any joint training. FlexOlmo is trained on FlexMix, a corpus we curate comprising publicly available datasets alongside seven domain-specific sets, representing realistic approximations of closed sets. 
-
-You can find all the original FlexOlmo checkpoints under the [FlexOlmo](https://huggingface.co/collections/allenai/flexolmo-68471177a386b6e20a54c55f) collection.
-
-* Add FlexOlmo model  by @2015aroras in #40921
-
-### LFM2 VL
-
-&lt;img width=&quot;2300&quot; height=&quot;1400&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/ef0605cd-9512-458c-915a-62316e14d90c&quot; /&gt;
-
-[LFM2-VL](https://www.liquid.ai/blog/lfm2-vl-efficient-vision-language-models) first series of vision-language foundation models developed by [Liquid AI](https://liquid.ai/). These multimodal models are designed for low-latency and device-aware deployment. LFM2-VL extends the LFM2 family of open-weight Liquid Foundation Models (LFMs) into the vision-language space, supporting both text and image inputs with variable resolutions.
-
-#### Architecture
-
-LFM2-VL consists of three main components: a language model backbone, a vision encoder, and a multimodal projector. LFM2-VL builds upon the LFM2 backbone, inheriting from either LFM2-1.2B (for LFM2-VL-1.6B) or LFM2-350M (for LFM2-VL-450M). For the vision tower, LFM2-VL uses SigLIP2 NaFlex encoders to convert input images into token sequences. Two variants are implemented:
-* Shape-optimized (400M) for more fine-grained vision capabilities for LFM2-VL-1.6B
-* Base (86M) for fast image processing for LFM2-VL-450M
-
-The encoder processes images at their native resolution up to 512×512 pixels, efficiently handling smaller images without upscaling and supporting non-standard aspect ratios without distortion. Larger images are split into non-overlapping square patches of 512×512 each, preserving detail. In LFM2-VL-1.6B, the model also receives a thumbnail (a small, downscaled version of the original image capturing the overall scene) to enhance global context understanding and alignment. Special tokens mark each patch’s position and indicate the thumbnail’s start. The multimodal connector is a 2-layer MLP connector with pixel unshuffle to reduce image token count. 
-
-* Add new model LFM2-VL  by @zucchini-nlp in #40624
-
-### BLT
-
-&lt;img width=&quot;1448&quot; height=&quot;1062&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/af1fbb09-082c-4331-9217-357adb506cbf&quot; /&gt;
-
-The BLT model was proposed in [Byte Latent Transformer: Patches Scale Better Than Tokens](&lt;https://arxiv.org/pdf/2412.09871&gt;) by Artidoro Pagnoni, Ram Pasunuru, Pedro Rodriguez, John Nguyen, Benjamin Muller, Margaret Li1, Chunting Zhou, Lili Yu, Jason Weston, Luke Zettlemoyer, Gargi Ghosh, Mike Lewis, Ari Holtzman†, Srinivasan Iyer.
-BLT is a byte-level LLM that achieves tokenization-level performance through entropy-based dynamic patching.
-
-The abstract from the paper is the following:
-
-*We introduce the Byte Latent Transformer (BLT), a new byte-level LLM architecture that, for the first time, matches tokenization-based LLM performance at scale with significant improvements in inference
-efficiency and robustness. BLT encodes bytes into dynamically sized patches, which serve as the primary units of computation. Patches are segmented based on the entropy of the next byte, allocating
-more compute and model capacity where increased data complexity demands it. We present the first flop controlled scaling study of byte-level models up to 8B parameters and 4T training bytes. Our results demonstrate the feasibility of scaling models trained on raw bytes without a fixed vocabulary. Both training and inference efficiency improve due to dynamically selecting long patches when data is predictable, along with qualitative improvements on reasoning and long tail generalization. Overall, for fixed inference costs, BLT shows significantly better scaling than tokenization-based models, by simultaneously growing both patch and model size.*
-
-#### Usage Tips:
-
-- **Dual Model Architecture**: BLT consists of two separate trained models:
-  - **Patcher (Entropy Model)**: A smaller transformer model that predicts byte-level entropy to determine patch boundaries and segment input.
-  - **Main Transformer Model**: The primary model that processes the patches through a Local Encoder, Global Transformer, and Local Decoder.
-
-- **Dynamic Patching**: The model uses entropy-based dynamic patching where:
-  - High-entropy regions (complex data) get shorter patches with more computational attention
-  - Low-entropy regions (predictable data) get longer patches for efficiency
-  - This allows the model to allocate compute resources where they're most needed
-
-- **Local Encoder**: Processes byte sequences with cross-attention to patch embeddings
-- **Global Transformer**: Processes patch-level representations with full attention across patches
-- **Local Decoder**: Generates output with cross-attention back to the original byte sequence
-
-- **Byte-Level Tokenizer**: Unlike traditional tokenizers that use learned vocabularies, BLT's tokenizer simply converts text to UTF-8 bytes and maps each byte to a token ID. There is no need for a vocabulary.
-
-* blt wip  by @itazap in #38579
-
-### Qwen3 Omni MoE
-
-&lt;img width=&quot;14084&quot; height=&quot;7429&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/20d46a43-15f2-42bf-9703-9575f5ca4430&quot; /&gt;
-
-The [Qwen2.5-Omni](https://qwenlm.github.io/blog/qwen2.5-omni/) model is a unified multiple modalities model proposed in [Qwen2.5-Omni Technical Report](https://huggingface.co/papers/2503.20215) from Qwen team, Alibaba Group.
-
-#### Notes
-
-- Use [`Qwen2_5OmniForConditionalGeneration`] to generate audio and text output. To generate only one output type, use [`Qwen2_5OmniThinkerForConditionalGeneration`] for text-only and [`Qwen2_5OmniTalkersForConditionalGeneration`] for audio-only outputs.
-- Audio generation with [`Qwen2_5OmniForConditionalGeneration`] supports only single batch size at the moment.
-- In case out out-of-memory errors hwen working with video input, decrease `processor.max_pixels`. By default the maximum is set to a very arge value and high resolution visuals will not be resized, unless resolution exceeds `processor.max_pixels`.
-- The processor has its own [`~ProcessorMixin.apply_chat_template`] method to convert chat messages to model inputs.
-
-* Adding support for Qwen3Omni  by @BakerBunker in #41025
-
-### Parakeet
-
-&lt;img width=&quot;1431&quot; height=&quot;527&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/e831f451-9be3-4b5c-a222-b833a50ceb2a&quot; /&gt;
-
-Parakeet models, [introduced by NVIDIA NeMo](https://developer.nvidia.com/blog/pushing-the-boundaries-of-speech-recognition-with-nemo-parakeet-asr-models/), are models that combine a [Fast Conformer](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/asr/models.html#fast-conformer) encoder with connectionist temporal classification (CTC), recurrent neural network transducer (RNNT) or token and duration transducer (TDT) decoder for automatic speech recognition.
-
-**Model Architecture**
-- **Fast Conformer Encoder**: A linearly scalable Conformer architecture that processes mel-spectrogram features and reduces sequence length through subsampling. This is more efficient version of the Conformer Encoder found in [FastSpeech2Conformer](./fastspeech2_conformer.md) (see [`ParakeetEncoder`] for the encoder implementation and details).
-- [**ParakeetForCTC**](#parakeetforctc): a Fast Conformer Encoder + a CTC decoder
-    - **CTC Decoder**: Simple but effective decoder consisting of:
-        - 1D convolution projection from encoder hidden size to vocabulary size (for optimal NeMo compatibility).
-        - CTC loss computation for training.
-        - Greedy CTC decoding for inference.
-
-* Add Parakeet  by @nithinraok in #39062
-
-### EdgeTAM
-
-&lt;img width=&quot;949&quot; height=&quot;537&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/5ca4e73d-5aa9-487d-96e1-92d4f2f4739f&quot; /&gt;
-
-The EdgeTAM model was proposed in [EdgeTAM: On-Device Track Anything Model](https://huggingface.co/papers/2501.07256) Chong Zhou, Chenchen Zhu, Yunyang Xiong, Saksham Suri, Fanyi Xiao, Lemeng Wu, Raghuraman Krishnamoorthi, Bo Dai, Chen Change Loy, Vikas Chandra, Bilge Soran.
-
-EdgeTAM is an efficient adaptation of SAM 2 that introduces a 2D Spatial Perceiver architecture to optimize memory attention mechanisms for real-time video segmentation on mobile devices.
-
-* Add EdgeTAM  by @yonigozlan in #39800
-
-### OLMO3
-
-More details to come soon :eyes:
-
-* Add Olmo3 model  by @2015aroras in #40778
-
-## Continuous batching
-
-We are introducing Continuous Batching (CB) in this release, we consider it a stable feature. The main use case for CB is batched generation, which makes it very efficient in the context of GRPO training or evaluation. Thanks to CB, researchers or model developers are now free to use transformers in these contexts without having to spin up an additional inference engine. 
-
-CB currently supports both full attention and sliding window attention: this means that the vast majority of models are supported, like llama, gemma3, gpt-oss. 
-
-CB is also integrated with transformers serve, which means that you can deploy transformers as an OpenAI-compatible HTTP server.
-Here is a small snippet on how to use it:
-
-```python
-import datasets
-import torch
-
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers.generation import GenerationConfig
-model = AutoModelForCausalLM.from_pretrained(
-    &quot;Qwen/Qwen3-4B-Instruct-2507&quot;, dtype=torch.bfloat16, _attn_implementation=&quot;sdpa_paged&quot;, device_map=&quot;auto&quot;
-)
-model.generation_config.max_new_tokens = 32
-tokenizer = AutoTokenizer.from_pretrained(&quot;Qwen/Qwen3-4B-Instruct-2507&quot;, padding_side=&quot;left&quot;)
-dataset = datasets.load_dataset(&quot;openai/gsm8k&quot;, &quot;socratic&quot;, split=&quot;test&quot;)
-tokenized_datasets = dataset.map(lambda x: tokenizer(x[&quot;question&quot;]), batched=True)
-simple_batch_inputs = [item[&quot;input_ids&quot;] for item in tokenized_datasets]
-
-batch_outputs = model.generate_batch(inputs=simple_batch_inputs)
-for request in batch_outputs:
-    print(tokenizer.decode(batch_outputs[request].generated_tokens))
-&quot;&quot;&quot;
- Let's break down the problem step by step:
-
-1. **Total eggs laid per day**:  
-   Janet’s ducks lay **16 eggs per day**
- Let's break down the problem step by step:
-
-1. **Blue fiber**: The robe takes **2 bolts** of blue fiber.
-2. **White fiber
- To determine Josh's profit from flipping the house, let's go step by step.
-
----
-
-### Step 1: Initial cost of the house
-Josh buys the
- To find the total distance James runs in a week, we can break down the problem step by step:
-
-1. **Sprints per session**: James runs 
- To determine how many cups of feed Wendi needs to give her chickens in the final meal of the day, let's go step by step.
-&quot;&quot;&quot;
-```
-
-## Breaking changes
-
-* 🚨 Remove Group Beam Search decoding strategy  by @manueldeprada in #40495
-* 🚨 Remove Constrained Beam Search decoding strategy  by @manueldeprada in #40518
-* 🚨 Allow `check_model_inputs` in core VLMs  by @zucchini-nlp in #40342
-* 🔴 Update Glm4V to use config values  by @zucchini-nlp in #40712
-* 🚨 Fix Inconsistant `input_feature` length and `attention_mask` length in `WhisperFeatureExtractor`  by @BakerBunker in #39221
-* ⚠️ 🔴 Add ministral model  by @manueldeprada in #40247
-* 🔴 Move variable output controls to `_prepare_generation_config `  by @manueldeprada in #40715
-* 🔴Make `center_crop` fast equivalent to slow  by @yonigozlan in #40856
-
-## Bugfixes and improvements
-
-* Fix collated reports upload filename  by @ivarflakstad in #40556
-* pin `pytest-rerunfailures&lt;16.0`  by @ydshieh in #40561
-* remove the redundant non maintained jieba and use rjieba instead  by @divyanshsinghvi in #40383
-* Set `test_all_params_have_gradient=False` for `DeepseekV2ModelTest`  by @ydshieh in #40566
-* processor tests - use dummy videos  by @zucchini-nlp in #40537
-* [qwen-vl] fix position ids  by @zucchini-nlp in #40490
-* Fix `test_eager_matches_sdpa_inference` not run for `CLIP`  by @ydshieh in #40581
-* Fix CircleCI step passes in the case of pytest worker crash at test collection time  by @ydshieh in #40552
-* Allow `remi-or` to `run-slow`  by @ydshieh in #40590
-* Fix llava image processor  by @zucchini-nlp in #40588
-* Update `get_*_features` methods + update doc snippets  by @qubvel in #40555
-* Fix custom generate relative imports  by @manueldeprada in #40480
-* Support batch size &gt; 1 image-text inference  by @hiyouga in #36682
-* Fix typos  by @cyyever in #40585
-* Skip `TvpImageProcessingTest::test_slow_fast_equivalence`  by @ydshieh in #40593
-* Fix inexistent imports  by @cyyever in #40580
-* Add Copilot instructions  by @Rocketknight1 in #40432
-* Fix `siglip` flaky `test_eager_matches_sdpa_inference`  by @ydshieh in #40584
-* Fix for missing default values in encoder decoder   by @remi-or in #40517
-* Fix quite a lot of FA tests  by @Cyrilvallez in #40548
-* [`Tests`] Fixup duplicated mrope logic  by @vasqu in #40592
-* Reduce more test data fetch  by @ydshieh in #40595
-* Pin torchcodec to 0.5 in AMD docker  by @remi-or in #40598
-* Multiple fixes to FA tests in AMD  by @remi-or in #40498
-* Disable cache for `TokenizerTesterMixin` temporarily  by @ydshieh in #40611
-* fix: continuous batching in `transformers serve`  by @McPatate in #40479
-* Fix processor chat template  by @zucchini-nlp in #40613
-* Avoid `too many request` caused by `AutoModelTest::test_dynamic_saving_from_local_repo`  by @ydshieh in #40614
-* Fix flaky `JambaModelTest.test_load_balancing_loss`  by @ydshieh in #40617
-* Add collated reports job to Nvidia CI  by @ahadnagy in #40470
-* Remove unnecessary pillow version check  by @cyyever in #40604
-* Fix invalid typing  by @cyyever in #40612
-* Enable more ruff UP rules  by @cyyever in #40579
-* Support TF32 flag for MUSA backend  by @fmo-mt in #33187
-* Remove random flag  by @Cyrilvallez in #40629
-* 🌐 [i18n-KO] Translated `deepseek_v3.md` to Korean   by @ssum21 in #39649
-* Fix `too many requests` in `TestMistralCommonTokenizer`  by @ydshieh in #40623
-* fix: gas for gemma fixed  by @yevvonlim in #40591
-* [auto-model] propagate kwargs  by @zucchini-nlp in #40491
-* [CP] Add attention_mask to the buffer when the mask is causal   by @kashif in #40619
-* Fix: PIL image load in Processing utils apply_chat_template  by @abdokaseb in #40622
-* Skip `test_prompt_lookup_decoding_matches_greedy_search` for `voxtral`  by @ydshieh in #40643
-* add DeepseekV3ForTokenClassification  by @bzantium in #40641
-* fix MetaCLIP 2 wrong link &amp; wrong model names in the docstrings  by @voidism in #40565
-* Remove TF/Flax examples  by @Rocketknight1 in #40654
-* Mark `LongformerModelTest::test_attention_outputs` as flaky  by @ydshieh in #40655
-* fix pipeline dtype  by @jiqing-feng in #40638
-* feat(serving): add healthcheck  by @McPatate in #40653
-* Fix Metaclip modular conversion  by @Rocketknight1 in #40660
-* Avoid attention_mask copy in qwen2.5  by @cyyever in #40658
-* Allow custom args in `custom_generate` Callables and unify generation args structure  by @manueldeprada in #40586
-* Update `check_determinism` inside `test_determinism`  by @ydshieh in #40661
-* Skip `test_fast_is_faster_than_slow` for `Owlv2ImageProcessingTest`  by @ydshieh in #40663
-* Fix warning for output_attentions=True  by @qubvel in #40597
-* Skip `test_prompt_lookup_decoding_matches_greedy_search` for `qwen2_audio`  by @ydshieh in #40664
-* Remove overwritten `GitModelTest::test_beam_search_generate`  by @ydshieh in #40666
-* refactor: use `tolist` instead of list comprehension calling `.item()`  by @McPatate in #40646
-* Benchmarking V2: framework impl  by @ahadnagy in #40486
-* Even more test data cached  by @ydshieh in #40636
-* Skip more fast v.s slow image processor tests  by @ydshieh in #40675
-* Avoid night torch CI not run because of irrelevant docker image failing to build   by @ydshieh in #40677
-* Mark `Aimv2ModelTest::test_eager_matches_sdpa_inference_04_fp16_pad_right_sdpa_kernels` as flaky  by @ydshieh in #40683
-* CircleCI docker images cleanup / update / fix  by @ydshieh in #40681
-* Add sequence classification support for small Gemma 3 text models  by @abdokaseb in #40562
-* Add codebook_dim attribute to DacVectorQuantize for DacResidualVectorQuantize.from_latents()  by @flavioialongo in #40665
-* fix broken offline mode when loading tokenizer from hub  by @winglian in #40669
-* Load a tiny video to make CI faster  by @zucchini-nlp in #40684
-* Final test data cache - inside CI docker images  by @ydshieh in #40689
-* add: embedding model  by @RyanMullins in #40694
-* feat: support request cancellation  by @McPatate in #40599
-* Fixing bug in Voxtral when merging text and audio embeddings  by @rcogill in #40671
-* Change docker image to preview for the MI355 CI  by @ahadnagy in #40693
-* Fix backward compatibility with accelerate in Trainer  by @qgallouedec in #40668
-* Fix self.dropout_p is not defined for SamAttention/Sam2Attention  by @yonigozlan in #40667
-* [Glm4.5V] fix vLLM support  by @zucchini-nlp in #40696
-* Fix broken Llama4 accuracy in MoE part  by @nvpohanh in #40609
-* Avoid `T5GemmaModelTest::test_eager_matches_sdpa_inference` being flaky  by @ydshieh in #40702
-* Align assisted generate for unified signature in decoding methods  by @manueldeprada in #40657
-* Fetch one missing test data  by @ydshieh in #40703
-* Add Fast Image Processor for ImageGPT  by @agamjots05 in #39592
-* Fetch more test data with `hf_hub_download`  by @ydshieh in #40710
-* feat(serve): add healthcheck test  by @McPatate in #40697
-* Fix parent classes of ProcessingKwargs  by @cyyever in #40676
-* [tests] fix blip2 edge case  by @gante in #40699
-* [moduar] Add missing `self` in post-process methods  by @framonmar7 in #40711
-* [onnx] use logical `or` for grounding dino mask  by @lmarshall12 in #40625
-* Fix parent classes of AllKwargsForChatTemplate  by @cyyever in #40685
-* Fix arguments  by @cyyever in #40605
-* [serve] re-enable tests  by @gante in #40717
-* [tests] remove overwrites of removed test  by @gante in #40720
-* Add Optional typing  by @cyyever in #40686
-* [`Gemma Embedding`] Fix SWA  by @vasqu in #40700
-* Keypoint matching docs  by @merveenoyan in #40541
-* Skip `VitMatteImageProcessingTest::test_fast_is_faster_than_slow`  by @ydshieh in #40713
-* refactor(serve): move `request_id` to headers  by @McPatate in #40722
-* [Continous Batching] fix do_Sample=True in continuous batching  by @kashif in #40692
-* Fix order of mask functions when using `and/or_mask_function`  by @Cyrilvallez in #40753
-* Fix np array typing  by @cyyever in #40741
-* Set accepts_loss_kwargs to False for ConvNext(|V2)ForImageClassification  by @clinty in #40746
-* Add BF16 support check for MUSA backend  by @fmo-mt in #40576
-* remove gemmas eager training warning  by @August-murr in #40744
-* remove FSDP prefix when using save_pretrained with FSDP2  by @winglian in #40207
-* feat: err when unsupported attn impl is set w/ `--continuous_batching`  by @McPatate in #40618
-* docs: add continuous batching to serving  by @McPatate in #40758
-* Remove unnecessary tildes from documentation  by @st81 in #40748
-* Fix more typos  by @cyyever in #40627
-* Fix inconsistency in SeamlessM4T and SeamlessM4Tv2 docs  by @clinty in #39364
-* Fix `continue_final_message` in `apply_chat_template` to prevent substring matching issues  by @abdokaseb in #40732
-* 🌐 [i18n-KO] Translated 'xclip.md' to Korean  by @ssum21 in #39594
-* Fix Bark failing tests  by @ebezzam in #39478
-* Add EfficientLoFTRImageProcessorFast for GPU-accelerated image processing  by @LawJarp-A in #40215
-* Fix: swanlab `public.cloud.experiment_url` api error  by @Zeyi-Lin in #40763
-* [generate] `PromptLookupCandidateGenerator` won't generate forbidden tokens  by @gante in #40726
-* Support sliding window in CB  by @remi-or in #40688
-* [deprecations] Remove generate-related deprecations up to v4.56  by @gante in #40729
-* rm src/transformers/convert_pytorch_checkpoint_to_tf2.py  by @gante in #40718
-* [tests] update `test_past_key_values_format` and delete overwrites  by @gante in #40701
-* [RoPE] run RoPE tests when the model uses RoPE  by @gante in #40630
-* Fix crash when executing MambaCache sample code  by @torotoki in #40557
-* [pipeline] ASR pipeline kwargs are forwared to `generate`  by @gante in #40375
-* [docs] CPU install  by @stevhliu in #40631
-* Adding Support for Qwen3-Next  by @bozheng-hit in #40771
-* Fix gpt-oss router_indices in EP  by @jiqing-feng in #40545
-* Remove reference of video_load_backend and video_fps for processor  by @cyyever in #40719
-* [processors] Unbloating simple processors  by @zucchini-nlp in #40377
-* Enable ruff on benchmark and scripts  by @cyyever in #40634
-* Fix doc for PerceptionLMForConditionalGeneration forward.  by @shuminghu in #40733
-* Fix typos in tests and util  by @cyyever in #40780
-* Fix invalid PipelineParallel member  by @cyyever in #40789
-* Use functools.cached_property  by @cyyever in #40607
-* Read config pattern for Qwen3Next  by @Cyrilvallez in #40792
-* Fix dotted model names  by @August-murr in #40745
-* Fix the issue that csm model cannot work with pipeline mode.  by @yuanwu2017 in #39349
-* Move num_items_in_batch to correct device before accelerator.gather  by @ssharpe42 in #40773
-* Remove use_ipex option from Trainer  by @cyyever in #40784
-* fix_image_processing_fast_for_glm4v  by @lambertwjh in #40483
-* [Docs] Add missing class documentation for optimizer_schedules  by @jijihuny in #31870,  #23010) 
-* Fix DeepSpeed mixed precision precedence over Accelerate defaults  by @notkisk in #39856
-* feature: Add robust token counting with padding exclusion   by @PrathmeshAdsod in #40416
-* Fix edge case for tokenize  by @wangzhen0518 in #36277) 
-* Fix config dtype parsing for Emu3 edge case  by @Isotr0py in #40766
-* Align torch implementation of Gated DeltaNet in Qwen3-Next with fla library.  by @bozheng-hit in #40807
-* Fix typos in src  by @cyyever in #40782
-* add general hub test for Fast Image Processors in test_image_processing_utils  by @namgyu-youn in #40086
-* Push generation config along with checkpoints  by @qgallouedec in #40804
-* [`Jetmoe`] Fix RoPE  by @vasqu in #40819
-* 🌐 [i18n-KO] Translated clipseg.md to Korean  by @HyunZ118 in #39903
-* Improve torch_dtype checks  by @cyyever in #40808
-* Add VideoProcessors to auto-backend requirements  by @Cyrilvallez in #40843
-* Adds Causal Conv 1D kernel for mamba models  by @MekkCyber in #40765
-* Update no split modules in T5Gemma model  by @npuichigo in #40810
-* Replace image classification loss functions to `self.loss_function`  by @qubvel in #40764
-* Fix the misalignment between the l2norm in GDN of Qwen3-Next and the implementation in the FLA library.  by @bozheng-hit in #40842
-* Fixes for continuous batching  by @remi-or in #40828
-* [tests] re-enable aria fast tests  by @gante in #40846
-* [SAM2] Fix inconsistent results with original implementation with input boxes  by @yonigozlan in #40800
-* [Sam2Video] Fix video inference with batched boxes and add test  by @yonigozlan in #40797
-* add: differential privacy research model  by @RyanMullins in #40851
-* [test] Fix test_eager_matches_sdpa incorrectly skipped  by @eustlb in #40852
-* [tests] move generative tests away from `test_modeling_common.py`  by @gante in #40854
-* [generate] Always use decoder config to init cache  by @gante in #40772
-* Use checkpoint in auto_class_docstring  by @cyyever in #40844
-* Fix TrainingArguments.parallelism_config NameError with accelerate&lt;1.10.1  by @albertvillanova in #40818
-* Redirect MI355 CI results to dummy dataset  by @ahadnagy in #40862
-* [Bug fix #40813] Fix base_model_tp_plan of Starcoder2 model.  by @greg-kwasniewski1 in #40814
-* [docstrings / type hints] Update outdated annotations for `past_key_values`   by @gante in #40803
-* fix florence kwargs   by @SunMarc in #40826
-* fix: XIELU act parameters not being casted to correct dtype  by @NanoCode012 in #40812
-* Update model tags and integration references in bug report  by @ArthurZucker in #40881
-* [Qwen3 Next] Use numerically stable `rsqrt`  by @thalahors in #40848
-* Adding Support for Qwen3-VL Series  by @JJJYmmm in #40795
-* [`VaultGemma`] Update expectations in integration tests  by @vasqu in #40855
-* Fix modular consistency  by @Cyrilvallez in #40883
-* Clarify passing is_causal in sdpa_attention_paged_forward  by @cyyever in #40838
-* Use torch.expm1 and torch.log1p for better numerical results  by @cyyever in #40860
-* Add Fast PromptDepthAnything Processor  by @SamuelBarryCS in #40602
-* Fix deta loading &amp; dataclass  by @Cyrilvallez in #40878
-* Remove dict branch of attention_mask in sdpa_attention_paged_forward  by @cyyever in #40882
-* 🌐 [i18n-KO] Translated smolvlm.md to Korean  by @HyunZ118 in #40414
-* 🌐 [i18n-KO] Translated `imageprocessor.md` to Korean  by @HyunZ118 in #39557
-* [generate] remove docs of a feature that no longer exists  by @gante in #40895
-* Make debugging failing tests (check and update expect output values) easier 🔥   by @ydshieh in #40727
-* Fixing the call to kernelize  by @MekkCyber in #40628
-* Fix getter  regression  by @molbap in #40824
-* Fix flaky `Gemma3nAudioFeatureExtractionTest::test_dither`  by @ydshieh in #40902
-* [cache] Merge static sliding and static chunked layer  by @Cyrilvallez in #40893
-* Harmonize CacheLayer names  by @Cyrilvallez in #40892
-* [cache] Only use scalars in `get_mask_sizes`  by @Cyrilvallez in #40907
-* Set seed for `Glm4vIntegrationTest`  by @ydshieh in #40905
-* Add Olmo3 model  by @2015aroras in #40778
-* remove dummy EncodingFast  by @cyyever in #40864
-* Improve module name handling for local custom code  by @XuehaiPan in #40809
-* Remove `runner_map`  by @ydshieh in #40880
-* disable `test_fast_is_faster_than_slow`  by @ydshieh in #40909
-* [gemma3] `Gemma3ForConditionalGeneration` compatible with assisted generation  by @gante in #40791
-* [generate] misc fixes  by @gante in #40906
-* Fix dtype in Paligemma  by @zucchini-nlp in #40912
-* [Docs] Adding documentation of MXFP4 Quantization  by @ariG23498 in #40885
-* Processor load with multi-processing  by @zucchini-nlp in #40786
-* [Llama4] Remove `image_sizes` arg and deprecate `vision_feature_layer`  by @yaswanth19 in #40832
-* Fix #40067: Add dedicated UMT5 support to GGUF loader (config, tokenizer, test)  by @akshay-babbar in #40218
-* [torchao safetensors] renaming get_state_dict function  by @liangel-02 in #40774
-* Adding activation kernels  by @MekkCyber in #40890
-* Minor fix for #40727  by @ydshieh in #40929
-* Add support for Florence-2 training  by @ducviet00 in #40914
-* Add LongCat-Flash  by @molbap in #40730
-* [DOC] Add missing dates in model cards  by @yonigozlan in #40922
-* [models] remove unused `import torch.utils.checkpoint`   by @gante in #40934
-* Intel CPU dockerfile  by @jiqing-feng in #40806
-* docs(i18n): Correct the descriptive text in the README_zh-hans.md  by @lilin-1 in #40941
-* Fix trainer tests  by @SunMarc in #40823
-* Fix `Glm4vMoeIntegrationTest`  by @ydshieh in #40930
-* Raise error instead of warning when using meta device in from_pretrained  by @Cyrilvallez in #40942
-* Consistent naming for images kwargs  by @zucchini-nlp in #40834
-* Remove nested import logic for torchvision  by @yonigozlan in #40940
-* Fix `Glm4vModelTest::test_eager_matches_fa2_generate`  by @ydshieh in #40947
-* Update expected values for some `test_speculative_generation`  by @ydshieh in #40949
-* Standardize audio embedding function name for audio multimodal models  by @jackzhxng in #40919
-* Add FlexOlmo model  by @2015aroras in #40921
-* Don't list dropout in eager_paged_attention_forward  by @cyyever in #40924
-
-## Significant community contributions
-
-The following contributors have made significant changes to the library over the last release:
-
-* @hiyouga
-    * Support batch size &gt; 1 image-text inference (#36682)
-* @cyyever
-    * Fix typos (#40585)
-    * Fix inexistent imports (#40580)
-    * Remove unnecessary pillow version check (#40604)
-    * Fix invalid typing (#40612)
-    * Enable more ruff UP rules (#40579)
-    * Avoid attention_mask copy in qwen2.5 (#40658)
-    * Fix parent classes of ProcessingKwargs (#40676)
-    * Fix parent classes of AllKwargsForChatTemplate (#40685)
-    * Fix arguments (#40605)
-    * Add Optional typing (#40686)
-    * Fix np array typing (#40741)
-    * Fix more typos (#40627)
-    * Remove reference of video_load_backend and video_fps for processor (#40719)
-    * Enable ruff on benchmark and scripts (#40634)
-    * Fix typos in tests and util (#40780)
-    * Fix invalid PipelineParallel member (#40789)
-    * Use functools.cached_property (#40607)
-    * Remove use_ipex option from Trainer (#40784)
-    * Fix typos in src (#40782)
-    * Improve torch_dtype checks (#40808)
-    * Use checkpoint in auto_class_docstring (#40844)
-    * Clarify passing is_causal in sdpa_attention_paged_forward (#40838)
-    * Use torch.expm1 and torch.log1p for better numerical results (#40860)
-    * Remove dict branch of attention_mask in sdpa_attention_paged_forward (#40882)
-    * remove dummy EncodingFast (#40864)
-    * Don't list dropout in eager_paged_attention_forward (#40924)
-    * Benchmarking V2: framework impl (#40486)
-    * Change docker image to preview for the MI355 CI (#40693)
-    * Redirect MI355 CI results to dummy dataset (#40862)
-* @voidism
-    * fix MetaCLIP 2 wrong link &amp; wrong model names in the docstrings (#40565)
-* @RyanMullins
-    * add: embedding model (#40694)
-    * add: differential privacy research model (#40851)
-* @LawJarp-A
-    * Add EfficientLoFTRImageProcessorFast for GPU-accelerated image processing (#40215)
-* @bozheng-hit
-    * Adding Support for Qwen3-Next (#40771)
-    * Align torch implementation of Gated DeltaNet in Qwen3-Next with fla library. (#40807)
-    * Fix the misalignment between the l2norm in GDN of Qwen3-Next and the implementation in the FLA library. (#40842)
-* @wangzhen0518
-    * Fix edge case for tokenize (#36277) (#36555)
-* @HyunZ118
-    * 🌐 [i18n-KO] Translated clipseg.md to Korean (#39903)
-    * 🌐 [i18n-KO] Translated smolvlm.md to Korean (#40414)
-    * 🌐 [i18n-KO] Translated `imageprocessor.md` to Korean (#39557)
-* @JJJYmmm
-    * Adding Support for Qwen3-VL Series (#40795)
-* @SamuelBarryCS
-    * Add Fast PromptDepthAnything Processor (#40602)
-* @2015aroras
-    * Add Olmo3 model (#40778)
-    * Add FlexOlmo model (#40921)</description>
-      <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v4.57.0</guid>
-      <pubDate>Fri, 03 Oct 2025 17:04:51 GMT</pubDate>
-      <author>LysandreJik</author>
     </item>
   </channel>
 </rss>
