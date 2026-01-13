@@ -4,6 +4,8 @@ from datetime import datetime
 from pathlib import Path
 from xml.dom import minidom
 from xml.etree.ElementTree import Element, SubElement, tostring
+import markdown
+import re
 
 
 def create_rss_feed(
@@ -54,7 +56,12 @@ def create_rss_feed(
 
         item_description = SubElement(item, "description")
         body = release.get("body", "")
-        item_description.text = body if body else "No description provided."
+        if body:
+            html_body = markdown.markdown(body)
+            # Use a placeholder that we'll replace with CDATA later
+            item_description.text = f"__CDATA_START__{html_body}__CDATA_END__"
+        else:
+            item_description.text = "__CDATA_START__No description provided.__CDATA_END__"
 
         item_guid = SubElement(item, "guid", isPermaLink="true")
         item_guid.text = release.get("html_url", "")
@@ -74,6 +81,13 @@ def create_rss_feed(
 
     # Pretty print the XML
     xml_string = tostring(rss, encoding="unicode")
+    # Replace placeholders with actual CDATA sections
+    xml_string = re.sub(
+        r"__CDATA_START__(.*?)__CDATA_END__",
+        r"<![CDATA[\1]]>",
+        xml_string,
+        flags=re.DOTALL
+    )
     parsed = minidom.parseString(xml_string)
     return parsed.toprettyxml(indent="  ")
 
