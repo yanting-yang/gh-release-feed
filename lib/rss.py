@@ -45,7 +45,9 @@ def create_rss_feed(
     last_build_date.text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT")
 
     # Add each release as an item
-    for release in releases:
+    # Keep track of item descriptions to replace after XML generation
+    item_descriptions = {}
+    for idx, release in enumerate(releases):
         item = SubElement(channel, "item")
 
         item_title = SubElement(item, "title")
@@ -58,10 +60,13 @@ def create_rss_feed(
         body = release.get("body", "")
         if body:
             html_body = markdown.markdown(body)
-            # Use a placeholder that we'll replace with CDATA later
-            item_description.text = f"__CDATA_START__{html_body}__CDATA_END__"
         else:
-            item_description.text = "__CDATA_START__No description provided.__CDATA_END__"
+            html_body = "No description provided."
+
+        # Use unique placeholder for each item
+        placeholder = f"__ITEM_{idx}__"
+        item_description.text = placeholder
+        item_descriptions[placeholder] = html_body
 
         item_guid = SubElement(item, "guid", isPermaLink="true")
         item_guid.text = release.get("html_url", "")
@@ -81,13 +86,12 @@ def create_rss_feed(
 
     # Pretty print the XML
     xml_string = tostring(rss, encoding="unicode")
-    # Replace placeholders with actual CDATA sections
-    xml_string = re.sub(
-        r"__CDATA_START__(.*?)__CDATA_END__",
-        r"<![CDATA[\1]]>",
-        xml_string,
-        flags=re.DOTALL
-    )
+    # Replace each placeholder with actual CDATA sections
+    for placeholder, html_content in item_descriptions.items():
+        xml_string = xml_string.replace(
+            f"<description>{placeholder}</description>",
+            f"<description><![CDATA[{html_content}]]></description>"
+        )
     parsed = minidom.parseString(xml_string)
     return parsed.toprettyxml(indent="  ")
 
@@ -127,7 +131,7 @@ def save_feed(
     if xml_path.exists():
         with open(xml_path, "r", encoding="utf-8") as f:
             existing_content = f.read()
-        
+
         if _strip_last_build_date(existing_content) == _strip_last_build_date(rss_content):
             return None  # No updates
 
