@@ -48,7 +48,9 @@ def create_rss_feed(
     last_build_date.text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT")
 
     # Add each release as an item
-    for release in releases:
+    # Keep track of item descriptions to replace after XML generation
+    item_descriptions = {}
+    for idx, release in enumerate(releases):
         item = SubElement(channel, "item")
 
         item_title = SubElement(item, "title")
@@ -62,10 +64,13 @@ def create_rss_feed(
         content_encoded = SubElement(item, "{http://purl.org/rss/1.0/modules/content/}encoded")
         if body:
             html_body = markdown.markdown(body)
-            # Use a placeholder that we'll replace with raw HTML later
-            content_encoded.text = f"__HTML_START__{html_body}__HTML_END__"
         else:
-            content_encoded.text = "__HTML_START__<p>No description provided.</p>__HTML_END__"
+            html_body = "No description provided."
+
+        # Use unique placeholder for each item
+        placeholder = f"__ITEM_{idx}__"
+        item_description.text = placeholder
+        item_descriptions[placeholder] = html_body
 
         item_guid = SubElement(item, "guid", isPermaLink="true")
         item_guid.text = release.get("html_url", "")
@@ -85,13 +90,12 @@ def create_rss_feed(
 
     # Pretty print the XML
     xml_string = tostring(rss, encoding="unicode")
-    # Replace placeholders with raw HTML (unescaped)
-    xml_string = re.sub(
-        r"__HTML_START__(.*?)__HTML_END__",
-        r"\1",
-        xml_string,
-        flags=re.DOTALL
-    )
+    # Replace each placeholder with actual CDATA sections
+    for placeholder, html_content in item_descriptions.items():
+        xml_string = xml_string.replace(
+            f"<description>{placeholder}</description>",
+            f"<description><![CDATA[{html_content}]]></description>"
+        )
     parsed = minidom.parseString(xml_string)
     return parsed.toprettyxml(indent="  ")
 

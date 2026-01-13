@@ -5,37 +5,37 @@
     <link>https://github.com/huggingface/datasets/releases</link>
     <description>Latest releases from huggingface/datasets on GitHub</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Jan 2026 08:37:39 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jan 2026 09:01:19 GMT</lastBuildDate>
     <item>
       <title>4.4.2</title>
       <link>https://github.com/huggingface/datasets/releases/tag/4.4.2</link>
-      <ns0:encoded>&lt;h2&gt;Bug fixes&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Fix embed storage nifti by @CloseChoice in https://github.com/huggingface/datasets/pull/7853&lt;/li&gt;
-&lt;li&gt;ArXiv -&amp;gt; HF Papers by @qgallouedec in https://github.com/huggingface/datasets/pull/7855&lt;/li&gt;
-&lt;li&gt;fix some broken links by @julien-c in https://github.com/huggingface/datasets/pull/7859&lt;/li&gt;
-&lt;li&gt;Nifti visualization support by @CloseChoice in https://github.com/huggingface/datasets/pull/7874&lt;/li&gt;
-&lt;li&gt;Replace papaya with niivue by @CloseChoice in https://github.com/huggingface/datasets/pull/7878&lt;/li&gt;
-&lt;li&gt;Fix 7846: add_column and add_item erroneously(?) require new_fingerprint parameter  by @sajmaru in https://github.com/huggingface/datasets/pull/7884&lt;/li&gt;
-&lt;li&gt;fix(fingerprint): treat TMPDIR as strict API and fail (Issue #7877) by @ada-ggf25 in https://github.com/huggingface/datasets/pull/7891&lt;/li&gt;
-&lt;li&gt;encode nifti correctly when uploading lazily by @CloseChoice in https://github.com/huggingface/datasets/pull/7892&lt;/li&gt;
-&lt;li&gt;fix(nifti): enable lazy loading for Nifti1ImageWrapper by @The-Obstacle-Is-The-Way in https://github.com/huggingface/datasets/pull/7887&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Minor additions&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Add type overloads to load_dataset for better static type inference by @Aditya2755 in https://github.com/huggingface/datasets/pull/7888&lt;/li&gt;
-&lt;li&gt;Add inspect_ai eval logs support by @lhoestq in https://github.com/huggingface/datasets/pull/7899&lt;/li&gt;
-&lt;li&gt;Save input shard lengths by @lhoestq in https://github.com/huggingface/datasets/pull/7897&lt;/li&gt;
-&lt;li&gt;Don't save original_shard_lengths by default for backward compat by @lhoestq in https://github.com/huggingface/datasets/pull/7906&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;New Contributors&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;@sajmaru made their first contribution in https://github.com/huggingface/datasets/pull/7884&lt;/li&gt;
-&lt;li&gt;@Aditya2755 made their first contribution in https://github.com/huggingface/datasets/pull/7888&lt;/li&gt;
-&lt;li&gt;@ada-ggf25 made their first contribution in https://github.com/huggingface/datasets/pull/7891&lt;/li&gt;
-&lt;li&gt;@The-Obstacle-Is-The-Way made their first contribution in https://github.com/huggingface/datasets/pull/7887&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/datasets/compare/4.4.1...4.4.2&lt;/p&gt;</ns0:encoded>
+      <description><![CDATA[<h2>Bug fixes</h2>
+<ul>
+<li>Fix embed storage nifti by @CloseChoice in https://github.com/huggingface/datasets/pull/7853</li>
+<li>ArXiv -&gt; HF Papers by @qgallouedec in https://github.com/huggingface/datasets/pull/7855</li>
+<li>fix some broken links by @julien-c in https://github.com/huggingface/datasets/pull/7859</li>
+<li>Nifti visualization support by @CloseChoice in https://github.com/huggingface/datasets/pull/7874</li>
+<li>Replace papaya with niivue by @CloseChoice in https://github.com/huggingface/datasets/pull/7878</li>
+<li>Fix 7846: add_column and add_item erroneously(?) require new_fingerprint parameter  by @sajmaru in https://github.com/huggingface/datasets/pull/7884</li>
+<li>fix(fingerprint): treat TMPDIR as strict API and fail (Issue #7877) by @ada-ggf25 in https://github.com/huggingface/datasets/pull/7891</li>
+<li>encode nifti correctly when uploading lazily by @CloseChoice in https://github.com/huggingface/datasets/pull/7892</li>
+<li>fix(nifti): enable lazy loading for Nifti1ImageWrapper by @The-Obstacle-Is-The-Way in https://github.com/huggingface/datasets/pull/7887</li>
+</ul>
+<h2>Minor additions</h2>
+<ul>
+<li>Add type overloads to load_dataset for better static type inference by @Aditya2755 in https://github.com/huggingface/datasets/pull/7888</li>
+<li>Add inspect_ai eval logs support by @lhoestq in https://github.com/huggingface/datasets/pull/7899</li>
+<li>Save input shard lengths by @lhoestq in https://github.com/huggingface/datasets/pull/7897</li>
+<li>Don't save original_shard_lengths by default for backward compat by @lhoestq in https://github.com/huggingface/datasets/pull/7906</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@sajmaru made their first contribution in https://github.com/huggingface/datasets/pull/7884</li>
+<li>@Aditya2755 made their first contribution in https://github.com/huggingface/datasets/pull/7888</li>
+<li>@ada-ggf25 made their first contribution in https://github.com/huggingface/datasets/pull/7891</li>
+<li>@The-Obstacle-Is-The-Way made their first contribution in https://github.com/huggingface/datasets/pull/7887</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.1...4.4.2</p>]]></description>
       <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.2</guid>
       <pubDate>Fri, 19 Dec 2025 15:05:34 GMT</pubDate>
       <author>lhoestq</author>
@@ -43,12 +43,12 @@
     <item>
       <title>4.4.1</title>
       <link>https://github.com/huggingface/datasets/releases/tag/4.4.1</link>
-      <ns0:encoded>&lt;h2&gt;Bug fixes and improvements&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Better streaming retries (504 and 429) by @lhoestq in https://github.com/huggingface/datasets/pull/7847&lt;/li&gt;
-&lt;li&gt;DOC: remove mode parameter in docstring of pdf and video feature by @CloseChoice in https://github.com/huggingface/datasets/pull/7848&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/datasets/compare/4.4.0...4.4.1&lt;/p&gt;</ns0:encoded>
+      <description><![CDATA[<h2>Bug fixes and improvements</h2>
+<ul>
+<li>Better streaming retries (504 and 429) by @lhoestq in https://github.com/huggingface/datasets/pull/7847</li>
+<li>DOC: remove mode parameter in docstring of pdf and video feature by @CloseChoice in https://github.com/huggingface/datasets/pull/7848</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.0...4.4.1</p>]]></description>
       <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.1</guid>
       <pubDate>Wed, 05 Nov 2025 16:01:38 GMT</pubDate>
       <author>lhoestq</author>
@@ -56,48 +56,48 @@
     <item>
       <title>4.4.0</title>
       <link>https://github.com/huggingface/datasets/releases/tag/4.4.0</link>
-      <ns0:encoded>&lt;h2&gt;Dataset Features&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Add nifti support by @CloseChoice in https://github.com/huggingface/datasets/pull/7815&lt;/li&gt;
-&lt;li&gt;Load medical imaging datasets from Hugging Face:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;python
-  ds = load_dataset(&quot;username/my_nifti_dataset&quot;)
-  ds[&quot;train&quot;][0]  # {&quot;nifti&quot;: &amp;lt;nibabel.nifti1.Nifti1Image&amp;gt;}&lt;/code&gt;
-  * Load medical imaging datasets from your disk:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;python
-  files = [&quot;/path/to/scan_001.nii.gz&quot;, &quot;/path/to/scan_002.nii.gz&quot;]
-  ds = Dataset.from_dict({&quot;nifti&quot;: files}).cast_column(&quot;nifti&quot;, Nifti())
-  ds[&quot;train&quot;][0]  # {&quot;nifti&quot;: &amp;lt;nibabel.nifti1.Nifti1Image&amp;gt;}&lt;/code&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Documentation: https://huggingface.co/docs/datasets/nifti_dataset&lt;/li&gt;
-&lt;li&gt;Add num channels to audio by @CloseChoice in https://github.com/huggingface/datasets/pull/7840&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;```python&lt;/p&gt;
-&lt;h1&gt;samples have shape (num_channels, num_samples)&lt;/h1&gt;
-&lt;p&gt;ds = ds.cast_column(&quot;audio&quot;, Audio())  # default, use all channels
-ds = ds.cast_column(&quot;audio&quot;, Audio(num_channels=2))  # use stereo
-ds = ds.cast_column(&quot;audio&quot;, Audio(num_channels=1))  # use mono
-```&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Python 3.14 support by @lhoestq in https://github.com/huggingface/datasets/pull/7836&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;What's Changed&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Fix random seed on shuffle and interleave_datasets by @CloseChoice in https://github.com/huggingface/datasets/pull/7823&lt;/li&gt;
-&lt;li&gt;fix ci compressionfs by @lhoestq in https://github.com/huggingface/datasets/pull/7830&lt;/li&gt;
-&lt;li&gt;fix: better args passthrough for &lt;code&gt;_batch_setitems()&lt;/code&gt; by @sghng in https://github.com/huggingface/datasets/pull/7817&lt;/li&gt;
-&lt;li&gt;Fix: Properly render [!TIP] block in stream.shuffle documentation by @art-test-stack in https://github.com/huggingface/datasets/pull/7833&lt;/li&gt;
-&lt;li&gt;resolves the ValueError: Unable to avoid copy while creating an array by @ArjunJagdale in https://github.com/huggingface/datasets/pull/7831&lt;/li&gt;
-&lt;li&gt;fix column with transform by @lhoestq in https://github.com/huggingface/datasets/pull/7843&lt;/li&gt;
-&lt;li&gt;support fsspec 2025.10.0 by @lhoestq in https://github.com/huggingface/datasets/pull/7844&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;New Contributors&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;@sghng made their first contribution in https://github.com/huggingface/datasets/pull/7817&lt;/li&gt;
-&lt;li&gt;@art-test-stack made their first contribution in https://github.com/huggingface/datasets/pull/7833&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/datasets/compare/4.3.0...4.4.0&lt;/p&gt;</ns0:encoded>
+      <description><![CDATA[<h2>Dataset Features</h2>
+<ul>
+<li>Add nifti support by @CloseChoice in https://github.com/huggingface/datasets/pull/7815</li>
+<li>Load medical imaging datasets from Hugging Face:</li>
+</ul>
+<p><code>python
+  ds = load_dataset("username/my_nifti_dataset")
+  ds["train"][0]  # {"nifti": &lt;nibabel.nifti1.Nifti1Image&gt;}</code>
+  * Load medical imaging datasets from your disk:</p>
+<p><code>python
+  files = ["/path/to/scan_001.nii.gz", "/path/to/scan_002.nii.gz"]
+  ds = Dataset.from_dict({"nifti": files}).cast_column("nifti", Nifti())
+  ds["train"][0]  # {"nifti": &lt;nibabel.nifti1.Nifti1Image&gt;}</code></p>
+<ul>
+<li>Documentation: https://huggingface.co/docs/datasets/nifti_dataset</li>
+<li>Add num channels to audio by @CloseChoice in https://github.com/huggingface/datasets/pull/7840</li>
+</ul>
+<p>```python</p>
+<h1>samples have shape (num_channels, num_samples)</h1>
+<p>ds = ds.cast_column("audio", Audio())  # default, use all channels
+ds = ds.cast_column("audio", Audio(num_channels=2))  # use stereo
+ds = ds.cast_column("audio", Audio(num_channels=1))  # use mono
+```</p>
+<ul>
+<li>Python 3.14 support by @lhoestq in https://github.com/huggingface/datasets/pull/7836</li>
+</ul>
+<h2>What's Changed</h2>
+<ul>
+<li>Fix random seed on shuffle and interleave_datasets by @CloseChoice in https://github.com/huggingface/datasets/pull/7823</li>
+<li>fix ci compressionfs by @lhoestq in https://github.com/huggingface/datasets/pull/7830</li>
+<li>fix: better args passthrough for <code>_batch_setitems()</code> by @sghng in https://github.com/huggingface/datasets/pull/7817</li>
+<li>Fix: Properly render [!TIP] block in stream.shuffle documentation by @art-test-stack in https://github.com/huggingface/datasets/pull/7833</li>
+<li>resolves the ValueError: Unable to avoid copy while creating an array by @ArjunJagdale in https://github.com/huggingface/datasets/pull/7831</li>
+<li>fix column with transform by @lhoestq in https://github.com/huggingface/datasets/pull/7843</li>
+<li>support fsspec 2025.10.0 by @lhoestq in https://github.com/huggingface/datasets/pull/7844</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@sghng made their first contribution in https://github.com/huggingface/datasets/pull/7817</li>
+<li>@art-test-stack made their first contribution in https://github.com/huggingface/datasets/pull/7833</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.3.0...4.4.0</p>]]></description>
       <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.0</guid>
       <pubDate>Tue, 04 Nov 2025 10:42:47 GMT</pubDate>
       <author>lhoestq</author>
@@ -105,32 +105,32 @@ ds = ds.cast_column(&quot;audio&quot;, Audio(num_channels=1))  # use mono
     <item>
       <title>4.3.0</title>
       <link>https://github.com/huggingface/datasets/releases/tag/4.3.0</link>
-      <ns0:encoded>&lt;h2&gt;Dataset Features&lt;/h2&gt;
-&lt;p&gt;Enable large scale distributed dataset streaming:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Keep hffs cache in workers when streaming by @lhoestq in https://github.com/huggingface/datasets/pull/7820&lt;/li&gt;
-&lt;li&gt;Retry open hf file by @lhoestq in https://github.com/huggingface/datasets/pull/7822&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;These improvements require &lt;code&gt;huggingface_hub&amp;gt;=1.1.0&lt;/code&gt; to take full effect&lt;/p&gt;
-&lt;h2&gt;What's Changed&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;fix conda deps by @lhoestq in https://github.com/huggingface/datasets/pull/7810&lt;/li&gt;
-&lt;li&gt;Add pyarrow's binary view to features by @delta003 in https://github.com/huggingface/datasets/pull/7795&lt;/li&gt;
-&lt;li&gt;Fix polars cast column image by @CloseChoice in https://github.com/huggingface/datasets/pull/7800&lt;/li&gt;
-&lt;li&gt;Allow streaming hdf5 files by @lhoestq in https://github.com/huggingface/datasets/pull/7814&lt;/li&gt;
-&lt;li&gt;Fix batch_size default description in to_polars docstrings by @albertvillanova in https://github.com/huggingface/datasets/pull/7824&lt;/li&gt;
-&lt;li&gt;docs: document_dataset PDFs &amp;amp; OCR by @ethanknights in https://github.com/huggingface/datasets/pull/7812&lt;/li&gt;
-&lt;li&gt;Add custom fingerprint support to &lt;code&gt;from_generator&lt;/code&gt; by @simonreise in https://github.com/huggingface/datasets/pull/7533&lt;/li&gt;
-&lt;li&gt;picklable batch_fn by @lhoestq in https://github.com/huggingface/datasets/pull/7826&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;New Contributors&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;@delta003 made their first contribution in https://github.com/huggingface/datasets/pull/7795&lt;/li&gt;
-&lt;li&gt;@CloseChoice made their first contribution in https://github.com/huggingface/datasets/pull/7800&lt;/li&gt;
-&lt;li&gt;@ethanknights made their first contribution in https://github.com/huggingface/datasets/pull/7812&lt;/li&gt;
-&lt;li&gt;@simonreise made their first contribution in https://github.com/huggingface/datasets/pull/7533&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0&lt;/p&gt;</ns0:encoded>
+      <description><![CDATA[<h2>Dataset Features</h2>
+<p>Enable large scale distributed dataset streaming:</p>
+<ul>
+<li>Keep hffs cache in workers when streaming by @lhoestq in https://github.com/huggingface/datasets/pull/7820</li>
+<li>Retry open hf file by @lhoestq in https://github.com/huggingface/datasets/pull/7822</li>
+</ul>
+<p>These improvements require <code>huggingface_hub&gt;=1.1.0</code> to take full effect</p>
+<h2>What's Changed</h2>
+<ul>
+<li>fix conda deps by @lhoestq in https://github.com/huggingface/datasets/pull/7810</li>
+<li>Add pyarrow's binary view to features by @delta003 in https://github.com/huggingface/datasets/pull/7795</li>
+<li>Fix polars cast column image by @CloseChoice in https://github.com/huggingface/datasets/pull/7800</li>
+<li>Allow streaming hdf5 files by @lhoestq in https://github.com/huggingface/datasets/pull/7814</li>
+<li>Fix batch_size default description in to_polars docstrings by @albertvillanova in https://github.com/huggingface/datasets/pull/7824</li>
+<li>docs: document_dataset PDFs &amp; OCR by @ethanknights in https://github.com/huggingface/datasets/pull/7812</li>
+<li>Add custom fingerprint support to <code>from_generator</code> by @simonreise in https://github.com/huggingface/datasets/pull/7533</li>
+<li>picklable batch_fn by @lhoestq in https://github.com/huggingface/datasets/pull/7826</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@delta003 made their first contribution in https://github.com/huggingface/datasets/pull/7795</li>
+<li>@CloseChoice made their first contribution in https://github.com/huggingface/datasets/pull/7800</li>
+<li>@ethanknights made their first contribution in https://github.com/huggingface/datasets/pull/7812</li>
+<li>@simonreise made their first contribution in https://github.com/huggingface/datasets/pull/7533</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0</p>]]></description>
       <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.3.0</guid>
       <pubDate>Thu, 23 Oct 2025 16:33:59 GMT</pubDate>
       <author>lhoestq</author>
@@ -138,48 +138,48 @@ ds = ds.cast_column(&quot;audio&quot;, Audio(num_channels=1))  # use mono
     <item>
       <title>4.2.0</title>
       <link>https://github.com/huggingface/datasets/releases/tag/4.2.0</link>
-      <ns0:encoded>&lt;h2&gt;Dataset Features&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Sample without replacement option when interleaving datasets by @radulescupetru in https://github.com/huggingface/datasets/pull/7786&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;python
-  ds = interleave_datasets(datasets, stopping_strategy=&quot;all_exhausted_without_replacement&quot;)&lt;/code&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Parquet: add &lt;code&gt;on_bad_files&lt;/code&gt; argument to error/warn/skip bad files by @lhoestq in https://github.com/huggingface/datasets/pull/7806&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;python
-  ds = load_dataset(parquet_dataset_id, on_bad_files=&quot;warn&quot;)&lt;/code&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Add parquet scan options and docs by @lhoestq in https://github.com/huggingface/datasets/pull/7801&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;docs to select columns and filter data efficiently&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;code&gt;python
-  ds = load_dataset(parquet_dataset_id, columns=[&quot;col_0&quot;, &quot;col_1&quot;])
-  ds = load_dataset(parquet_dataset_id, filters=[(&quot;col_0&quot;, &quot;==&quot;, 0)])&lt;/code&gt;
-  * new argument to control buffering and caching when streaming&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;python
-  fragment_scan_options = pyarrow.dataset.ParquetFragmentScanOptions(cache_options=pyarrow.CacheOptions(prefetch_limit=1, range_size_limit=128 &amp;lt;&amp;lt; 20))
-  ds = load_dataset(parquet_dataset_id, streaming=True, fragment_scan_options=fragment_scan_options)&lt;/code&gt;&lt;/p&gt;
-&lt;h2&gt;What's Changed&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Document HDF5 support by @klamike in https://github.com/huggingface/datasets/pull/7740&lt;/li&gt;
-&lt;li&gt;update tips in docs by @lhoestq in https://github.com/huggingface/datasets/pull/7790&lt;/li&gt;
-&lt;li&gt;feat: avoid some copies in torch formatter by @drbh in https://github.com/huggingface/datasets/pull/7787&lt;/li&gt;
-&lt;li&gt;Support huggingface_hub v0.x and v1.x by @Wauplin in https://github.com/huggingface/datasets/pull/7783&lt;/li&gt;
-&lt;li&gt;Define CI future by @lhoestq in https://github.com/huggingface/datasets/pull/7799&lt;/li&gt;
-&lt;li&gt;More Parquet streaming docs by @lhoestq in https://github.com/huggingface/datasets/pull/7803&lt;/li&gt;
-&lt;li&gt;Less api calls when resolving data_files by @lhoestq in https://github.com/huggingface/datasets/pull/7805&lt;/li&gt;
-&lt;li&gt;typo by @lhoestq in https://github.com/huggingface/datasets/pull/7807&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;New Contributors&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;@drbh made their first contribution in https://github.com/huggingface/datasets/pull/7787&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/datasets/compare/4.1.1...4.2.0&lt;/p&gt;</ns0:encoded>
+      <description><![CDATA[<h2>Dataset Features</h2>
+<ul>
+<li>Sample without replacement option when interleaving datasets by @radulescupetru in https://github.com/huggingface/datasets/pull/7786</li>
+</ul>
+<p><code>python
+  ds = interleave_datasets(datasets, stopping_strategy="all_exhausted_without_replacement")</code></p>
+<ul>
+<li>Parquet: add <code>on_bad_files</code> argument to error/warn/skip bad files by @lhoestq in https://github.com/huggingface/datasets/pull/7806</li>
+</ul>
+<p><code>python
+  ds = load_dataset(parquet_dataset_id, on_bad_files="warn")</code></p>
+<ul>
+<li>
+<p>Add parquet scan options and docs by @lhoestq in https://github.com/huggingface/datasets/pull/7801</p>
+</li>
+<li>
+<p>docs to select columns and filter data efficiently</p>
+</li>
+</ul>
+<p><code>python
+  ds = load_dataset(parquet_dataset_id, columns=["col_0", "col_1"])
+  ds = load_dataset(parquet_dataset_id, filters=[("col_0", "==", 0)])</code>
+  * new argument to control buffering and caching when streaming</p>
+<p><code>python
+  fragment_scan_options = pyarrow.dataset.ParquetFragmentScanOptions(cache_options=pyarrow.CacheOptions(prefetch_limit=1, range_size_limit=128 &lt;&lt; 20))
+  ds = load_dataset(parquet_dataset_id, streaming=True, fragment_scan_options=fragment_scan_options)</code></p>
+<h2>What's Changed</h2>
+<ul>
+<li>Document HDF5 support by @klamike in https://github.com/huggingface/datasets/pull/7740</li>
+<li>update tips in docs by @lhoestq in https://github.com/huggingface/datasets/pull/7790</li>
+<li>feat: avoid some copies in torch formatter by @drbh in https://github.com/huggingface/datasets/pull/7787</li>
+<li>Support huggingface_hub v0.x and v1.x by @Wauplin in https://github.com/huggingface/datasets/pull/7783</li>
+<li>Define CI future by @lhoestq in https://github.com/huggingface/datasets/pull/7799</li>
+<li>More Parquet streaming docs by @lhoestq in https://github.com/huggingface/datasets/pull/7803</li>
+<li>Less api calls when resolving data_files by @lhoestq in https://github.com/huggingface/datasets/pull/7805</li>
+<li>typo by @lhoestq in https://github.com/huggingface/datasets/pull/7807</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@drbh made their first contribution in https://github.com/huggingface/datasets/pull/7787</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.1.1...4.2.0</p>]]></description>
       <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.2.0</guid>
       <pubDate>Thu, 09 Oct 2025 16:18:22 GMT</pubDate>
       <author>lhoestq</author>
