@@ -1,24 +1,24 @@
 <?xml version="1.0" ?>
-<rss version="2.0">
+<rss xmlns:ns0="http://purl.org/rss/1.0/modules/content/" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
     <title>huggingface/transformers Releases</title>
     <link>https://github.com/huggingface/transformers/releases</link>
     <description>Latest releases from huggingface/transformers on GitHub</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Jan 2026 08:19:55 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jan 2026 08:37:39 GMT</lastBuildDate>
     <item>
       <title>Release candidate 5.0.0rc2</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</link>
-      <description><![CDATA[&lt;h2&gt;What's Changed&lt;/h2&gt;
+      <ns0:encoded>&lt;h2&gt;What's Changed&lt;/h2&gt;
 &lt;p&gt;This release candidate is focused on fixing &lt;code&gt;AutoTokenizer&lt;/code&gt;, expanding the dynamic weight loading support, and improving performances with MoEs!&lt;/p&gt;
 &lt;h2&gt;MoEs and performances:&lt;/h2&gt;
-&lt;p&gt;&lt;img width="2048" height="1451" alt="image" src="https://github.com/user-attachments/assets/3ed2508e-3eb1-4f13-8717-cd9027d12a39" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;2048&quot; height=&quot;1451&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/3ed2508e-3eb1-4f13-8717-cd9027d12a39&quot; /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;batched and grouped experts implementations by @IlyasMoutawwakil in https://github.com/huggingface/transformers/pull/42697&lt;/li&gt;
 &lt;li&gt;Optimize MoEs for decoding using batched_mm by @IlyasMoutawwakil in https://github.com/huggingface/transformers/pull/43126&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Tokenization:&lt;/h2&gt;
-&lt;p&gt;The main issue with the tokenization refactor is that &lt;code&gt;tokenizer_class&lt;/code&gt; are now "enforced" when in most cases they are wrong. This took a while to properly isolate and now we try to use &lt;code&gt;TokenizersBackend&lt;/code&gt; whenever we can. #42894 has a much more detailed description of the big changes!&lt;/p&gt;
+&lt;p&gt;The main issue with the tokenization refactor is that &lt;code&gt;tokenizer_class&lt;/code&gt; are now &quot;enforced&quot; when in most cases they are wrong. This took a while to properly isolate and now we try to use &lt;code&gt;TokenizersBackend&lt;/code&gt; whenever we can. #42894 has a much more detailed description of the big changes!&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;use &lt;code&gt;TokenizersBackend&lt;/code&gt; by @ArthurZucker in https://github.com/huggingface/transformers/pull/42894&lt;/li&gt;
 &lt;li&gt;Fix convert_tekken_tokenizer by @juliendenize in https://github.com/huggingface/transformers/pull/42592&lt;/li&gt;
@@ -84,7 +84,7 @@
 &lt;li&gt;@tanmay2004 made their first contribution in https://github.com/huggingface/transformers/pull/42737&lt;/li&gt;
 &lt;li&gt;@atultw made their first contribution in https://github.com/huggingface/transformers/pull/43061&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/transformers/compare/v5.0.0rc1...v5.0.0rc2&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/transformers/compare/v5.0.0rc1...v5.0.0rc2&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</guid>
       <pubDate>Thu, 08 Jan 2026 10:33:33 GMT</pubDate>
       <author>ArthurZucker</author>
@@ -92,7 +92,7 @@
     <item>
       <title>Release candidate 5.0.0rc1</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc1</link>
-      <description><![CDATA[&lt;h2&gt;What's Changed&lt;/h2&gt;
+      <ns0:encoded>&lt;h2&gt;What's Changed&lt;/h2&gt;
 &lt;p&gt;This release candidate was focused mostly on &lt;code&gt;quantization&lt;/code&gt; support with the new dynamic weight loader, and a few notable 🚨 breaking changes🚨:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Default dtype for any model when using &lt;code&gt;from_pretrained&lt;/code&gt; is now &lt;code&gt;auto&lt;/code&gt;! &lt;/li&gt;
@@ -154,7 +154,7 @@ This is now as fast as before thanks to xet, and is just more convenient on the 
 &lt;li&gt;@hqkqn32 made their first contribution in https://github.com/huggingface/transformers/pull/42620&lt;/li&gt;
 &lt;li&gt;@zhang-prog made their first contribution in https://github.com/huggingface/transformers/pull/42178&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/transformers/compare/v5.0.0rc0...v5.0.0rc1&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/transformers/compare/v5.0.0rc0...v5.0.0rc1&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v5.0.0rc1</guid>
       <pubDate>Thu, 08 Jan 2026 10:15:16 GMT</pubDate>
       <author>ArthurZucker</author>
@@ -162,8 +162,8 @@ This is now as fast as before thanks to xet, and is just more convenient on the 
     <item>
       <title>Transformers v5.0.0rc0</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc0</link>
-      <description><![CDATA[&lt;h2&gt;Transformers v5 release notes&lt;/h2&gt;
-&lt;p&gt;&lt;img width="1800" height="1013" alt="image" src="https://github.com/user-attachments/assets/7b5187d7-6945-4108-a546-6d1d7bfb55e3" /&gt;&lt;/p&gt;
+      <ns0:encoded>&lt;h2&gt;Transformers v5 release notes&lt;/h2&gt;
+&lt;p&gt;&lt;img width=&quot;1800&quot; height=&quot;1013&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/7b5187d7-6945-4108-a546-6d1d7bfb55e3&quot; /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Highlights&lt;/li&gt;
 &lt;li&gt;Significant API changes: dynamic weight loading, tokenization&lt;/li&gt;
@@ -172,17 +172,17 @@ This is now as fast as before thanks to xet, and is just more convenient on the 
 &lt;/ul&gt;
 &lt;h2&gt;Highlights&lt;/h2&gt;
 &lt;p&gt;We are excited to announce the initial release of Transformers v5. This is the first major release in five years, and the release is significant: 800 commits have been pushed to &lt;code&gt;main&lt;/code&gt; since the latest minor release. This release removes a lot of long-due deprecations, introduces several refactors that significantly simplify our APIs and internals, and comes with a large number of bug fixes.&lt;/p&gt;
-&lt;p&gt;We give an overview of our focus for this release in the &lt;a href="https://huggingface.co/blog/transformers-v5"&gt;following blogpost&lt;/a&gt;. In these release notes, we'll focus directly on the refactors and new APIs coming with v5.&lt;/p&gt;
+&lt;p&gt;We give an overview of our focus for this release in the &lt;a href=&quot;https://huggingface.co/blog/transformers-v5&quot;&gt;following blogpost&lt;/a&gt;. In these release notes, we'll focus directly on the refactors and new APIs coming with v5.&lt;/p&gt;
 &lt;p&gt;This release is a release candidate (RC). It is not the final v5 release, and we will push on pypi as a pre-release. This means that the current release is purely opt-in, as installing &lt;code&gt;transformers&lt;/code&gt; without specifying this exact release will install the latest version instead (v4.57.3 as of writing).&lt;/p&gt;
 &lt;p&gt;In order to install this release, please do so with the following:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;shell
 pip install transformers --pre&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;For us to deliver the best package possible, it is imperative that we have feedback on how the toolkit is currently working for you. Please try it out, and &lt;a href="https://github.com/huggingface/transformers/issues/"&gt;open an issue&lt;/a&gt; in case you're facing something inconsistent/a bug.&lt;/p&gt;
+&lt;p&gt;For us to deliver the best package possible, it is imperative that we have feedback on how the toolkit is currently working for you. Please try it out, and &lt;a href=&quot;https://github.com/huggingface/transformers/issues/&quot;&gt;open an issue&lt;/a&gt; in case you're facing something inconsistent/a bug.&lt;/p&gt;
 &lt;p&gt;Transformers version 5 is a community endeavor, and this is the last mile. Let's ship this together!&lt;/p&gt;
 &lt;h2&gt;Significant API changes&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;[!NOTE]
-👀 Nothing is final and things are still actively in movement. We have a section dedicated to what is planned for future release candidates, yet is known not to work in the RC0. Look for "Disclaimers for the RC0".&lt;/p&gt;
+👀 Nothing is final and things are still actively in movement. We have a section dedicated to what is planned for future release candidates, yet is known not to work in the RC0. Look for &quot;Disclaimers for the RC0&quot;.&lt;/p&gt;
 &lt;p&gt;We'll be eagerly awaiting your feedback in our GitHub issues!&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3&gt;Dynamic weight loading&lt;/h3&gt;
@@ -202,8 +202,8 @@ operation done on the attention layers is to fuse the query, key, values layers.
 to defining the following conversion:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;python
 conversion = WeightConverter(
-    ["self_attn.q_proj", "self_attn.k_proj", "self_attn.v_proj"],  # The input layers
-    "self_attn.qkv_proj",  # The single layer as output
+    [&quot;self_attn.q_proj&quot;, &quot;self_attn.k_proj&quot;, &quot;self_attn.v_proj&quot;],  # The input layers
+    &quot;self_attn.qkv_proj&quot;,  # The single layer as output
     operations=[Concatenate(dim=0)],
 )&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;In this situation, we apply the &lt;code&gt;Concatenate&lt;/code&gt; operation, which accepts a list of layers as input and returns a single 
@@ -226,7 +226,7 @@ from transformers import TokenizersBackend, generate_merges
 from tokenizers import pre_tokenizers, Tokenizer
 from tokenizers.model import BPE&lt;/p&gt;
 &lt;p&gt;class Llama5Tokenizer(TokenizersBackend):
-    def &lt;strong&gt;init&lt;/strong&gt;(self, unk_token="&lt;unk&gt;",bos_token="&lt;s&gt;", eos_token="&lt;/s&gt;", vocab=None, merges=None ):
+    def &lt;strong&gt;init&lt;/strong&gt;(self, unk_token=&quot;&lt;unk&gt;&quot;,bos_token=&quot;&lt;s&gt;&quot;, eos_token=&quot;&lt;/s&gt;&quot;, vocab=None, merges=None ):
         if vocab is None:
             self._vocab = {
                 str(unk_token): 0,
@@ -245,7 +245,7 @@ from tokenizers.model import BPE&lt;/p&gt;
         BPE(vocab=self._vocab, merges=self._merges, fuse_unk=True)
     )
     self._tokenizer.pre_tokenizer = pre_tokenizers.Metaspace(
-        replacement="▁", prepend_scheme=_get_prepend_scheme(self.add_prefix_space, self), split=False
+        replacement=&quot;▁&quot;, prepend_scheme=_get_prepend_scheme(self.add_prefix_space, self), split=False
     )
     super().__init__(
         tokenizer_object=self._tokenizer,
@@ -259,11 +259,11 @@ from tokenizers.model import BPE&lt;/p&gt;
 &lt;p&gt;The above is the main motivation towards refactoring tokenization: we want tokenizers to behave similarly to models: trained or empty, and with exactly what is defined in their class definition.&lt;/p&gt;
 &lt;h3&gt;Backend Architecture Changes: moving away from the slow/fast tokenizer separation&lt;/h3&gt;
 &lt;p&gt;Up to now, transformers maintained two parallel implementations for many tokenizers:
-- "Slow" tokenizers (&lt;code&gt;tokenization_&amp;lt;model&amp;gt;.py&lt;/code&gt;) - Python-based implementations, often using &lt;a href="https://github.com/google/sentencepiece"&gt;SentencePiece&lt;/a&gt; as the backend.
-- "Fast" tokenizers (&lt;code&gt;tokenization_&amp;lt;model&amp;gt;_fast.py&lt;/code&gt;) - Rust-based implementations using the 🤗 &lt;a href="https://github.com/huggingface/tokenizers"&gt;tokenizers&lt;/a&gt; library.&lt;/p&gt;
+- &quot;Slow&quot; tokenizers (&lt;code&gt;tokenization_&amp;lt;model&amp;gt;.py&lt;/code&gt;) - Python-based implementations, often using &lt;a href=&quot;https://github.com/google/sentencepiece&quot;&gt;SentencePiece&lt;/a&gt; as the backend.
+- &quot;Fast&quot; tokenizers (&lt;code&gt;tokenization_&amp;lt;model&amp;gt;_fast.py&lt;/code&gt;) - Rust-based implementations using the 🤗 &lt;a href=&quot;https://github.com/huggingface/tokenizers&quot;&gt;tokenizers&lt;/a&gt; library.&lt;/p&gt;
 &lt;p&gt;In v5, we consolidate to a single tokenizer file per model: &lt;code&gt;tokenization_&amp;lt;model&amp;gt;.py&lt;/code&gt;. This file will use the most appropriate backend available:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;TokenizersBackend&lt;/strong&gt; (preferred): Rust-based tokenizers from the 🤗 &lt;a href="https://github.com/huggingface/tokenizers"&gt;tokenizers&lt;/a&gt; library. In general it provides optimal performance, but it also offers a lot more features that are commonly adopted across the ecosystem:&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TokenizersBackend&lt;/strong&gt; (preferred): Rust-based tokenizers from the 🤗 &lt;a href=&quot;https://github.com/huggingface/tokenizers&quot;&gt;tokenizers&lt;/a&gt; library. In general it provides optimal performance, but it also offers a lot more features that are commonly adopted across the ecosystem:&lt;/li&gt;
 &lt;li&gt;handling additional tokens&lt;/li&gt;
 &lt;li&gt;a full python API for setting and updating &lt;/li&gt;
 &lt;li&gt;automatic parallelization,&lt;/li&gt;
@@ -295,12 +295,12 @@ from tokenizers.model import BPE&lt;/p&gt;
 from transformers import LlamaTokenizer&lt;/p&gt;
 &lt;p&gt;tokenizer = LlamaTokenizer()
 ```&lt;/p&gt;
-&lt;p&gt;This tokenizer will therefore follow the definition of the &lt;code&gt;LlamaTokenizer&lt;/code&gt; as defined in its class definition. It can then be trained on a corpus as can be seen in &lt;a href="https://huggingface.co/docs/tokenizers/training_from_memory"&gt;the &lt;code&gt;tokenizers&lt;/code&gt; documentation&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;These tokenizers can also be initialized from vocab and merges (if necessary), like the previous "slow" tokenizers:&lt;/p&gt;
+&lt;p&gt;This tokenizer will therefore follow the definition of the &lt;code&gt;LlamaTokenizer&lt;/code&gt; as defined in its class definition. It can then be trained on a corpus as can be seen in &lt;a href=&quot;https://huggingface.co/docs/tokenizers/training_from_memory&quot;&gt;the &lt;code&gt;tokenizers&lt;/code&gt; documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;These tokenizers can also be initialized from vocab and merges (if necessary), like the previous &quot;slow&quot; tokenizers:&lt;/p&gt;
 &lt;p&gt;```py
 from transformers import LlamaTokenizer&lt;/p&gt;
-&lt;p&gt;vocab = {"&lt;unk&gt;": 0, "&lt;s&gt;": 1, "&lt;/s&gt;": 2, "hello": 3, "world": 4}
-merges = [("h", "e"), ("l", "l"), ("o", " ")]&lt;/p&gt;
+&lt;p&gt;vocab = {&quot;&lt;unk&gt;&quot;: 0, &quot;&lt;s&gt;&quot;: 1, &quot;&lt;/s&gt;&quot;: 2, &quot;hello&quot;: 3, &quot;world&quot;: 4}
+merges = [(&quot;h&quot;, &quot;e&quot;), (&quot;l&quot;, &quot;l&quot;), (&quot;o&quot;, &quot; &quot;)]&lt;/p&gt;
 &lt;p&gt;tokenizer = LlamaTokenizer(vocab=vocab, merges=merges)
 ```&lt;/p&gt;
 &lt;p&gt;This tokenizer will behave as a Llama-like tokenizer, with an updated vocabulary. This allows comparing different tokenizer classes with the same vocab; therefore enabling the comparison of different pre-tokenizers, normalizers, etc.&lt;/p&gt;
@@ -309,8 +309,8 @@ merges = [("h", "e"), ("l", "l"), ("o", " ")]&lt;/p&gt;
 &lt;p&gt;The &lt;code&gt;batch_decode&lt;/code&gt; and &lt;code&gt;decode&lt;/code&gt; methods have been unified to reflect behavior of the &lt;code&gt;encode&lt;/code&gt; method. Both single and batch decoding now use the same &lt;code&gt;decode&lt;/code&gt; method. See an example of the new behavior below:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;python
 from transformers import AutoTokenizer
-tokenizer = AutoTokenizer.from_pretrained("t5-small") 
-inputs = ["hey how are you?", "fine"]
+tokenizer = AutoTokenizer.from_pretrained(&quot;t5-small&quot;) 
+inputs = [&quot;hey how are you?&quot;, &quot;fine&quot;]
 tokenizer.decode(tokenizer.encode(inputs))&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;Gives:
 &lt;code&gt;diff
@@ -328,11 +328,11 @@ A common use-case would be: &lt;code&gt;encode&lt;/code&gt;, &lt;code&gt;model.g
 &lt;p&gt;```python&lt;/p&gt;
 &lt;h1&gt;v5&lt;/h1&gt;
 &lt;p&gt;messages = [
-    {"role": "user", "content": "Hello!"},
-    {"role": "assistant", "content": "Hi there!"}
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Hi there!&quot;}
 ]&lt;/p&gt;
 &lt;h1&gt;Now returns BatchEncoding with input_ids, attention_mask, etc.&lt;/h1&gt;
-&lt;p&gt;outputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
+&lt;p&gt;outputs = tokenizer.apply_chat_template(messages, return_tensors=&quot;pt&quot;)
 print(outputs.keys())  # dict_keys(['input_ids', 'attention_mask'])
 ```&lt;/p&gt;
 &lt;h4&gt;5. Removed legacy configuration file saving:&lt;/h4&gt;
@@ -383,8 +383,8 @@ tokenizer.extra_special_tokens  # Additional tokens
 &lt;h1&gt;v4&lt;/h1&gt;
 &lt;p&gt;model_inputs = tokenizer.prepare_seq2seq_batch(src_texts, tgt_texts, max_length=128)&lt;/p&gt;
 &lt;h1&gt;v5&lt;/h1&gt;
-&lt;p&gt;model_inputs = tokenizer(src_texts, text_target=tgt_texts, max_length=128, return_tensors="pt")
-model_inputs["labels"] = model_inputs.pop("input_ids_target")
+&lt;p&gt;model_inputs = tokenizer(src_texts, text_target=tgt_texts, max_length=128, return_tensors=&quot;pt&quot;)
+model_inputs[&quot;labels&quot;] = model_inputs.pop(&quot;input_ids_target&quot;)
 ```&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;BatchEncoding.words()&lt;/code&gt;: Deprecated; use &lt;code&gt;word_ids()&lt;/code&gt; instead.&lt;/li&gt;
@@ -417,31 +417,31 @@ This is known and actively being worked on.&lt;/p&gt;
 ```python&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;@torch.no_grad()
 def _init_weights(self, module):
-    """
+    &quot;&quot;&quot;
     Initialize the weights. This is quite general on purpose, in the spirit of what we usually do. For more complex
     initialization scheme, it should be overridden by the derived `PreTrainedModel` class. In case a model adds an explicit
     `nn.Parameter`, this method should also be overridden in order to initialize it correctly.
-    """
-    if hasattr(self.config, "initializer_range"):
+    &quot;&quot;&quot;
+    if hasattr(self.config, &quot;initializer_range&quot;):
         std = self.config.initializer_range or 0.02
-    elif hasattr(self.config, "init_std"):
+    elif hasattr(self.config, &quot;init_std&quot;):
         std = self.config.init_std
-    elif hasattr(self.config, "initializer_factor"):
+    elif hasattr(self.config, &quot;initializer_factor&quot;):
         std = self.config.initializer_factor
     else:
         # 0.02 is the standard default value across the library
-        std = getattr(self.config.get_text_config(), "initializer_range", 0.02)
+        std = getattr(self.config.get_text_config(), &quot;initializer_range&quot;, 0.02)
 
     if isinstance(module, (nn.Linear, nn.Conv1d, nn.Conv2d, nn.Conv3d, nn.ConvTranspose1d, nn.ConvTranspose2d)):
-        if getattr(module, "weight", None) is not None:
+        if getattr(module, &quot;weight&quot;, None) is not None:
             init.normal_(module.weight, mean=0.0, std=std)
-        if getattr(module, "bias", None) is not None:
+        if getattr(module, &quot;bias&quot;, None) is not None:
             init.zeros_(module.bias)
     elif isinstance(module, nn.Embedding):
-        if getattr(module, "weight", None) is not None:
+        if getattr(module, &quot;weight&quot;, None) is not None:
             init.normal_(module.weight, mean=0.0, std=std)
             # Here we need the check explicitly, as we slice the weight in the `zeros_` call, so it looses the flag
-            if module.padding_idx is not None and not getattr(module.weight, "_is_hf_initialized", False):
+            if module.padding_idx is not None and not getattr(module.weight, &quot;_is_hf_initialized&quot;, False):
                 init.zeros_(module.weight[module.padding_idx])
     elif isinstance(module, nn.MultiheadAttention):
         # This uses torch's original init
@@ -450,13 +450,13 @@ def _init_weights(self, module):
     # between modelings (because they are prefixed with the model name)
     elif (
         isinstance(module, (nn.GroupNorm, nn.BatchNorm1d, nn.BatchNorm2d, nn.BatchNorm3d))
-        or "LayerNorm" in module.__class__.__name__
-        or "RMSNorm" in module.__class__.__name__
+        or &quot;LayerNorm&quot; in module.__class__.__name__
+        or &quot;RMSNorm&quot; in module.__class__.__name__
     ):
         # Norms can exist without weights (in which case they are None from torch primitives)
-        if hasattr(module, "weight") and module.weight is not None:
+        if hasattr(module, &quot;weight&quot;) and module.weight is not None:
             init.ones_(module.weight)
-        if hasattr(module, "bias") and module.bias is not None:
+        if hasattr(module, &quot;bias&quot;) and module.bias is not None:
             init.zeros_(module.bias)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;```&lt;/p&gt;
@@ -480,9 +480,9 @@ You should be able to search and replace &lt;code&gt;use_auth_token&lt;/code&gt;
 &lt;p&gt;Linked PR: https://github.com/huggingface/transformers/pull/41666&lt;/p&gt;
 &lt;h3&gt;Attention-related features&lt;/h3&gt;
 &lt;p&gt;We decided to remove some features for the upcoming v5 as they are currently only supported in a few old models and no longer integrated in current model additions. It's recommended to stick to v4.x in case you need them. Following features are affected:
-- No more head masking, see &lt;a href="https://github.com/huggingface/transformers/pull/41076"&gt;#41076&lt;/a&gt;. This feature allowed to turn off certain heads during the attention calculation and only worked for eager.
-- No more relative positional biases in Bert-like models, see &lt;a href="https://github.com/huggingface/transformers/pull/41170"&gt;#41170&lt;/a&gt;. This feature was introduced to allow relative position scores within attention calculations (similar to T5). However, this feature is barely used in official models and a lot of complexity instead. It also only worked with eager.
-- No more head pruning, see &lt;a href="https://github.com/huggingface/transformers/pull/41417"&gt;#41417&lt;/a&gt; by @gante. As the name suggests, it allowed to prune heads within your attention layers.&lt;/p&gt;
+- No more head masking, see &lt;a href=&quot;https://github.com/huggingface/transformers/pull/41076&quot;&gt;#41076&lt;/a&gt;. This feature allowed to turn off certain heads during the attention calculation and only worked for eager.
+- No more relative positional biases in Bert-like models, see &lt;a href=&quot;https://github.com/huggingface/transformers/pull/41170&quot;&gt;#41170&lt;/a&gt;. This feature was introduced to allow relative position scores within attention calculations (similar to T5). However, this feature is barely used in official models and a lot of complexity instead. It also only worked with eager.
+- No more head pruning, see &lt;a href=&quot;https://github.com/huggingface/transformers/pull/41417&quot;&gt;#41417&lt;/a&gt; by @gante. As the name suggests, it allowed to prune heads within your attention layers.&lt;/p&gt;
 &lt;h3&gt;Updates to supported torch APIs&lt;/h3&gt;
 &lt;p&gt;We dropped support for two torch APIs:
 - &lt;code&gt;torchscript&lt;/code&gt; in https://github.com/huggingface/transformers/pull/41688
@@ -500,16 +500,16 @@ you would load a 4-bit bitsandbytes model using this argument:&lt;/p&gt;
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig&lt;/p&gt;
 &lt;p&gt;quantization_config = BitsAndBytesConfig(load_in_4bit=True)&lt;/p&gt;
 &lt;p&gt;model_4bit = AutoModelForCausalLM.from_pretrained(
-    "meta-llama/Llama-3.2-3B",
-    device_map="auto",
+    &quot;meta-llama/Llama-3.2-3B&quot;,
+    device_map=&quot;auto&quot;,
     quantization_config=quantization_config
 )
 ```&lt;/p&gt;
 &lt;h2&gt;Configuration&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Methods to init a nested config such as &lt;code&gt;from_xxx_config&lt;/code&gt; are deleted. Configs can be init from the &lt;code&gt;__init__&lt;/code&gt; method in the same way. See &lt;a href="https://github.com/huggingface/transformers/pull/41314"&gt;#41314&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;It is no longer possible to load a config class from a URL file. Configs must be loaded from either a local path or a repo on the Hub. See &lt;a href="https://github.com/huggingface/transformers/pull/42383"&gt;#42383&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;All parameters for configuring model's rotary embedding are now stored under &lt;code&gt;mode.rope_parameters&lt;/code&gt;, including the &lt;code&gt;rope_theta&lt;/code&gt; and &lt;code&gt;rope_type&lt;/code&gt;. Model's &lt;code&gt;config.rope_parameters&lt;/code&gt; is a simple dictionaty in most cases, and can also be a nested dict in special cases (i.e. Gemma3 and ModernBert) with different rope parameterization for each layer type. Trying to get &lt;code&gt;config.rope_theta&lt;/code&gt; will throw an attribute error from now on. See &lt;a href="https://github.com/huggingface/transformers/pull/39847"&gt;#39847&lt;/a&gt; and &lt;a href="https://github.com/huggingface/transformers/pull/42255"&gt;#42255&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Methods to init a nested config such as &lt;code&gt;from_xxx_config&lt;/code&gt; are deleted. Configs can be init from the &lt;code&gt;__init__&lt;/code&gt; method in the same way. See &lt;a href=&quot;https://github.com/huggingface/transformers/pull/41314&quot;&gt;#41314&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;It is no longer possible to load a config class from a URL file. Configs must be loaded from either a local path or a repo on the Hub. See &lt;a href=&quot;https://github.com/huggingface/transformers/pull/42383&quot;&gt;#42383&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;All parameters for configuring model's rotary embedding are now stored under &lt;code&gt;mode.rope_parameters&lt;/code&gt;, including the &lt;code&gt;rope_theta&lt;/code&gt; and &lt;code&gt;rope_type&lt;/code&gt;. Model's &lt;code&gt;config.rope_parameters&lt;/code&gt; is a simple dictionaty in most cases, and can also be a nested dict in special cases (i.e. Gemma3 and ModernBert) with different rope parameterization for each layer type. Trying to get &lt;code&gt;config.rope_theta&lt;/code&gt; will throw an attribute error from now on. See &lt;a href=&quot;https://github.com/huggingface/transformers/pull/39847&quot;&gt;#39847&lt;/a&gt; and &lt;a href=&quot;https://github.com/huggingface/transformers/pull/42255&quot;&gt;#42255&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Qwen-VL family configuration is in a nested format and trying to access keys directly will throw an error (e.g. &lt;code&gt;config.vocab_size&lt;/code&gt;). Users are expected to access keys from their respective sub-configs (&lt;code&gt;config.text_config.vocab_size&lt;/code&gt;).&lt;/li&gt;
 &lt;li&gt;Configurations of non-generative models (any model that doesn't call &lt;code&gt;model.generate()&lt;/code&gt;) will no longer have a &lt;code&gt;generation_config&lt;/code&gt; and &lt;code&gt;model.config.generation_config&lt;/code&gt; will throw an attribute error.&lt;/li&gt;
 &lt;/ul&gt;
@@ -538,9 +538,9 @@ it for backward compatibility. The method now returns a &lt;code&gt;BatchEncodin
 &lt;/ul&gt;
 &lt;h2&gt;Modeling&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Some &lt;code&gt;RotaryEmbeddings&lt;/code&gt; layers will start returning a dict of tuples, in case the model uses several RoPE configurations (Gemma2, ModernBert). Each value will be a tuple of "cos, sin" per RoPE type.&lt;/li&gt;
+&lt;li&gt;Some &lt;code&gt;RotaryEmbeddings&lt;/code&gt; layers will start returning a dict of tuples, in case the model uses several RoPE configurations (Gemma2, ModernBert). Each value will be a tuple of &quot;cos, sin&quot; per RoPE type.&lt;/li&gt;
 &lt;li&gt;Config attribute for &lt;code&gt;RotaryEmbeddings&lt;/code&gt; layer will be unified and accessed via &lt;code&gt;config.rope_parameters&lt;/code&gt;. Config attr for &lt;code&gt;rope_theta&lt;/code&gt; might not be accessible anymore for some models, and instead will be in &lt;code&gt;config.rope_parameters['rope_theta']&lt;/code&gt;. BC will be supported for a while as much as possible, and in the near future we'll gradually move to the new RoPE format  (https://github.com/huggingface/transformers/pull/39847)&lt;/li&gt;
-&lt;li&gt;Vision Language models will not have a shortcut access to its language and vision component from the generative model via &lt;code&gt;model.language_model&lt;/code&gt;. It is recommended to either access the module with &lt;code&gt;model.model.language_model&lt;/code&gt; or &lt;code&gt;model.get_decoder()&lt;/code&gt;. See &lt;a href="https://github.com/huggingface/transformers/pull/42156/"&gt;#42156&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Vision Language models will not have a shortcut access to its language and vision component from the generative model via &lt;code&gt;model.language_model&lt;/code&gt;. It is recommended to either access the module with &lt;code&gt;model.model.language_model&lt;/code&gt; or &lt;code&gt;model.get_decoder()&lt;/code&gt;. See &lt;a href=&quot;https://github.com/huggingface/transformers/pull/42156/&quot;&gt;#42156&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;Generate&lt;/h3&gt;
 &lt;ul&gt;
@@ -561,7 +561,7 @@ it for backward compatibility. The method now returns a &lt;code&gt;BatchEncodin
 &lt;/ul&gt;
 &lt;h3&gt;Breaking Changes&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;report_to&lt;/code&gt; now defaults to &lt;code&gt;"none"&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;report_to&lt;/code&gt; now defaults to &lt;code&gt;&quot;none&quot;&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Logging integrations are no longer auto-detected by default; users must explicitly specify which reporting backends to use.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;Removing arguments without deprecation cycle in &lt;code&gt;TrainingArguments&lt;/code&gt; due to low usage&lt;/h3&gt;
@@ -610,7 +610,7 @@ it for backward compatibility. The method now returns a &lt;code&gt;BatchEncodin
 &lt;/ul&gt;
 &lt;h2&gt;Pipeline&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Image text to text pipelines will no longer accept images as a separate argument along with conversation chats. Image data has to be embedded in the chat's "content" field. See &lt;a href="https://github.com/huggingface/transformers/pull/42359"&gt;#42359&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Image text to text pipelines will no longer accept images as a separate argument along with conversation chats. Image data has to be embedded in the chat's &quot;content&quot; field. See &lt;a href=&quot;https://github.com/huggingface/transformers/pull/42359&quot;&gt;#42359&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;PushToHubMixin&lt;/h2&gt;
 &lt;ul&gt;
@@ -655,49 +655,49 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;/ul&gt;
 &lt;p&gt;Linked PR: https://github.com/huggingface/transformers/pull/42391.&lt;/p&gt;
 &lt;h2&gt;Requirements update&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;transformers&lt;/code&gt; v5 pins the &lt;code&gt;huggingface_hub&lt;/code&gt; version to &lt;code&gt;&amp;gt;=1.0.0&lt;/code&gt;. See this &lt;a href="https://huggingface.co/docs/huggingface_hub/concepts/migration"&gt;migration guide&lt;/a&gt; to learn more about this major release. Here are to main aspects to know about:
+&lt;p&gt;&lt;code&gt;transformers&lt;/code&gt; v5 pins the &lt;code&gt;huggingface_hub&lt;/code&gt; version to &lt;code&gt;&amp;gt;=1.0.0&lt;/code&gt;. See this &lt;a href=&quot;https://huggingface.co/docs/huggingface_hub/concepts/migration&quot;&gt;migration guide&lt;/a&gt; to learn more about this major release. Here are to main aspects to know about:
 - switched the HTTP backend from &lt;code&gt;requests&lt;/code&gt; to &lt;code&gt;httpx&lt;/code&gt;. This change was made to improve performance and to support both synchronous and asynchronous requests the same way. If you are currently catching &lt;code&gt;requests.HTTPError&lt;/code&gt; errors in your codebase, you'll need to switch to &lt;code&gt;httpx.HTTPError&lt;/code&gt;.
 - related to 1., it is not possible to set proxies from your script. To handle proxies, you must set the &lt;code&gt;HTTP_PROXY&lt;/code&gt; / &lt;code&gt;HTTPS_PROXY&lt;/code&gt; environment variables
 - &lt;code&gt;hf_transfer&lt;/code&gt; and therefore &lt;code&gt;HF_HUB_ENABLE_HF_TRANSFER&lt;/code&gt; have been completed dropped in favor of &lt;code&gt;hf_xet&lt;/code&gt;. This should be transparent for most users. Please let us know if you notice any downside!&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;typer-slim&lt;/code&gt; has been added as required dependency, used to implement both &lt;code&gt;hf&lt;/code&gt; and &lt;code&gt;transformers&lt;/code&gt; CLIs.&lt;/p&gt;
 &lt;h2&gt;New model additions in v5&lt;/h2&gt;
 &lt;h3&gt;CWM&lt;/h3&gt;
-&lt;p&gt;&lt;img width="809" height="471" alt="image" src="https://github.com/user-attachments/assets/58bb9c70-d481-48ed-ab8f-6553be7c240f" /&gt;&lt;/p&gt;
-&lt;p&gt;The Code World Model (CWM) model was proposed in &lt;a href="https://ai.facebook.com/research/publications/cwm"&gt;CWM: An Open-Weights LLM for Research on Code Generation with World Models&lt;/a&gt; by Meta FAIR CodeGen Team. CWM is an LLM for code generation and reasoning about code that has, in particular, been trained to better represent and reason about how code and commands affect the state of a program or system. Specifically, we mid-trained CWM on a large number of observation-action trajectories from Python execution traces and agentic interactions in containerized environments. We post-trained with extensive multi-task RL in verifiable coding, math, and multi-turn software engineering environments.&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;809&quot; height=&quot;471&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/58bb9c70-d481-48ed-ab8f-6553be7c240f&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The Code World Model (CWM) model was proposed in &lt;a href=&quot;https://ai.facebook.com/research/publications/cwm&quot;&gt;CWM: An Open-Weights LLM for Research on Code Generation with World Models&lt;/a&gt; by Meta FAIR CodeGen Team. CWM is an LLM for code generation and reasoning about code that has, in particular, been trained to better represent and reason about how code and commands affect the state of a program or system. Specifically, we mid-trained CWM on a large number of observation-action trajectories from Python execution traces and agentic interactions in containerized environments. We post-trained with extensive multi-task RL in verifiable coding, math, and multi-turn software engineering environments.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Add Code World Model (CWM)  by @jacobkahn in #41199&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;SAM3&lt;/h3&gt;
-&lt;p&gt;&lt;img width="1505" height="915" alt="image" src="https://github.com/user-attachments/assets/eec48633-f02b-464a-ae5c-c65473387e53" /&gt;&lt;/p&gt;
-&lt;p&gt;SAM3 (Segment Anything Model 3) was introduced in &lt;a href="https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts/"&gt;SAM 3: Segment Anything with Concepts&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;1505&quot; height=&quot;915&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/eec48633-f02b-464a-ae5c-c65473387e53&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;SAM3 (Segment Anything Model 3) was introduced in &lt;a href=&quot;https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts/&quot;&gt;SAM 3: Segment Anything with Concepts&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The SAM3 addition adds four new architectures:
 - Sam3
 - Sam3Tracker
 - Sam3TrackerVideo
 - Sam3Video&lt;/p&gt;
-&lt;p&gt;SAM3 performs Promptable Concept Segmentation (PCS) on images. PCS takes text and/or image exemplars as input (e.g., "yellow school bus"), and predicts instance and semantic masks for every single object matching the concept.&lt;/p&gt;
+&lt;p&gt;SAM3 performs Promptable Concept Segmentation (PCS) on images. PCS takes text and/or image exemplars as input (e.g., &quot;yellow school bus&quot;), and predicts instance and semantic masks for every single object matching the concept.&lt;/p&gt;
 &lt;p&gt;Sam3Tracker and Sam3TrackerVideo perform Promptable Visual Segmentation (PVS) on images. PVS takes interactive visual prompts (points, boxes, masks) or text inputs to segment a specific object instance per prompt. This is the task that SAM 1 and SAM 2 focused on, and SAM 3 improves upon it. Sam3Tracker and Sam3TrackerVideo are updated versions of SAM2 Video that maintain the same API while providing improved performance and capabilities.&lt;/p&gt;
-&lt;p&gt;SAM3 Video performs Promptable Concept Segmentation (PCS) on videos. PCS takes text as input (e.g., "yellow school bus"), and predicts instance and semantic masks for every single object matching the concept, while preserving object identities across video frames. The model combines a detection module (SAM3) with a tracking module (SAM2-style tracker) to enable robust object tracking across video frames using text prompts.&lt;/p&gt;
+&lt;p&gt;SAM3 Video performs Promptable Concept Segmentation (PCS) on videos. PCS takes text as input (e.g., &quot;yellow school bus&quot;), and predicts instance and semantic masks for every single object matching the concept, while preserving object identities across video frames. The model combines a detection module (SAM3) with a tracking module (SAM2-style tracker) to enable robust object tracking across video frames using text prompts.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Add SAM3 to 🤗 Transformers  by @yonigozlan in #42285&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;LFM2 MoE&lt;/h3&gt;
-&lt;p&gt;&lt;img width="1080" height="849" alt="image" src="https://github.com/user-attachments/assets/a9fa1b81-114d-4054-9699-5083ac69d830" /&gt;&lt;/p&gt;
-&lt;p&gt;LFM2-MoE is a Mixture-of-Experts (MoE) variant of &lt;a href="https://huggingface.co/collections/LiquidAI/lfm2-686d721927015b2ad73eaa38"&gt;LFM2&lt;/a&gt;. The LFM2 family is optimized for on-device inference by combining short‑range, input‑aware gated convolutions with grouped‑query attention (GQA) in a layout tuned to maximize quality under strict speed and memory constraints.&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;1080&quot; height=&quot;849&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/a9fa1b81-114d-4054-9699-5083ac69d830&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;LFM2-MoE is a Mixture-of-Experts (MoE) variant of &lt;a href=&quot;https://huggingface.co/collections/LiquidAI/lfm2-686d721927015b2ad73eaa38&quot;&gt;LFM2&lt;/a&gt;. The LFM2 family is optimized for on-device inference by combining short‑range, input‑aware gated convolutions with grouped‑query attention (GQA) in a layout tuned to maximize quality under strict speed and memory constraints.&lt;/p&gt;
 &lt;p&gt;LFM2‑MoE keeps this fast backbone and introduces sparse MoE feed‑forward networks to add representational capacity without significantly increasing the active compute path. The first LFM2-MoE release is LFM2-8B-A1B, with 8.3B total parameters and 1.5B active parameters. The model excels in quality (comparable to 3-4B dense models) and speed (faster than other 1.5B class models).&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;[Model] Lfm2Moe  by @paulpak58 in #41401&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;VideoLlama 3&lt;/h3&gt;
-&lt;p&gt;&lt;img width="812" height="366" alt="image" src="https://github.com/user-attachments/assets/21c82c6e-cf0a-4d6c-a707-b9e57663ca85" /&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;a href="https://huggingface.co/papers/2501.13106"&gt;VideoLLaMA3&lt;/a&gt; model is a major update to &lt;a href="https://huggingface.co/papers/2406.07476"&gt;VideoLLaMA2&lt;/a&gt; from Alibaba DAMO Academy.&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;812&quot; height=&quot;366&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/21c82c6e-cf0a-4d6c-a707-b9e57663ca85&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://huggingface.co/papers/2501.13106&quot;&gt;VideoLLaMA3&lt;/a&gt; model is a major update to &lt;a href=&quot;https://huggingface.co/papers/2406.07476&quot;&gt;VideoLLaMA2&lt;/a&gt; from Alibaba DAMO Academy.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;[model] Add VideoLLaMA3 implementation  by @lkhl in #40499&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;AudioFlamingo 3&lt;/h3&gt;
-&lt;p&gt;&lt;img width="621" height="475" alt="image" src="https://github.com/user-attachments/assets/c9616758-b3aa-41d0-bd58-695966ba146d" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;621&quot; height=&quot;475&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/c9616758-b3aa-41d0-bd58-695966ba146d&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Audio Flamingo 3 (AF3) is a fully open large audio–language model designed for robust understanding and reasoning over speech, environmental sounds, and music. AF3 pairs a Whisper-style audio encoder with a causal language model and performs replace-in-place audio–text fusion: the processor aligns post-pool audio frames to a dedicated placeholder token and the model replaces those token slots with projected audio embeddings during the forward pass.&lt;/p&gt;
-&lt;p&gt;The model checkpoint is available at: &lt;a href="https://huggingface.co/nvidia/audio-flamingo-3-hf"&gt;nvidia/audio-flamingo-3-hf&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The model checkpoint is available at: &lt;a href=&quot;https://huggingface.co/nvidia/audio-flamingo-3-hf&quot;&gt;nvidia/audio-flamingo-3-hf&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Highlights:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Unified audio encoder across speech, sound, and music.&lt;/li&gt;
@@ -710,7 +710,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;Nanochat&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://huggingface.co/karpathy/nanochat-d32"&gt;NanoChat&lt;/a&gt; is a compact decoder-only transformer model designed for educational purposes and efficient training. The model features several fundamental architectural innovations which are common in modern transformer models. Therefore, it is a good model to use as a starting point to understand the principles of modern transformer models. NanoChat is a variant of the &lt;a href="https://huggingface.co/docs/transformers/en/model_doc/llama"&gt;Llama&lt;/a&gt; architecture, with simplified attention mechanism and normalization layers.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://huggingface.co/karpathy/nanochat-d32&quot;&gt;NanoChat&lt;/a&gt; is a compact decoder-only transformer model designed for educational purposes and efficient training. The model features several fundamental architectural innovations which are common in modern transformer models. Therefore, it is a good model to use as a starting point to understand the principles of modern transformer models. NanoChat is a variant of the &lt;a href=&quot;https://huggingface.co/docs/transformers/en/model_doc/llama&quot;&gt;Llama&lt;/a&gt; architecture, with simplified attention mechanism and normalization layers.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;[MODEL] Nanochat implementation  by @burtenshaw in #41634&lt;/li&gt;
 &lt;/ul&gt;
@@ -795,7 +795,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Remove &lt;code&gt;past_index&lt;/code&gt;  by @SunMarc in #41384&lt;/li&gt;
 &lt;li&gt;Remove deprecated args in Trainer for v5  by @SunMarc in #41404&lt;/li&gt;
 &lt;li&gt;Update GLM-4.6 doc  by @zRzRzRzRzRzRzR in #41471&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;report_to&lt;/code&gt; default changed to "none" + cleaning deprecated env var  by @SunMarc in #41375&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;report_to&lt;/code&gt; default changed to &quot;none&quot; + cleaning deprecated env var  by @SunMarc in #41375&lt;/li&gt;
 &lt;li&gt;deprecate &lt;code&gt;overwrite_output_dir&lt;/code&gt;  by @SunMarc in #41323&lt;/li&gt;
 &lt;li&gt;[&lt;code&gt;CI&lt;/code&gt;] Fix copies on main  by @vasqu in #41486&lt;/li&gt;
 &lt;li&gt;[Trainer] deprecate ray scope  by @SunMarc in #41403&lt;/li&gt;
@@ -847,7 +847,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Add DINOv3Backbone for ConvNext variant  by @merveenoyan in #40651&lt;/li&gt;
 &lt;li&gt;Add conditional checks to _check_and_adjust_attn_implementation()  by @zheliuyu in #41542&lt;/li&gt;
 &lt;li&gt;add rmsnorm kernels support for Intel XPU  by @kaixuanliu in #41563&lt;/li&gt;
-&lt;li&gt;Revert "add rmsnorm kernels support for Intel XPU"  by @MekkCyber in #41579&lt;/li&gt;
+&lt;li&gt;Revert &quot;add rmsnorm kernels support for Intel XPU&quot;  by @MekkCyber in #41579&lt;/li&gt;
 &lt;li&gt;[VisionEncoderDecoderModel] Update loss function  by @NielsRogge in #40863&lt;/li&gt;
 &lt;li&gt;Add &lt;strong&gt;iter&lt;/strong&gt; to DynamicCache  by @remi-or in #41569&lt;/li&gt;
 &lt;li&gt;Revert some breaking changes bnb  by @SunMarc in #41581&lt;/li&gt;
@@ -857,7 +857,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Enable non-streaming mode in &lt;code&gt;transformers serve&lt;/code&gt;  by @LysandreJik in #41446&lt;/li&gt;
 &lt;li&gt;[device_map] Accelerate loading by computing device_map much faster  by @Cyrilvallez in #41548&lt;/li&gt;
 &lt;li&gt;Add &lt;code&gt;logits_to_keep&lt;/code&gt; to many older CausalLM models  by @philiproeleveld in #41335&lt;/li&gt;
-&lt;li&gt;fix some case failures lead by "&lt;code&gt;torch.compile&lt;/code&gt; recompiled part of th…  by @sywangyi in #41558&lt;/li&gt;
+&lt;li&gt;fix some case failures lead by &quot;&lt;code&gt;torch.compile&lt;/code&gt; recompiled part of th…  by @sywangyi in #41558&lt;/li&gt;
 &lt;li&gt;remove ray_scope and check_quantized_param  by @SunMarc in #41587&lt;/li&gt;
 &lt;li&gt;Update issue template   by @SunMarc in #41573&lt;/li&gt;
 &lt;li&gt;[&lt;code&gt;Docs&lt;/code&gt;] Fix changed references  by @vasqu in #41614&lt;/li&gt;
@@ -869,7 +869,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Add fast path for bidirectional mask creation to fix regression  by @i3hz in #41586&lt;/li&gt;
 &lt;li&gt;enable sdpa enable gqa logic for Ascend NPU  by @FightingZhen in #41601&lt;/li&gt;
 &lt;li&gt;Fix video processing channel format  by @zucchini-nlp in #41603&lt;/li&gt;
-&lt;li&gt;[chat template] update when "push_to_hub"  by @zucchini-nlp in #39815&lt;/li&gt;
+&lt;li&gt;[chat template] update when &quot;push_to_hub&quot;  by @zucchini-nlp in #39815&lt;/li&gt;
 &lt;li&gt;Remove the head masking block in some vision models  by @ydshieh in #41620&lt;/li&gt;
 &lt;li&gt;Remove deprecated code  by @SunMarc in #41616&lt;/li&gt;
 &lt;li&gt;Fix quantization base class   by @SunMarc in #41613&lt;/li&gt;
@@ -942,7 +942,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Gemma3 conversion script maintenance  by @RyanMullins in #41704&lt;/li&gt;
 &lt;li&gt;Fix Qwen3-Omni inference when mixing video and image inputs in one batch  by @BakerBunker in #41741&lt;/li&gt;
 &lt;li&gt;Fix typo in LFM-VL  by @zucchini-nlp in #41742&lt;/li&gt;
-&lt;li&gt;Revert "Remove upper version bound of pandas"  by @ydshieh in #41744&lt;/li&gt;
+&lt;li&gt;Revert &quot;Remove upper version bound of pandas&quot;  by @ydshieh in #41744&lt;/li&gt;
 &lt;li&gt;[doc] remove broken notebooks on AMD Dev Cloud  by @pagezyhf in #41743&lt;/li&gt;
 &lt;li&gt;Update type hints in tokenization_utils.py to use | syntax  by @faizan842 in #41713&lt;/li&gt;
 &lt;li&gt;Fix documentation issues  by @cyyever in #41726&lt;/li&gt;
@@ -1091,7 +1091,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Reinstate self.scaling in Gemma3nTextAttention  by @RyanMullins in #41751&lt;/li&gt;
 &lt;li&gt;[v5] 🚨Refactor subprocessors handling in processors  by @yonigozlan in #41633&lt;/li&gt;
 &lt;li&gt;add xpu support in test_modeling_janus.py::JanusIntegrationTest::test…  by @sywangyi in #41986&lt;/li&gt;
-&lt;li&gt;Revert "permissions worflows fix"  by @ydshieh in #42110&lt;/li&gt;
+&lt;li&gt;Revert &quot;permissions worflows fix&quot;  by @ydshieh in #42110&lt;/li&gt;
 &lt;li&gt;Fix return metadata checking logic  by @Xqle in #42108&lt;/li&gt;
 &lt;li&gt;Correctly handle unbatched audio inputs in Gemma3nAudioFeatureExtractor  by @kho in #42076&lt;/li&gt;
 &lt;li&gt;[Bugfix] fix qwen3vl expand generation with video  by @JJJYmmm in #42089&lt;/li&gt;
@@ -1166,7 +1166,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;🚨 Delete generation params from model config  by @zucchini-nlp in #41695&lt;/li&gt;
 &lt;li&gt;Allow VLMs to have a correct &lt;code&gt;base_model&lt;/code&gt;  by @zucchini-nlp in #41589&lt;/li&gt;
 &lt;li&gt;Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt;  by @ydshieh in #42213&lt;/li&gt;
-&lt;li&gt;Revert "Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt;"  by @ydshieh in #42258&lt;/li&gt;
+&lt;li&gt;Revert &quot;Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt;&quot;  by @ydshieh in #42258&lt;/li&gt;
 &lt;li&gt;Cleanup reference to TFBertTokenizer and TFGPT2Tokenizer  by @Rocketknight1 in #42182&lt;/li&gt;
 &lt;li&gt;delete already deprecated models  by @ydshieh in #42235&lt;/li&gt;
 &lt;li&gt;Fix bnb for the weights refactor  by @SunMarc in #42043&lt;/li&gt;
@@ -1273,7 +1273,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;FIX: Minimal fix for loading PEFT weights  by @BenjaminBossan in #42387&lt;/li&gt;
 &lt;li&gt;Let's break Qwen-VL 🚨    by @zucchini-nlp in #42420&lt;/li&gt;
 &lt;li&gt;[&lt;code&gt;CI&lt;/code&gt;] Add to run slow  by @vasqu in #42459&lt;/li&gt;
-&lt;li&gt;Fix the "test_offline" test  by @LysandreJik in #42458&lt;/li&gt;
+&lt;li&gt;Fix the &quot;test_offline&quot; test  by @LysandreJik in #42458&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;transformers chat&lt;/code&gt; launched without base_url has a direct tie to localhost:8000  by @LysandreJik in #42463&lt;/li&gt;
 &lt;li&gt;update with more recent tts models  by @Deep-unlearning in #42328&lt;/li&gt;
 &lt;li&gt;rm slow tokenizers  by @itazap in #40936&lt;/li&gt;
@@ -1354,7 +1354,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;path validation for security reason (#41256)&lt;/li&gt;
 &lt;li&gt;pin torchcodec on CI docker image (#41703)&lt;/li&gt;
 &lt;li&gt;further improve &lt;code&gt;utils/check_bad_commit.py&lt;/code&gt; (#41658) (#41690)&lt;/li&gt;
-&lt;li&gt;Revert "Remove upper version bound of pandas" (#41744)&lt;/li&gt;
+&lt;li&gt;Revert &quot;Remove upper version bound of pandas&quot; (#41744)&lt;/li&gt;
 &lt;li&gt;Fix bark after #41445 (#41645)&lt;/li&gt;
 &lt;li&gt;flash attn pytest marker (#41781)&lt;/li&gt;
 &lt;li&gt;unpin torch/torchcodec for CircleCI (#41839)&lt;/li&gt;
@@ -1378,12 +1378,12 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;Fix another &lt;code&gt;Argument list too long&lt;/code&gt; in &lt;code&gt;pr_slow_ci_suggestion.yml&lt;/code&gt; (#42061)&lt;/li&gt;
 &lt;li&gt;Revert back to use GitHub context  (#42066)&lt;/li&gt;
 &lt;li&gt;Fix inconsistency of commit sha during the workflow run (#42074)&lt;/li&gt;
-&lt;li&gt;Revert "permissions worflows fix" (#42110)&lt;/li&gt;
+&lt;li&gt;Revert &quot;permissions worflows fix&quot; (#42110)&lt;/li&gt;
 &lt;li&gt;pin &lt;code&gt;pytest&amp;lt;9&lt;/code&gt; for now (#42162)&lt;/li&gt;
 &lt;li&gt;Update &lt;code&gt;test_dynamic_cache_exportability_multiple_run&lt;/code&gt; (failing on torch 2.10 nightly) (#42212)&lt;/li&gt;
 &lt;li&gt;Reduce timing on CircleCI - part 1 (Use @slow for IntegrationTests) (#42206)&lt;/li&gt;
 &lt;li&gt;Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt; (#42213)&lt;/li&gt;
-&lt;li&gt;Revert "Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt;" (#42258)&lt;/li&gt;
+&lt;li&gt;Revert &quot;Make tests run in less time by reducing &lt;code&gt;batch_size&lt;/code&gt;&quot; (#42258)&lt;/li&gt;
 &lt;li&gt;delete already deprecated models (#42235)&lt;/li&gt;
 &lt;li&gt;Remove doc files of other langs for deleted models (#42276)&lt;/li&gt;
 &lt;li&gt;[testing] fix &lt;code&gt;cwm&lt;/code&gt; (#42261)&lt;/li&gt;
@@ -1448,7 +1448,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;[kernels] Remove RWKV kernel finally ! (#41493)&lt;/li&gt;
 &lt;li&gt;[kernels] rm yoso kernel (#41495)&lt;/li&gt;
 &lt;li&gt;[kernels] rm mra kernels (#41507)&lt;/li&gt;
-&lt;li&gt;Revert "add rmsnorm kernels support for Intel XPU" (#41579)&lt;/li&gt;
+&lt;li&gt;Revert &quot;add rmsnorm kernels support for Intel XPU&quot; (#41579)&lt;/li&gt;
 &lt;li&gt;[kernels] refactor function kernel calling (#41577)&lt;/li&gt;
 &lt;li&gt;Erroring when KernelConfig is passed without use_kernels = True (#41657)&lt;/li&gt;
 &lt;li&gt;Small Fix for imports  (#41411)&lt;/li&gt;
@@ -1579,7 +1579,7 @@ this is a method you are using; in which case we should bring it back with bette
 &lt;li&gt;rm slow tokenizers (#40936)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;]]></description>
+&lt;/ul&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v5.0.0rc0</guid>
       <pubDate>Mon, 01 Dec 2025 18:14:54 GMT</pubDate>
       <author>LysandreJik</author>
@@ -1587,10 +1587,10 @@ this is a method you are using; in which case we should bring it back with bette
     <item>
       <title>Patch release v4.57.3</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v4.57.3</link>
-      <description><![CDATA[&lt;p&gt;There was a hidden bug when loading models with &lt;code&gt;local_files_only=True&lt;/code&gt; and a typo related to the recent patch. &lt;/p&gt;
+      <ns0:encoded>&lt;p&gt;There was a hidden bug when loading models with &lt;code&gt;local_files_only=True&lt;/code&gt; and a typo related to the recent patch. &lt;/p&gt;
 &lt;p&gt;The main fix is: https://github.com/huggingface/transformers/commit/b6055550a15a8fab367cf983b743ff68cc58d81a.&lt;/p&gt;
 &lt;p&gt;We are really sorry that this slipped through, our CIs just did not catch it.&lt;/p&gt;
-&lt;p&gt;As it affects a lot of users we are gonna yank the previous release&lt;/p&gt;]]></description>
+&lt;p&gt;As it affects a lot of users we are gonna yank the previous release&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v4.57.3</guid>
       <pubDate>Tue, 25 Nov 2025 15:51:36 GMT</pubDate>
       <author>ArthurZucker</author>
@@ -1598,14 +1598,14 @@ this is a method you are using; in which case we should bring it back with bette
     <item>
       <title>Patch Release v4.57.2</title>
       <link>https://github.com/huggingface/transformers/releases/tag/v4.57.2</link>
-      <description><![CDATA[&lt;p&gt;This patch most notably fixes an issue on some Mistral tokenizers. It contains the following commits:&lt;/p&gt;
+      <ns0:encoded>&lt;p&gt;This patch most notably fixes an issue on some Mistral tokenizers. It contains the following commits:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Add AutoTokenizer mapping for mistral3 and ministral (#42198)&lt;/li&gt;
 &lt;li&gt;Auto convert tekken.json (#42299)&lt;/li&gt;
 &lt;li&gt;fix tekken pattern matching (#42363)&lt;/li&gt;
 &lt;li&gt;Check model inputs - hidden states (#40994)&lt;/li&gt;
 &lt;li&gt;Remove invalid &lt;code&gt;@staticmethod&lt;/code&gt; from module-level get_device_and_memory_breakdown (#41747)&lt;/li&gt;
-&lt;/ul&gt;]]></description>
+&lt;/ul&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/transformers/releases/tag/v4.57.2</guid>
       <pubDate>Mon, 24 Nov 2025 17:54:34 GMT</pubDate>
       <author>Cyrilvallez</author>

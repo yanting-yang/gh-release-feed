@@ -1,25 +1,25 @@
 <?xml version="1.0" ?>
-<rss version="2.0">
+<rss xmlns:ns0="http://purl.org/rss/1.0/modules/content/" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
     <title>huggingface/accelerate Releases</title>
     <link>https://github.com/huggingface/accelerate/releases</link>
     <description>Latest releases from huggingface/accelerate on GitHub</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Jan 2026 08:19:56 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jan 2026 08:37:39 GMT</lastBuildDate>
     <item>
       <title>v1.12.0: Deepspeed Ulysses/ALST</title>
       <link>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</link>
-      <description><![CDATA[&lt;h2&gt;Deepspeed Ulysses/ALST integration&lt;/h2&gt;
+      <ns0:encoded>&lt;h2&gt;Deepspeed Ulysses/ALST integration&lt;/h2&gt;
 &lt;p&gt;Deepspeed Ulysses/ALST is an efficient way of training on long sequences by employing sequence parallelism and attention head parallelism. You can learn more about this technology in this paper https://arxiv.org/abs/2506.13996 or this deepspeed tutorial https://www.deepspeed.ai/tutorials/ulysses-alst-sequence-parallelism/.&lt;/p&gt;
-&lt;p&gt;&lt;img width="2368" height="1250" alt="0d8bd9e0" src="https://github.com/user-attachments/assets/b94e90c9-4368-4711-ad57-58de3c714ebc" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img width=&quot;2368&quot; height=&quot;1250&quot; alt=&quot;0d8bd9e0&quot; src=&quot;https://github.com/user-attachments/assets/b94e90c9-4368-4711-ad57-58de3c714ebc&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;To enable Deepspeed Ulysses, you first need to create &lt;code&gt;ParallelismConfig&lt;/code&gt; and setting &lt;code&gt;sp&lt;/code&gt; related args: &lt;/p&gt;
 &lt;p&gt;&lt;code&gt;python
 parallelism_config = ParallelismConfig(
-    sp_backend="deepspeed",
+    sp_backend=&quot;deepspeed&quot;,
     sp_size=2,
     sp_handler=DeepSpeedSequenceParallelConfig(...),
 )&lt;/code&gt;
-Then, you need to make sure to compute the correct loss as described on our &lt;a href="https://huggingface.co/docs/accelerate/main/en/concept_guides/sequence_parallelism"&gt;docs&lt;/a&gt;&lt;/p&gt;
+Then, you need to make sure to compute the correct loss as described on our &lt;a href=&quot;https://huggingface.co/docs/accelerate/main/en/concept_guides/sequence_parallelism&quot;&gt;docs&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;python 
         ...
         losses_per_rank = torch.distributed.nn.functional.all_gather(loss, group=sp_group)
@@ -50,7 +50,7 @@ Then, you need to make sure to compute the correct loss as described on our &lt;
 &lt;li&gt;@wsntxxn made their first contribution in https://github.com/huggingface/accelerate/pull/3823&lt;/li&gt;
 &lt;li&gt;@naomili0924 made their first contribution in https://github.com/huggingface/accelerate/pull/3835&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.11.0...v1.12.0&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.11.0...v1.12.0&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.12.0</guid>
       <pubDate>Fri, 21 Nov 2025 12:47:55 GMT</pubDate>
       <author>SunMarc</author>
@@ -58,13 +58,13 @@ Then, you need to make sure to compute the correct loss as described on our &lt;
     <item>
       <title>v1.11.0: TE MXFP8, FP16/BF16 with MPS, Python 3.10 </title>
       <link>https://github.com/huggingface/accelerate/releases/tag/v1.11.0</link>
-      <description><![CDATA[&lt;h2&gt;TE MXFP8 support&lt;/h2&gt;
+      <ns0:encoded>&lt;h2&gt;TE MXFP8 support&lt;/h2&gt;
 &lt;p&gt;We've added support for MXFP8 in our TransformerEngine integration. To use that, you need to set  &lt;code&gt;use_mxfp8_block_scaling&lt;/code&gt; in &lt;code&gt;fp8_config&lt;/code&gt;. See nvidia docs [here]. (https://docs.nvidia.com/deeplearning/transformer-engine/user-guide/examples/fp8_primer.html#MXFP8-and-block-scaling) &lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Add support for TE MXFP8 recipe in accelerate by @pstjohn in https://github.com/huggingface/accelerate/pull/3688&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;FP16/BF16 Training for MPS devices&lt;/h2&gt;
-&lt;p&gt;BF16 and FP16 support for MPS devices is finally here. You can now pass &lt;code&gt;mixed_precision = "fp16" or "bf16"&lt;/code&gt; when training on a mac (&lt;code&gt;fp16&lt;/code&gt; requires torch 2.8 and &lt;code&gt;bf16&lt;/code&gt; requires torch 2.6)
+&lt;p&gt;BF16 and FP16 support for MPS devices is finally here. You can now pass &lt;code&gt;mixed_precision = &quot;fp16&quot; or &quot;bf16&quot;&lt;/code&gt; when training on a mac (&lt;code&gt;fp16&lt;/code&gt; requires torch 2.8 and &lt;code&gt;bf16&lt;/code&gt; requires torch 2.6)
 * Add bf16/fp16 support for amp with mps device by @SunMarc in https://github.com/huggingface/accelerate/pull/3373&lt;/p&gt;
 &lt;h2&gt;FSDP updates&lt;/h2&gt;
 &lt;p&gt;The following PRs  add respectively support to &lt;code&gt;ignored_params&lt;/code&gt; and &lt;code&gt;no_sync()&lt;/code&gt; for FSDPv2:
@@ -122,7 +122,7 @@ Then, you need to make sure to compute the correct loss as described on our &lt;
 &lt;li&gt;@SamuelBarryCS made their first contribution in https://github.com/huggingface/accelerate/pull/3776&lt;/li&gt;
 &lt;li&gt;@Qubitium made their first contribution in https://github.com/huggingface/accelerate/pull/3796&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.10.1...v1.11.0&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.10.1...v1.11.0&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.11.0</guid>
       <pubDate>Mon, 20 Oct 2025 16:08:58 GMT</pubDate>
       <author>SunMarc</author>
@@ -130,11 +130,11 @@ Then, you need to make sure to compute the correct loss as described on our &lt;
     <item>
       <title>v1.10.1: Patchfix</title>
       <link>https://github.com/huggingface/accelerate/releases/tag/v1.10.1</link>
-      <description><![CDATA[&lt;ul&gt;
+      <ns0:encoded>&lt;ul&gt;
 &lt;li&gt;Feat: add to_json by @S1ro1 in https://github.com/huggingface/accelerate/pull/3743&lt;/li&gt;
 &lt;li&gt;Protect import for device_mesh by @SunMarc in https://github.com/huggingface/accelerate/pull/3742. &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.10.0...v1.10.1&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.10.0...v1.10.1&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.10.1</guid>
       <pubDate>Mon, 25 Aug 2025 13:57:15 GMT</pubDate>
       <author>SunMarc</author>
@@ -142,9 +142,9 @@ Then, you need to make sure to compute the correct loss as described on our &lt;
     <item>
       <title>v1.10.0: N-D Parallelism</title>
       <link>https://github.com/huggingface/accelerate/releases/tag/v1.10.0</link>
-      <description><![CDATA[&lt;h1&gt;N-D Parallelism&lt;/h1&gt;
-&lt;p&gt;Training large models across multiple GPUs can be complex, especially when combining &lt;a href="https://huggingface.co/spaces/nanotron/ultrascale-playbook"&gt;different parallelism strategies&lt;/a&gt; (e.g TP, CP, DP). To simplify this process, we've collaborated with &lt;a href="https://github.com/axolotl-ai-cloud/axolotl/"&gt;Axolotl&lt;/a&gt; to introduce an easy-to-use integration that allows you to apply any combination of parallelism strategies directly in your training script. Just pass a &lt;code&gt;ParallelismConfig&lt;/code&gt; specifying the size of each parallelism type—it's that simple.
-Learn more about how it works in our latest &lt;a href="https://github.com/huggingface/blog/pull/3006"&gt;blogpost&lt;/a&gt;.&lt;/p&gt;
+      <ns0:encoded>&lt;h1&gt;N-D Parallelism&lt;/h1&gt;
+&lt;p&gt;Training large models across multiple GPUs can be complex, especially when combining &lt;a href=&quot;https://huggingface.co/spaces/nanotron/ultrascale-playbook&quot;&gt;different parallelism strategies&lt;/a&gt; (e.g TP, CP, DP). To simplify this process, we've collaborated with &lt;a href=&quot;https://github.com/axolotl-ai-cloud/axolotl/&quot;&gt;Axolotl&lt;/a&gt; to introduce an easy-to-use integration that allows you to apply any combination of parallelism strategies directly in your training script. Just pass a &lt;code&gt;ParallelismConfig&lt;/code&gt; specifying the size of each parallelism type—it's that simple.
+Learn more about how it works in our latest &lt;a href=&quot;https://github.com/huggingface/blog/pull/3006&quot;&gt;blogpost&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;python
 parallelism_config = ParallelismConfig(
     dp_shard_size=2,
@@ -156,7 +156,7 @@ accelerator = Accelerator(
     parallelism_config=parallelism_config,
    ...
 )
-model = AutoModelForCausalLM.from_pretrained("your-model-name", device_mesh=accelerator.torch_device_mesh)
+model = AutoModelForCausalLM.from_pretrained(&quot;your-model-name&quot;, device_mesh=accelerator.torch_device_mesh)
 model = accelerator.prepare(model)&lt;/code&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Parallelism config + TP + HSDP +  BYODM (Bring Your Own Device Mesh) by @SalmanMohammadi in https://github.com/huggingface/accelerate/pull/3682&lt;/li&gt;
@@ -187,7 +187,7 @@ model = accelerator.prepare(model)&lt;/code&gt;&lt;/p&gt;
 &lt;li&gt;@jp1924 made their first contribution in https://github.com/huggingface/accelerate/pull/3712&lt;/li&gt;
 &lt;li&gt;@JoeGaffney made their first contribution in https://github.com/huggingface/accelerate/pull/3695&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.9.0...v1.10.0&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.9.0...v1.10.0&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.10.0</guid>
       <pubDate>Thu, 07 Aug 2025 13:39:44 GMT</pubDate>
       <author>SunMarc</author>
@@ -195,9 +195,9 @@ model = accelerator.prepare(model)&lt;/code&gt;&lt;/p&gt;
     <item>
       <title>v1.9.0: Trackio support, Model loading speedup, Minor distributed improvements</title>
       <link>https://github.com/huggingface/accelerate/releases/tag/v1.9.0</link>
-      <description><![CDATA[&lt;h1&gt;Trackio tracker support&lt;/h1&gt;
+      <ns0:encoded>&lt;h1&gt;Trackio tracker support&lt;/h1&gt;
 &lt;p&gt;We've added support for a trackio, lightweight, 💯 free experiment tracking Python library built on top of 🤗 Datasets and Spaces.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Screen Recording 2025-06-11 at 5 39 32 PM" src="https://github.com/user-attachments/assets/5cf12286-54e7-4119-8a20-88c2cbd37ab6" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&quot;Screen Recording 2025-06-11 at 5 39 32 PM&quot; src=&quot;https://github.com/user-attachments/assets/5cf12286-54e7-4119-8a20-88c2cbd37ab6&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Main features are: 
 - &lt;em&gt;Local-first&lt;/em&gt; design: dashboard runs locally by default. You can also host it on Spaces by specifying a &lt;code&gt;space_id&lt;/code&gt;.
 - Persists logs locally (or in a private Hugging Face Dataset)
@@ -205,11 +205,11 @@ model = accelerator.prepare(model)&lt;/code&gt;&lt;/p&gt;
 - Everything here, including hosting on Hugging Faces, is &lt;strong&gt;free&lt;/strong&gt;!&lt;/p&gt;
 &lt;p&gt;To use it with accelerate, you need to set &lt;code&gt;log_with&lt;/code&gt; and initialize the trackers 
 ```python 
-accelerator = Accelerator(log_with="trackio")
-config={"learning_rate": 0.001, "batch_size": 32}&lt;/p&gt;
+accelerator = Accelerator(log_with=&quot;trackio&quot;)
+config={&quot;learning_rate&quot;: 0.001, &quot;batch_size&quot;: 32}&lt;/p&gt;
 &lt;h1&gt;init_kwargs in order to host the dashboard on spaces&lt;/h1&gt;
-&lt;p&gt;init_kwargs = {"trackio": {"space_id": "hf_username/space_name"}
-accelerator.init_trackers("example_project", config=config, init_kwargs=init_kwargs})
+&lt;p&gt;init_kwargs = {&quot;trackio&quot;: {&quot;space_id&quot;: &quot;hf_username/space_name&quot;}
+accelerator.init_trackers(&quot;example_project&quot;, config=config, init_kwargs=init_kwargs})
 ```
 Thanks @pcuenca for the integration ! 
 * trackio by @pcuenca in https://github.com/huggingface/accelerate/pull/3669&lt;/p&gt;
@@ -249,7 +249,7 @@ Another small optimization is using &lt;code&gt;non_blocking&lt;/code&gt; everyw
 &lt;li&gt;@xliu0105 made their first contribution in https://github.com/huggingface/accelerate/pull/3656&lt;/li&gt;
 &lt;li&gt;@0xnightwind made their first contribution in https://github.com/huggingface/accelerate/pull/3659&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.8.1...v1.9.0&lt;/p&gt;]]></description>
+&lt;p&gt;&lt;strong&gt;Full Changelog&lt;/strong&gt;: https://github.com/huggingface/accelerate/compare/v1.8.1...v1.9.0&lt;/p&gt;</ns0:encoded>
       <guid isPermaLink="true">https://github.com/huggingface/accelerate/releases/tag/v1.9.0</guid>
       <pubDate>Wed, 16 Jul 2025 16:35:54 GMT</pubDate>
       <author>SunMarc</author>
