@@ -25,7 +25,10 @@ def create_rss_feed(
     Returns:
         RSS feed XML string
     """
-    rss = Element("rss", version="2.0")
+    rss = Element("rss", {
+        "version": "2.0",
+        "xmlns:content": "http://purl.org/rss/1.0/modules/content/"
+    })
     channel = SubElement(rss, "channel")
 
     # Channel metadata
@@ -54,14 +57,15 @@ def create_rss_feed(
         item_link = SubElement(item, "link")
         item_link.text = release.get("html_url", "")
 
-        item_description = SubElement(item, "description")
+        # Add content:encoded with HTML content
         body = release.get("body", "")
+        content_encoded = SubElement(item, "{http://purl.org/rss/1.0/modules/content/}encoded")
         if body:
             html_body = markdown.markdown(body)
-            # Use a placeholder that we'll replace with CDATA later
-            item_description.text = f"__CDATA_START__{html_body}__CDATA_END__"
+            # Use a placeholder that we'll replace with raw HTML later
+            content_encoded.text = f"__HTML_START__{html_body}__HTML_END__"
         else:
-            item_description.text = "__CDATA_START__No description provided.__CDATA_END__"
+            content_encoded.text = "__HTML_START__<p>No description provided.</p>__HTML_END__"
 
         item_guid = SubElement(item, "guid", isPermaLink="true")
         item_guid.text = release.get("html_url", "")
@@ -81,10 +85,10 @@ def create_rss_feed(
 
     # Pretty print the XML
     xml_string = tostring(rss, encoding="unicode")
-    # Replace placeholders with actual CDATA sections
+    # Replace placeholders with raw HTML (unescaped)
     xml_string = re.sub(
-        r"__CDATA_START__(.*?)__CDATA_END__",
-        r"<![CDATA[\1]]>",
+        r"__HTML_START__(.*?)__HTML_END__",
+        r"\1",
         xml_string,
         flags=re.DOTALL
     )
@@ -127,7 +131,7 @@ def save_feed(
     if xml_path.exists():
         with open(xml_path, "r", encoding="utf-8") as f:
             existing_content = f.read()
-        
+
         if _strip_last_build_date(existing_content) == _strip_last_build_date(rss_content):
             return None  # No updates
 
