@@ -78,12 +78,25 @@ def create_rss_feed(
     return parsed.toprettyxml(indent="  ")
 
 
+def _strip_last_build_date(content: str) -> str:
+    """Remove lastBuildDate element from RSS content for comparison.
+
+    Args:
+        content: RSS XML content
+
+    Returns:
+        Content with lastBuildDate element removed
+    """
+    import re
+    return re.sub(r"<lastBuildDate>.*?</lastBuildDate>\s*", "", content)
+
+
 def save_feed(
     name: str,
     rss_content: str,
     output_dir: Path,
-) -> Path:
-    """Save RSS feed to XML file.
+) -> Path | None:
+    """Save RSS feed to XML file only if content has changed.
 
     Args:
         name: Feed name (used for filename)
@@ -91,10 +104,18 @@ def save_feed(
         output_dir: Output directory
 
     Returns:
-        Path to saved XML file
+        Path to saved XML file if saved, None if no changes detected
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     xml_path = output_dir / f"{name}.xml"
+
+    # Check if file exists and compare content (ignoring lastBuildDate)
+    if xml_path.exists():
+        with open(xml_path, "r", encoding="utf-8") as f:
+            existing_content = f.read()
+        
+        if _strip_last_build_date(existing_content) == _strip_last_build_date(rss_content):
+            return None  # No updates
 
     with open(xml_path, "w", encoding="utf-8") as f:
         f.write(rss_content)

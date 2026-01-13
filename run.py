@@ -28,7 +28,10 @@ def generate_feed(owner: str, repo: str, per_page: int) -> None:
         output_dir=OUTPUT_DIR,
     )
 
-    print(f"RSS feed saved to {xml_path}")
+    if xml_path:
+        print(f"RSS feed saved to {xml_path}")
+    else:
+        print("No updates detected, feed not saved")
 
 
 def main():
