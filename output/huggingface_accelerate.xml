@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<rss version="2.0">
+<rss xmlns:ns0="http://purl.org/rss/1.0/modules/content/" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
     <title>huggingface/accelerate Releases</title>
     <link>https://github.com/huggingface/accelerate/releases</link>
@@ -20,7 +20,7 @@ parallelism_config = ParallelismConfig(
     sp_handler=DeepSpeedSequenceParallelConfig(...),
 )</code>
 Then, you need to make sure to compute the correct loss as described on our <a href="https://huggingface.co/docs/accelerate/main/en/concept_guides/sequence_parallelism">docs</a></p>
-<p><code>python 
+<p><code>python
         ...
         losses_per_rank = torch.distributed.nn.functional.all_gather(loss, group=sp_group)
         good_tokens = (shift_labels != -100).view(-1).sum()
@@ -28,7 +28,7 @@ Then, you need to make sure to compute the correct loss as described on our <a h
         total_loss = sum(
             losses_per_rank[rank] * good_tokens_per_rank[rank]
             for rank in range(sp_world_size)
-            if good_tokens_per_rank[rank] &gt; 0
+            if good_tokens_per_rank[rank] &amp;gt; 0
         )
         total_good_tokens = sum(good_tokens_per_rank)
         loss = total_loss / max(total_good_tokens, 1)</code></p>
@@ -81,7 +81,7 @@ Then, you need to make sure to compute the correct loss as described on our <a h
 <li>[ND Parallel] Update examples, cleanup by @S1ro1 in https://github.com/huggingface/accelerate/pull/3737</li>
 </ul>
 <h2>Bump to Python 3.10</h2>
-<p>We've dropped support for python 3.9 as it reached EOL in October. 
+<p>We've dropped support for python 3.9 as it reached EOL in October.
 * Bump to python3.10 + update linter by @SunMarc in https://github.com/huggingface/accelerate/pull/3809</p>
 <h3>Lots of minor fixes:</h3>
 <ul>
@@ -198,23 +198,23 @@ model = accelerator.prepare(model)</code></p>
       <description><![CDATA[<h1>Trackio tracker support</h1>
 <p>We've added support for a trackio, lightweight, 💯 free experiment tracking Python library built on top of 🤗 Datasets and Spaces.</p>
 <p><img alt="Screen Recording 2025-06-11 at 5 39 32 PM" src="https://github.com/user-attachments/assets/5cf12286-54e7-4119-8a20-88c2cbd37ab6" /></p>
-<p>Main features are: 
+<p>Main features are:
 - <em>Local-first</em> design: dashboard runs locally by default. You can also host it on Spaces by specifying a <code>space_id</code>.
 - Persists logs locally (or in a private Hugging Face Dataset)
 - Visualize experiments with a Gradio dashboard locally (or on Hugging Face Spaces)
 - Everything here, including hosting on Hugging Faces, is <strong>free</strong>!</p>
-<p>To use it with accelerate, you need to set <code>log_with</code> and initialize the trackers 
-```python 
+<p>To use it with accelerate, you need to set <code>log_with</code> and initialize the trackers
+```python
 accelerator = Accelerator(log_with="trackio")
 config={"learning_rate": 0.001, "batch_size": 32}</p>
 <h1>init_kwargs in order to host the dashboard on spaces</h1>
 <p>init_kwargs = {"trackio": {"space_id": "hf_username/space_name"}
 accelerator.init_trackers("example_project", config=config, init_kwargs=init_kwargs})
 ```
-Thanks @pcuenca for the integration ! 
+Thanks @pcuenca for the integration !
 * trackio by @pcuenca in https://github.com/huggingface/accelerate/pull/3669</p>
 <h2>Model loading speedup when relying <code>set_module_tensor_to_device</code></h2>
-<p>Setting tensor while clearing cache is very slow, so we added <code>clear_device</code> option to disable it. 
+<p>Setting tensor while clearing cache is very slow, so we added <code>clear_device</code> option to disable it.
 Another small optimization is using <code>non_blocking</code> everywhere and syncing just before returning control to the user. This makes the loading slightly faster.
 * Speedup model loading by 4-5x in Diffusers ⚡ by @a-r-r-o-w in https://github.com/huggingface/accelerate/pull/3674</p>
 <h2>FDSP, Deepspeed, FP8 minor improvements</h2>

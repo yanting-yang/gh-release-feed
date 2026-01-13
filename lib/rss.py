@@ -25,7 +25,10 @@ def create_rss_feed(
     Returns:
         RSS feed XML string
     """
-    rss = Element("rss", version="2.0")
+    rss = Element("rss", {
+        "version": "2.0",
+        "xmlns:content": "http://purl.org/rss/1.0/modules/content/"
+    })
     channel = SubElement(rss, "channel")
 
     # Channel metadata
@@ -56,8 +59,9 @@ def create_rss_feed(
         item_link = SubElement(item, "link")
         item_link.text = release.get("html_url", "")
 
-        item_description = SubElement(item, "description")
+        # Add content:encoded with HTML content
         body = release.get("body", "")
+        content_encoded = SubElement(item, "{http://purl.org/rss/1.0/modules/content/}encoded")
         if body:
             html_body = markdown.markdown(body)
         else:
