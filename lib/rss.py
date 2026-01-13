@@ -1,11 +1,9 @@
 """RSS feed generation utilities."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from xml.dom import minidom
 from xml.etree.ElementTree import Element, SubElement, tostring
 import markdown
-import re
 
 
 def create_rss_feed(
@@ -25,10 +23,7 @@ def create_rss_feed(
     Returns:
         RSS feed XML string
     """
-    rss = Element("rss", {
-        "version": "2.0",
-        "xmlns:content": "http://purl.org/rss/1.0/modules/content/"
-    })
+    rss = Element("rss", {"version": "2.0"})
     channel = SubElement(rss, "channel")
 
     # Channel metadata
@@ -45,7 +40,7 @@ def create_rss_feed(
     language.text = "en-us"
 
     last_build_date = SubElement(channel, "lastBuildDate")
-    last_build_date.text = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT")
+    last_build_date.text = datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S GMT")
 
     # Add each release as an item
     # Keep track of item descriptions to replace after XML generation
@@ -61,7 +56,6 @@ def create_rss_feed(
 
         # Add content:encoded with HTML content
         body = release.get("body", "")
-        content_encoded = SubElement(item, "{http://purl.org/rss/1.0/modules/content/}encoded")
         if body:
             html_body = markdown.markdown(body)
         else:
@@ -69,10 +63,11 @@ def create_rss_feed(
 
         # Use unique placeholder for each item
         placeholder = f"__ITEM_{idx}__"
-        item_description.text = placeholder
         item_descriptions[placeholder] = html_body
+        item_description = SubElement(item, "description")
+        item_description.text = placeholder  # Placeholder to be replaced later
 
-        item_guid = SubElement(item, "guid", isPermaLink="true")
+        item_guid = SubElement(item, "guid")
         item_guid.text = release.get("html_url", "")
 
         # Parse and format the publication date
@@ -94,10 +89,9 @@ def create_rss_feed(
     for placeholder, html_content in item_descriptions.items():
         xml_string = xml_string.replace(
             f"<description>{placeholder}</description>",
-            f"<description><![CDATA[{html_content}]]></description>"
+            f"<content:encoded><![CDATA[{html_content}]]></content:encoded>"
         )
-    parsed = minidom.parseString(xml_string)
-    return parsed.toprettyxml(indent="  ")
+    return xml_string
 
 
 def _strip_last_build_date(content: str) -> str:

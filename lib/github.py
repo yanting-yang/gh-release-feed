@@ -1,5 +1,6 @@
 """GitHub API utilities."""
 
+import os
 import requests
 
 
@@ -17,6 +18,11 @@ def fetch_github_releases(owner: str, repo: str, per_page: int = 30) -> list:
     url = f"https://api.github.com/repos/{owner}/{repo}/releases"
     params = {"per_page": per_page}
     headers = {"Accept": "application/vnd.github+json"}
+
+    # Retrieve token from environment variables
+    token = os.getenv("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
 
     response = requests.get(url, params=params, headers=headers)
     response.raise_for_status()

@@ -1,15 +1,4 @@
-<?xml version="1.0" ?>
-<rss xmlns:ns0="http://purl.org/rss/1.0/modules/content/" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
-  <channel>
-    <title>huggingface/datasets Releases</title>
-    <link>https://github.com/huggingface/datasets/releases</link>
-    <description>Latest releases from huggingface/datasets on GitHub</description>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 13 Jan 2026 09:01:19 GMT</lastBuildDate>
-    <item>
-      <title>4.4.2</title>
-      <link>https://github.com/huggingface/datasets/releases/tag/4.4.2</link>
-      <description><![CDATA[<h2>Bug fixes</h2>
+<rss version="2.0"><channel><title>huggingface/datasets Releases</title><link>https://github.com/huggingface/datasets/releases</link><description>Latest releases from huggingface/datasets on GitHub</description><language>en-us</language><lastBuildDate>Tue, 13 Jan 2026 09:34:00 GMT</lastBuildDate><item><title>4.4.2</title><link>https://github.com/huggingface/datasets/releases/tag/4.4.2</link><content:encoded><![CDATA[<h2>Bug fixes</h2>
 <ul>
 <li>Fix embed storage nifti by @CloseChoice in https://github.com/huggingface/datasets/pull/7853</li>
 <li>ArXiv -&gt; HF Papers by @qgallouedec in https://github.com/huggingface/datasets/pull/7855</li>
@@ -35,28 +24,12 @@
 <li>@ada-ggf25 made their first contribution in https://github.com/huggingface/datasets/pull/7891</li>
 <li>@The-Obstacle-Is-The-Way made their first contribution in https://github.com/huggingface/datasets/pull/7887</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.1...4.4.2</p>]]></description>
-      <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.2</guid>
-      <pubDate>Fri, 19 Dec 2025 15:05:34 GMT</pubDate>
-      <author>lhoestq</author>
-    </item>
-    <item>
-      <title>4.4.1</title>
-      <link>https://github.com/huggingface/datasets/releases/tag/4.4.1</link>
-      <description><![CDATA[<h2>Bug fixes and improvements</h2>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.1...4.4.2</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.4.2</guid><pubDate>Fri, 19 Dec 2025 15:05:34 GMT</pubDate><author>lhoestq</author></item><item><title>4.4.1</title><link>https://github.com/huggingface/datasets/releases/tag/4.4.1</link><content:encoded><![CDATA[<h2>Bug fixes and improvements</h2>
 <ul>
 <li>Better streaming retries (504 and 429) by @lhoestq in https://github.com/huggingface/datasets/pull/7847</li>
 <li>DOC: remove mode parameter in docstring of pdf and video feature by @CloseChoice in https://github.com/huggingface/datasets/pull/7848</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.0...4.4.1</p>]]></description>
-      <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.1</guid>
-      <pubDate>Wed, 05 Nov 2025 16:01:38 GMT</pubDate>
-      <author>lhoestq</author>
-    </item>
-    <item>
-      <title>4.4.0</title>
-      <link>https://github.com/huggingface/datasets/releases/tag/4.4.0</link>
-      <description><![CDATA[<h2>Dataset Features</h2>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.0...4.4.1</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.4.1</guid><pubDate>Wed, 05 Nov 2025 16:01:38 GMT</pubDate><author>lhoestq</author></item><item><title>4.4.0</title><link>https://github.com/huggingface/datasets/releases/tag/4.4.0</link><content:encoded><![CDATA[<h2>Dataset Features</h2>
 <ul>
 <li>Add nifti support by @CloseChoice in https://github.com/huggingface/datasets/pull/7815</li>
 <li>Load medical imaging datasets from Hugging Face:</li>
@@ -97,15 +70,7 @@ ds = ds.cast_column("audio", Audio(num_channels=1))  # use mono
 <li>@sghng made their first contribution in https://github.com/huggingface/datasets/pull/7817</li>
 <li>@art-test-stack made their first contribution in https://github.com/huggingface/datasets/pull/7833</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.3.0...4.4.0</p>]]></description>
-      <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.4.0</guid>
-      <pubDate>Tue, 04 Nov 2025 10:42:47 GMT</pubDate>
-      <author>lhoestq</author>
-    </item>
-    <item>
-      <title>4.3.0</title>
-      <link>https://github.com/huggingface/datasets/releases/tag/4.3.0</link>
-      <description><![CDATA[<h2>Dataset Features</h2>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.3.0...4.4.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.4.0</guid><pubDate>Tue, 04 Nov 2025 10:42:47 GMT</pubDate><author>lhoestq</author></item><item><title>4.3.0</title><link>https://github.com/huggingface/datasets/releases/tag/4.3.0</link><content:encoded><![CDATA[<h2>Dataset Features</h2>
 <p>Enable large scale distributed dataset streaming:</p>
 <ul>
 <li>Keep hffs cache in workers when streaming by @lhoestq in https://github.com/huggingface/datasets/pull/7820</li>
@@ -130,15 +95,7 @@ ds = ds.cast_column("audio", Audio(num_channels=1))  # use mono
 <li>@ethanknights made their first contribution in https://github.com/huggingface/datasets/pull/7812</li>
 <li>@simonreise made their first contribution in https://github.com/huggingface/datasets/pull/7533</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0</p>]]></description>
-      <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.3.0</guid>
-      <pubDate>Thu, 23 Oct 2025 16:33:59 GMT</pubDate>
-      <author>lhoestq</author>
-    </item>
-    <item>
-      <title>4.2.0</title>
-      <link>https://github.com/huggingface/datasets/releases/tag/4.2.0</link>
-      <description><![CDATA[<h2>Dataset Features</h2>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.3.0</guid><pubDate>Thu, 23 Oct 2025 16:33:59 GMT</pubDate><author>lhoestq</author></item><item><title>4.2.0</title><link>https://github.com/huggingface/datasets/releases/tag/4.2.0</link><content:encoded><![CDATA[<h2>Dataset Features</h2>
 <ul>
 <li>Sample without replacement option when interleaving datasets by @radulescupetru in https://github.com/huggingface/datasets/pull/7786</li>
 </ul>
@@ -179,10 +136,4 @@ ds = ds.cast_column("audio", Audio(num_channels=1))  # use mono
 <ul>
 <li>@drbh made their first contribution in https://github.com/huggingface/datasets/pull/7787</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.1.1...4.2.0</p>]]></description>
-      <guid isPermaLink="true">https://github.com/huggingface/datasets/releases/tag/4.2.0</guid>
-      <pubDate>Thu, 09 Oct 2025 16:18:22 GMT</pubDate>
-      <author>lhoestq</author>
-    </item>
-  </channel>
-</rss>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.1.1...4.2.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.2.0</guid><pubDate>Thu, 09 Oct 2025 16:18:22 GMT</pubDate><author>lhoestq</author></item></channel></rss>
