@@ -1,4 +1,21 @@
-<rss version="2.0"><channel><title>huggingface/transformers Releases</title><link>https://github.com/huggingface/transformers/releases</link><description>Latest releases from huggingface/transformers on GitHub</description><language>en-us</language><lastBuildDate>Tue, 13 Jan 2026 09:34:00 GMT</lastBuildDate><item><title>Release candidate 5.0.0rc2</title><link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</link><content:encoded><![CDATA[<h2>What's Changed</h2>
+<rss version="2.0"><channel><title>huggingface/transformers Releases</title><link>https://github.com/huggingface/transformers/releases</link><description>Latest releases from huggingface/transformers on GitHub</description><language>en-us</language><lastBuildDate>Wed, 14 Jan 2026 01:04:11 GMT</lastBuildDate><item><title>Patch release v4.57.5</title><link>https://github.com/huggingface/transformers/releases/tag/v4.57.5</link><content:encoded><![CDATA[<h2>What's Changed</h2>
+<p>Should not have said last patch :wink: These should be the last remaining fixes that got lost in between patches and the transition to v5. </p>
+<ul>
+<li>QwenVL: add skipped keys in setattr as well by @zucchini-nlp in https://github.com/huggingface/transformers/pull/41808</li>
+<li>Fix lr_scheduler_parsing by @SunMarc in https://github.com/huggingface/transformers/pull/41322</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/transformers/compare/v4.57.4...v4.57.5</p>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v4.57.5</guid><pubDate>Tue, 13 Jan 2026 13:29:13 GMT</pubDate><author>vasqu</author></item><item><title>Patch release v4.57.4</title><link>https://github.com/huggingface/transformers/releases/tag/v4.57.4</link><content:encoded><![CDATA[<h2>What's Changed</h2>
+<p>Last patch release for v4: We have a few small fixes for remote generation methods (e.g. group beam search), vLLM, and an offline tokenizer fix (if it's already been cached).</p>
+<ul>
+<li>Grouped beam search from config params by @zucchini-nlp in https://github.com/huggingface/transformers/pull/42472</li>
+<li>Handle decorator with optional arguments better @hmellor in https://github.com/huggingface/transformers/pull/42512</li>
+<li>fix: make mistral base check conditional to fix offline loading by @Killusions in https://github.com/huggingface/transformers/pull/42880</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@Killusions made their first contribution in https://github.com/huggingface/transformers/pull/42880</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/transformers/compare/v4.57.3...v4.57.4</p>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v4.57.4</guid><pubDate>Tue, 13 Jan 2026 11:07:40 GMT</pubDate><author>vasqu</author></item><item><title>Release candidate 5.0.0rc2</title><link>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc2</link><content:encoded><![CDATA[<h2>What's Changed</h2>
 <p>This release candidate is focused on fixing <code>AutoTokenizer</code>, expanding the dynamic weight loading support, and improving performances with MoEs!</p>
 <h2>MoEs and performances:</h2>
 <p><img width="2048" height="1451" alt="image" src="https://github.com/user-attachments/assets/3ed2508e-3eb1-4f13-8717-cd9027d12a39" /></p>
@@ -1552,14 +1569,4 @@ this is a method you are using; in which case we should bring it back with bette
 <li>rm slow tokenizers (#40936)</li>
 </ul>
 </li>
-</ul>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc0</guid><pubDate>Mon, 01 Dec 2025 18:14:54 GMT</pubDate><author>LysandreJik</author></item><item><title>Patch release v4.57.3</title><link>https://github.com/huggingface/transformers/releases/tag/v4.57.3</link><content:encoded><![CDATA[<p>There was a hidden bug when loading models with <code>local_files_only=True</code> and a typo related to the recent patch. </p>
-<p>The main fix is: https://github.com/huggingface/transformers/commit/b6055550a15a8fab367cf983b743ff68cc58d81a.</p>
-<p>We are really sorry that this slipped through, our CIs just did not catch it.</p>
-<p>As it affects a lot of users we are gonna yank the previous release</p>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v4.57.3</guid><pubDate>Tue, 25 Nov 2025 15:51:36 GMT</pubDate><author>ArthurZucker</author></item><item><title>Patch Release v4.57.2</title><link>https://github.com/huggingface/transformers/releases/tag/v4.57.2</link><content:encoded><![CDATA[<p>This patch most notably fixes an issue on some Mistral tokenizers. It contains the following commits:</p>
-<ul>
-<li>Add AutoTokenizer mapping for mistral3 and ministral (#42198)</li>
-<li>Auto convert tekken.json (#42299)</li>
-<li>fix tekken pattern matching (#42363)</li>
-<li>Check model inputs - hidden states (#40994)</li>
-<li>Remove invalid <code>@staticmethod</code> from module-level get_device_and_memory_breakdown (#41747)</li>
-</ul>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v4.57.2</guid><pubDate>Mon, 24 Nov 2025 17:54:34 GMT</pubDate><author>Cyrilvallez</author></item></channel></rss>
+</ul>]]></content:encoded><guid>https://github.com/huggingface/transformers/releases/tag/v5.0.0rc0</guid><pubDate>Mon, 01 Dec 2025 18:14:54 GMT</pubDate><author>LysandreJik</author></item></channel></rss>

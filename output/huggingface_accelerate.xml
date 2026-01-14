@@ -1,214 +1,45 @@
-<rss version="2.0"><channel><title>huggingface/accelerate Releases</title><link>https://github.com/huggingface/accelerate/releases</link><description>Latest releases from huggingface/accelerate on GitHub</description><language>en-us</language><lastBuildDate>Tue, 13 Jan 2026 09:34:00 GMT</lastBuildDate><item><title>v1.12.0: Deepspeed Ulysses/ALST</title><link>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</link><content:encoded><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<html><body><figure class="wp-block-table"><table class="has-fixed-layout"><tbody><tr><td><em>Editor&rsquo;s note: A version of this blog was originally published in The GitHub Insider newsletter. <a href="https://github.com/newsletter">Sign up now for more technical content &gt;</a></em></td></tr></tbody></table></figure>
-
-
-
-<p>If you&rsquo;ve ever felt like <a href="https://github.com/features/copilot">GitHub Copilot</a> could be even stronger with just a little more context, you&rsquo;re right. Context engineering is quickly becoming one of the most important ways developers shape, guide, and improve AI-assisted development.</p>
-
-
-
-<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
-<iframe title="Your codebase, your rules: Customizing Copilot with context engineering" width="500" height="281" src="https://www.youtube.com/embed/0jEzUhU8bLc?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-</div></figure>
-
-
-
-<h2 class="wp-block-heading" id="h-what-is-context-engineering">What is context engineering?</h2>
-
-
-
-<p>Context engineering is the evolution of prompt engineering. It&rsquo;s focused less on clever phrasing and more, as <a href="https://x.com/ankrgyl/status/1913766591910842619">Braintrust CEO Ankur Goyal</a> puts it, on <em>&ldquo;bringing the right information (in the right format) to the LLM.&rdquo;</em></p>
-
-
-
-<p>At <a href="https://githubuniverse.com/">GitHub Universe</a> this past fall, <a href="https://x.com/digitarald?lang=en">Harald Kirschner</a>&mdash;principal product manager at Microsoft and longtime VS Code and GitHub Copilot expert&mdash;outlined three practical ways developers can apply context engineering today:</p>
-
-
-
-<ul class="wp-block-list">
-<li><strong>Custom instructions</strong></li>
-
-
-
-<li><strong>Reusable prompts</strong></li>
-
-
-
-<li><strong>Custom agents</strong></li>
+<rss version="2.0"><channel><title>huggingface/accelerate Releases</title><link>https://github.com/huggingface/accelerate/releases</link><description>Latest releases from huggingface/accelerate on GitHub</description><language>en-us</language><lastBuildDate>Wed, 14 Jan 2026 01:04:12 GMT</lastBuildDate><item><title>v1.12.0: Deepspeed Ulysses/ALST</title><link>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</link><content:encoded><![CDATA[<h2>Deepspeed Ulysses/ALST integration</h2>
+<p>Deepspeed Ulysses/ALST is an efficient way of training on long sequences by employing sequence parallelism and attention head parallelism. You can learn more about this technology in this paper https://arxiv.org/abs/2506.13996 or this deepspeed tutorial https://www.deepspeed.ai/tutorials/ulysses-alst-sequence-parallelism/.</p>
+<p><img width="2368" height="1250" alt="0d8bd9e0" src="https://github.com/user-attachments/assets/b94e90c9-4368-4711-ad57-58de3c714ebc" /></p>
+<p>To enable Deepspeed Ulysses, you first need to create <code>ParallelismConfig</code> and setting <code>sp</code> related args: </p>
+<p><code>python
+parallelism_config = ParallelismConfig(
+    sp_backend="deepspeed",
+    sp_size=2,
+    sp_handler=DeepSpeedSequenceParallelConfig(...),
+)</code>
+Then, you need to make sure to compute the correct loss as described on our <a href="https://huggingface.co/docs/accelerate/main/en/concept_guides/sequence_parallelism">docs</a></p>
+<p><code>python 
+        ...
+        losses_per_rank = torch.distributed.nn.functional.all_gather(loss, group=sp_group)
+        good_tokens = (shift_labels != -100).view(-1).sum()
+        good_tokens_per_rank = torch.distributed.nn.functional.all_gather(good_tokens, group=sp_group)
+        total_loss = sum(
+            losses_per_rank[rank] * good_tokens_per_rank[rank]
+            for rank in range(sp_world_size)
+            if good_tokens_per_rank[rank] &gt; 0
+        )
+        total_good_tokens = sum(good_tokens_per_rank)
+        loss = total_loss / max(total_good_tokens, 1)</code></p>
+<p>Thanks @S1ro1  for starting this work and for @stas00 for finishing this work. Also thanks @kashif for adding docs and reviewing/testing this PR !</p>
+<p>This feature will also be available in HF Trainer thanks for this PR from @stas00: https://github.com/huggingface/transformers/pull/41832</p>
+<h2>Minor changes</h2>
+<ul>
+<li>Remove warning for <code>cpu_ram_efficient_loading</code> by @SunMarc in https://github.com/huggingface/accelerate/pull/3816</li>
+<li>update typo in bnb quantisation 4bit flag docstring by @hbraith in https://github.com/huggingface/accelerate/pull/3828</li>
+<li>ArXiv -&gt; HF Papers by @qgallouedec in https://github.com/huggingface/accelerate/pull/3834</li>
+<li>Fix typo in broadcast_object_list docstring by @wsntxxn in https://github.com/huggingface/accelerate/pull/3823</li>
+<li>[Bug] Update torch.optim.Optimizer parameter states after tensor parallelism by @naomili0924 in https://github.com/huggingface/accelerate/pull/3835</li>
+<li>use self hosted runner by @SunMarc in https://github.com/huggingface/accelerate/pull/3841</li>
+<li>device type helper by @kashif in https://github.com/huggingface/accelerate/pull/3843</li>
 </ul>
-
-
-
-<p>Each technique gives Copilot more of the information it needs to produce code matching your expectations, your architecture, and your team&rsquo;s standards.</p>
-
-
-
-<p>Let&rsquo;s explore all three, so you can see how providing better context helps Copilot work the way you do.</p>
-
-
-
-<h2 class="wp-block-heading" id="h-1-custom-instructions-give-copilot-the-rules-it-should-follow">1. Custom instructions: Give Copilot the rules it should follow</h2>
-
-
-
-<p><a href="https://docs.github.com/en/copilot/tutorials/customization-library/custom-instructions/your-first-custom-instructions">Custom instruction files</a> help Copilot understand your:</p>
-
-
-
-<ul class="wp-block-list">
-<li>Coding conventions</li>
-
-
-
-<li>Language preferences</li>
-
-
-
-<li>Naming standards</li>
-
-
-
-<li>Documentation style</li>
+<h2>New Contributors</h2>
+<ul>
+<li>@hbraith made their first contribution in https://github.com/huggingface/accelerate/pull/3828</li>
+<li>@wsntxxn made their first contribution in https://github.com/huggingface/accelerate/pull/3823</li>
+<li>@naomili0924 made their first contribution in https://github.com/huggingface/accelerate/pull/3835</li>
 </ul>
-
-
-
-<p>You can use:</p>
-
-
-
-<ul class="wp-block-list">
-<li><strong>Global rules:</strong> <code>.github/<a href="http://copilot-instructions.md">copilot-instructions.md</a></code></li>
-
-
-
-<li><strong>Task-specific rules:</strong> <code>.github/instructions/*.instructions.md</code></li>
-</ul>
-
-
-
-<p>For example, you might define how React components should be structured, how errors should be handled in a Node service, or how you want API documentation formatted. Copilot then applies those rules automatically as Copilot works.</p>
-
-
-
-<p><a href="https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions?utm_source=chatgpt.com"><em>Learn how to set up custom instructions</em></a><em> </em>&#128073;&nbsp;</p>
-
-
-
-<h2 class="wp-block-heading" id="h-2-reusable-prompts-standardize-your-common-workflows">2. Reusable prompts: Standardize your common workflows</h2>
-
-
-
-<p>Reusable prompt files let you turn frequent tasks&mdash;like code reviews, scaffolding components, generating tests, or initializing projects&mdash;into prompts that you can call instantly and consistently.</p>
-
-
-
-<p>Use:</p>
-
-
-
-<ul class="wp-block-list">
-<li><strong>Prompt files:</strong> <code>.github/prompts/*.prompts.md</code></li>
-
-
-
-<li><strong>Slash commands</strong> such as <code>/create-react-form</code> to trigger structured tasks</li>
-</ul>
-
-
-
-<p>This helps teams enforce consistency, speed up onboarding, and execute repeatable workflows the same way every time.</p>
-
-
-
-<p><a href="https://docs.github.com/en/copilot/tutorials/customization-library/prompt-files"><em>See examples of reusable prompt files</em></a><em> </em>&#128073;&nbsp;</p>
-
-
-
-<h2 class="wp-block-heading" id="h-3-custom-agents-create-task-specific-ai-personas">3. Custom agents: Create task-specific AI personas</h2>
-
-
-
-<p>Custom agents allow you to build specialized AI assistants with well-defined responsibilities and scopes. For example:</p>
-
-
-
-<ul class="wp-block-list">
-<li>An <strong>API design agent</strong> to review interfaces</li>
-
-
-
-<li>A <strong>security agent</strong> that performs static analysis tasks</li>
-
-
-
-<li>A <strong>documentation agent</strong> that rewrites comments or generates examples</li>
-</ul>
-
-
-
-<p>Agents can include their own tools, instructions, constraints, and behavior models. And yes, you can even enable handoff between agents for more complex workflows.</p>
-
-
-
-<p><a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents"><em>Learn how to create and configure custom agents</em></a><em> </em>&#128073;&nbsp;</p>
-
-
-
-<h2 class="wp-block-heading" id="h-why-context-engineering-matters">Why context engineering matters</h2>
-
-
-
-<p>The goal isn&rsquo;t just better outputs, it&rsquo;s better understanding by Copilot. When you provide Copilot with clearer context:</p>
-
-
-
-<ul class="wp-block-list">
-<li>You get more accurate and reliable code.</li>
-
-
-
-<li>You reduce back-and-forth prompting.</li>
-
-
-
-<li>You increase consistency across files and repositories.</li>
-
-
-
-<li>You stay in flow longer instead of rewriting or correcting results.</li>
-</ul>
-
-
-
-<p>And the more you experiment with context engineering, the more you&rsquo;ll discover how deeply it can shape your development experience.</p>
-
-
-
-<div class="wp-block-group post-content-cta has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-<p><a href="https://github.com/features/copilot">Get started with context engineering in GitHub Copilot &gt;</a></p>
-</div>
-
-
-
-<h2 class="wp-block-heading" id="h-more-resources">More resources</h2>
-
-
-
-<ul class="wp-block-list">
-<li><a href="https://code.visualstudio.com/docs/copilot/guides/context-engineering-guide">A practical guide to context engineering for developers </a>&#128073;&nbsp;</li>
-
-
-
-<li><a href="https://github.blog/ai-and-ml/github-copilot/how-to-build-reliable-ai-workflows-with-agentic-primitives-and-context-engineering/">How to build reliable AI workflows with agentic primitives</a><em> </em>&#128073;&nbsp;</li>
-
-
-
-<li><a href="https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/">What makes a great agents.md file? Lessons from 2,500+ examples</a><em> </em>&#128073;&nbsp;</li>
-</ul>
-</body></html>
-<p>The post <a href="https://github.blog/ai-and-ml/generative-ai/want-better-ai-outputs-try-context-engineering/">Want better AI outputs? Try context engineering.</a> appeared first on <a href="https://github.blog">The GitHub Blog</a>.</p>
-]]></content:encoded><guid>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</guid><pubDate>Fri, 21 Nov 2025 12:47:55 GMT</pubDate><author>SunMarc</author></item><item><title>v1.11.0: TE MXFP8, FP16/BF16 with MPS, Python 3.10 </title><link>https://github.com/huggingface/accelerate/releases/tag/v1.11.0</link><content:encoded><![CDATA[<h2>TE MXFP8 support</h2>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/accelerate/compare/v1.11.0...v1.12.0</p>]]></content:encoded><guid>https://github.com/huggingface/accelerate/releases/tag/v1.12.0</guid><pubDate>Fri, 21 Nov 2025 12:47:55 GMT</pubDate><author>SunMarc</author></item><item><title>v1.11.0: TE MXFP8, FP16/BF16 with MPS, Python 3.10 </title><link>https://github.com/huggingface/accelerate/releases/tag/v1.11.0</link><content:encoded><![CDATA[<h2>TE MXFP8 support</h2>
 <p>We've added support for MXFP8 in our TransformerEngine integration. To use that, you need to set  <code>use_mxfp8_block_scaling</code> in <code>fp8_config</code>. See nvidia docs [here]. (https://docs.nvidia.com/deeplearning/transformer-engine/user-guide/examples/fp8_primer.html#MXFP8-and-block-scaling) </p>
 <ul>
 <li>Add support for TE MXFP8 recipe in accelerate by @pstjohn in https://github.com/huggingface/accelerate/pull/3688</li>
@@ -231,7 +62,7 @@
 <li>[ND Parallel] Update examples, cleanup by @S1ro1 in https://github.com/huggingface/accelerate/pull/3737</li>
 </ul>
 <h2>Bump to Python 3.10</h2>
-<p>We've dropped support for python 3.9 as it reached EOL in October.
+<p>We've dropped support for python 3.9 as it reached EOL in October. 
 * Bump to python3.10 + update linter by @SunMarc in https://github.com/huggingface/accelerate/pull/3809</p>
 <h3>Lots of minor fixes:</h3>
 <ul>
@@ -324,23 +155,23 @@ model = accelerator.prepare(model)</code></p>
 <p><strong>Full Changelog</strong>: https://github.com/huggingface/accelerate/compare/v1.9.0...v1.10.0</p>]]></content:encoded><guid>https://github.com/huggingface/accelerate/releases/tag/v1.10.0</guid><pubDate>Thu, 07 Aug 2025 13:39:44 GMT</pubDate><author>SunMarc</author></item><item><title>v1.9.0: Trackio support, Model loading speedup, Minor distributed improvements</title><link>https://github.com/huggingface/accelerate/releases/tag/v1.9.0</link><content:encoded><![CDATA[<h1>Trackio tracker support</h1>
 <p>We've added support for a trackio, lightweight, 💯 free experiment tracking Python library built on top of 🤗 Datasets and Spaces.</p>
 <p><img alt="Screen Recording 2025-06-11 at 5 39 32 PM" src="https://github.com/user-attachments/assets/5cf12286-54e7-4119-8a20-88c2cbd37ab6" /></p>
-<p>Main features are:
+<p>Main features are: 
 - <em>Local-first</em> design: dashboard runs locally by default. You can also host it on Spaces by specifying a <code>space_id</code>.
 - Persists logs locally (or in a private Hugging Face Dataset)
 - Visualize experiments with a Gradio dashboard locally (or on Hugging Face Spaces)
 - Everything here, including hosting on Hugging Faces, is <strong>free</strong>!</p>
-<p>To use it with accelerate, you need to set <code>log_with</code> and initialize the trackers
-```python
+<p>To use it with accelerate, you need to set <code>log_with</code> and initialize the trackers 
+```python 
 accelerator = Accelerator(log_with="trackio")
 config={"learning_rate": 0.001, "batch_size": 32}</p>
 <h1>init_kwargs in order to host the dashboard on spaces</h1>
 <p>init_kwargs = {"trackio": {"space_id": "hf_username/space_name"}
 accelerator.init_trackers("example_project", config=config, init_kwargs=init_kwargs})
 ```
-Thanks @pcuenca for the integration !
+Thanks @pcuenca for the integration ! 
 * trackio by @pcuenca in https://github.com/huggingface/accelerate/pull/3669</p>
 <h2>Model loading speedup when relying <code>set_module_tensor_to_device</code></h2>
-<p>Setting tensor while clearing cache is very slow, so we added <code>clear_device</code> option to disable it.
+<p>Setting tensor while clearing cache is very slow, so we added <code>clear_device</code> option to disable it. 
 Another small optimization is using <code>non_blocking</code> everywhere and syncing just before returning control to the user. This makes the loading slightly faster.
 * Speedup model loading by 4-5x in Diffusers ⚡ by @a-r-r-o-w in https://github.com/huggingface/accelerate/pull/3674</p>
 <h2>FDSP, Deepspeed, FP8 minor improvements</h2>
