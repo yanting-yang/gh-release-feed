@@ -1,4 +1,29 @@
-<rss version="2.0"><channel><title>huggingface/datasets Releases</title><link>https://github.com/huggingface/datasets/releases</link><description>Latest releases from huggingface/datasets on GitHub</description><language>en-us</language><lastBuildDate>Tue, 13 Jan 2026 09:34:00 GMT</lastBuildDate><item><title>4.4.2</title><link>https://github.com/huggingface/datasets/releases/tag/4.4.2</link><content:encoded><![CDATA[<h2>Bug fixes</h2>
+<rss version="2.0"><channel><title>huggingface/datasets Releases</title><link>https://github.com/huggingface/datasets/releases</link><description>Latest releases from huggingface/datasets on GitHub</description><language>en-us</language><lastBuildDate>Fri, 16 Jan 2026 01:02:31 GMT</lastBuildDate><item><title>4.5.0</title><link>https://github.com/huggingface/datasets/releases/tag/4.5.0</link><content:encoded><![CDATA[<h2>Dataset Features</h2>
+<ul>
+<li>Add lance format support by @eddyxu in https://github.com/huggingface/datasets/pull/7913</li>
+<li>Support for both Lance dataset (including metadata / manifests) and standalone .lance files</li>
+<li>e.g. with <a href="https://huggingface.co/datasets/lance-format/fineweb-edu">lance-format/fineweb-edu</a></li>
+</ul>
+<p>```python
+  from datasets import load_dataset</p>
+<p>ds = load_dataset("lance-format/fineweb-edu", streaming=True)
+  for example in ds["train"]:
+      ...
+  ```</p>
+<h2>What's Changed</h2>
+<ul>
+<li>Raise early for invalid <code>revision</code> in <code>load_dataset</code> by @Scott-Simmons in https://github.com/huggingface/datasets/pull/7929</li>
+<li>fix low but large example indexerror by @CloseChoice in https://github.com/huggingface/datasets/pull/7912</li>
+<li>Fix method to retrieve attributes from file object by @lhoestq in https://github.com/huggingface/datasets/pull/7938</li>
+<li>add _OverridableIOWrapper by @lhoestq in https://github.com/huggingface/datasets/pull/7942</li>
+<li>Add _generate_shards by @lhoestq in https://github.com/huggingface/datasets/pull/7943</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@eddyxu made their first contribution in https://github.com/huggingface/datasets/pull/7913</li>
+<li>@Scott-Simmons made their first contribution in https://github.com/huggingface/datasets/pull/7929</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.4.2...4.5.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.5.0</guid><pubDate>Wed, 14 Jan 2026 18:33:15 GMT</pubDate><author>lhoestq</author></item><item><title>4.4.2</title><link>https://github.com/huggingface/datasets/releases/tag/4.4.2</link><content:encoded><![CDATA[<h2>Bug fixes</h2>
 <ul>
 <li>Fix embed storage nifti by @CloseChoice in https://github.com/huggingface/datasets/pull/7853</li>
 <li>ArXiv -&gt; HF Papers by @qgallouedec in https://github.com/huggingface/datasets/pull/7855</li>
@@ -95,45 +120,4 @@ ds = ds.cast_column("audio", Audio(num_channels=1))  # use mono
 <li>@ethanknights made their first contribution in https://github.com/huggingface/datasets/pull/7812</li>
 <li>@simonreise made their first contribution in https://github.com/huggingface/datasets/pull/7533</li>
 </ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.3.0</guid><pubDate>Thu, 23 Oct 2025 16:33:59 GMT</pubDate><author>lhoestq</author></item><item><title>4.2.0</title><link>https://github.com/huggingface/datasets/releases/tag/4.2.0</link><content:encoded><![CDATA[<h2>Dataset Features</h2>
-<ul>
-<li>Sample without replacement option when interleaving datasets by @radulescupetru in https://github.com/huggingface/datasets/pull/7786</li>
-</ul>
-<p><code>python
-  ds = interleave_datasets(datasets, stopping_strategy="all_exhausted_without_replacement")</code></p>
-<ul>
-<li>Parquet: add <code>on_bad_files</code> argument to error/warn/skip bad files by @lhoestq in https://github.com/huggingface/datasets/pull/7806</li>
-</ul>
-<p><code>python
-  ds = load_dataset(parquet_dataset_id, on_bad_files="warn")</code></p>
-<ul>
-<li>
-<p>Add parquet scan options and docs by @lhoestq in https://github.com/huggingface/datasets/pull/7801</p>
-</li>
-<li>
-<p>docs to select columns and filter data efficiently</p>
-</li>
-</ul>
-<p><code>python
-  ds = load_dataset(parquet_dataset_id, columns=["col_0", "col_1"])
-  ds = load_dataset(parquet_dataset_id, filters=[("col_0", "==", 0)])</code>
-  * new argument to control buffering and caching when streaming</p>
-<p><code>python
-  fragment_scan_options = pyarrow.dataset.ParquetFragmentScanOptions(cache_options=pyarrow.CacheOptions(prefetch_limit=1, range_size_limit=128 &lt;&lt; 20))
-  ds = load_dataset(parquet_dataset_id, streaming=True, fragment_scan_options=fragment_scan_options)</code></p>
-<h2>What's Changed</h2>
-<ul>
-<li>Document HDF5 support by @klamike in https://github.com/huggingface/datasets/pull/7740</li>
-<li>update tips in docs by @lhoestq in https://github.com/huggingface/datasets/pull/7790</li>
-<li>feat: avoid some copies in torch formatter by @drbh in https://github.com/huggingface/datasets/pull/7787</li>
-<li>Support huggingface_hub v0.x and v1.x by @Wauplin in https://github.com/huggingface/datasets/pull/7783</li>
-<li>Define CI future by @lhoestq in https://github.com/huggingface/datasets/pull/7799</li>
-<li>More Parquet streaming docs by @lhoestq in https://github.com/huggingface/datasets/pull/7803</li>
-<li>Less api calls when resolving data_files by @lhoestq in https://github.com/huggingface/datasets/pull/7805</li>
-<li>typo by @lhoestq in https://github.com/huggingface/datasets/pull/7807</li>
-</ul>
-<h2>New Contributors</h2>
-<ul>
-<li>@drbh made their first contribution in https://github.com/huggingface/datasets/pull/7787</li>
-</ul>
-<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.1.1...4.2.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.2.0</guid><pubDate>Thu, 09 Oct 2025 16:18:22 GMT</pubDate><author>lhoestq</author></item></channel></rss>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/datasets/compare/4.2.0...4.3.0</p>]]></content:encoded><guid>https://github.com/huggingface/datasets/releases/tag/4.3.0</guid><pubDate>Thu, 23 Oct 2025 16:33:59 GMT</pubDate><author>lhoestq</author></item></channel></rss>
