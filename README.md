@@ -1,3 +1,7 @@
+⛔️ DEPRECATED: Use <https://newreleases.io/> instead.
+
+---
+
 # 📡 GitHub Releases to RSS
 
 Convert GitHub releases to RSS feeds.
